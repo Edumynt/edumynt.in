@@ -1,6 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import Navigation from '../components/Navigation.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import '../styles/global.css';
 
 const courses = await getCollection('courses');
 
@@ -39,269 +42,182 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
     <title>Edumynt - Master Literature & More</title>
     <meta name="description" content="Interactive learning platform for literature, periods, movements, and writers. Start your journey today." />
   </head>
-  <body>
+  <body class="min-h-screen flex flex-col">
     <Navigation pageType="home" />
 
     <!-- Main Content -->
-    <main class="main-content">
-      <section class="hero-section">
-        <h1 class="hero-title">Master Literature & More</h1>
-        <p class="hero-subtitle">Interactive learning platform for literature, periods, movements, and writers</p>
+    <main class="flex-1">
+      <!-- Hero Section -->
+      <section class="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+        <div class="absolute inset-0 bg-grid-white/[0.02] bg-grid-16"></div>
+        <div class="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center">
+            <div class="mb-8 animate-in fade-in slide-up duration-700">
+              <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
+                <svg class="h-8 w-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+                Master Literature & 
+                <span class="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">More</span>
+              </h1>
+            </div>
+            <p class="mt-6 text-lg leading-8 text-muted-foreground animate-in fade-in slide-up duration-700 delay-200">
+              Interactive learning platform for literature, periods, movements, and writers. Start your journey today.
+            </p>
+            <div class="mt-10 flex items-center justify-center gap-x-6 animate-in fade-in slide-up duration-700 delay-400">
+              <Button href="/courses" class="text-base px-8 py-3">
+                Get Started
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Button>
+              <Button variant="outline" class="text-base px-8 py-3">
+                Learn More
+              </Button>
+            </div>
+          </div>
+        </div>
       </section>
       
-      <!-- Courses Grid -->
-      <section class="courses-section">
-        <h2 class="section-title">Available Courses</h2>
-        <div class="courses-grid">
-          {uniqueCourses.map((course) => (
-            <div class="course-card">
-              <div class="card-icon">📚</div>
-              <h3 class="card-title">{course.name}</h3>
-              <p class="card-description">{course.description}</p>
-              <div class="card-stats">
-                <span>{course.chapterCount} chapters</span>
-                <span>{course.lessonCount} lessons</span>
-              </div>
-              <a href={`/courses/${course.slug}`} class="card-button">Start Learning</a>
+      <!-- Courses Section -->
+      <section class="py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center mb-16">
+            <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Available Courses
+            </h2>
+            <p class="mt-4 text-lg text-muted-foreground">
+              Explore our comprehensive collection of literature courses
+            </p>
+          </div>
+          
+          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            {uniqueCourses.map((course, index) => (
+              <Card 
+                variant="interactive" 
+                class={`group animate-in fade-in slide-up duration-700`}
+                style={`animation-delay: ${index * 100}ms`}
+              >
+                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 group-hover:bg-primary/20 transition-colors">
+                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  {course.name}
+                </h3>
+                
+                <p class="text-muted-foreground mb-6 leading-relaxed">
+                  {course.description}
+                </p>
+                
+                <div class="flex items-center gap-6 mb-6 text-sm text-muted-foreground">
+                  <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>{course.chapterCount} chapters</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>{course.lessonCount} lessons</span>
+                  </div>
+                </div>
+                
+                <Button 
+                  href={`/courses/${course.slug}`} 
+                  class="w-full group-hover:shadow-md transition-shadow"
+                >
+                  Start Learning
+                  <svg class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="py-24 sm:py-32 bg-muted/30">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center mb-16">
+            <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Why Choose Edumynt?
+            </h2>
+            <p class="mt-4 text-lg text-muted-foreground">
+              Experience learning like never before with our innovative approach
+            </p>
+          </div>
+          
+          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            <div class="animate-in fade-in slide-up duration-700 delay-100">
+              <Card class="text-center h-full">
+                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 mx-auto">
+                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground mb-3">
+                  Interactive Learning
+                </h3>
+                <p class="text-muted-foreground leading-relaxed">
+                  Engage with content through interactive exercises, quizzes, and multimedia resources.
+                </p>
+              </Card>
             </div>
-          ))}
+            
+            <div class="animate-in fade-in slide-up duration-700 delay-200">
+              <Card class="text-center h-full">
+                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 mx-auto">
+                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground mb-3">
+                  Comprehensive Content
+                </h3>
+                <p class="text-muted-foreground leading-relaxed">
+                  Dive deep into literature with our extensive collection of periods, movements, and writers.
+                </p>
+              </Card>
+            </div>
+            
+            <div class="animate-in fade-in slide-up duration-700 delay-300">
+              <Card class="text-center h-full">
+                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 mx-auto">
+                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground mb-3">
+                  Learn at Your Pace
+                </h3>
+                <p class="text-muted-foreground leading-relaxed">
+                  Study whenever and wherever you want with our flexible, self-paced learning approach.
+                </p>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <!-- Minimal Footer -->
-    <footer class="footer">
-      <div class="footer-content">
-        <p>&copy; 2024 Edumynt. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="border-t bg-card">
+      <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+        <div class="flex items-center justify-center">
+          <p class="text-sm text-muted-foreground">
+            &copy; 2024 Edumynt. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
-
-    <style>
-      :root {
-        --bg-color: #f8fafc;
-        --text-color: #1a1a1a;
-        --card-bg: white;
-        --border-color: #e5e7eb;
-        --accent-color: #667eea;
-        --hover-bg: #f3f4f6;
-      }
-
-      :root[data-theme="dark"] {
-        --bg-color: #0f172a;
-        --text-color: #f1f5f9;
-        --card-bg: #1e293b;
-        --border-color: #334155;
-        --accent-color: #818cf8;
-        --hover-bg: #334155;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        line-height: 1.6;
-        color: var(--text-color);
-        background: var(--bg-color);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        margin: 0;
-        padding: 0;
-      }
-
-      /* Main Content */
-      .main-content {
-        flex: 1;
-        padding: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-        width: 100%;
-      }
-
-      /* Hero Section */
-      .hero-section {
-        text-align: center;
-        margin-bottom: 4rem;
-        padding: 2rem 0;
-      }
-
-      .hero-title {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-        background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: var(--text-color);
-      }
-
-      .hero-subtitle {
-        font-size: 1.2rem;
-        color: #666;
-        max-width: 600px;
-        margin: 0 auto;
-        line-height: 1.6;
-      }
-
-      /* Courses Section */
-      .courses-section {
-        margin-bottom: 3rem;
-      }
-
-      .section-title {
-        font-size: 2rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 2rem;
-        color: var(--text-color);
-      }
-
-      .courses-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-      }
-
-      .course-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 2rem;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      }
-
-      .course-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      }
-
-      .card-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .card-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: var(--text-color);
-      }
-
-      .card-description {
-        color: #666;
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-        font-size: 0.95rem;
-      }
-
-      .card-stats {
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-        color: #888;
-        font-size: 0.9rem;
-      }
-
-      .card-button {
-        display: inline-block;
-        background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
-        color: white;
-        text-decoration: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: transform 0.2s ease;
-      }
-
-      .card-button:hover {
-        transform: translateY(-2px);
-      }
-
-      /* Footer */
-      .footer {
-        background: var(--card-bg);
-        border-top: 1px solid var(--border-color);
-        padding: 2rem 0;
-        margin-top: auto;
-      }
-
-      .footer-content {
-        text-align: center;
-        color: #666;
-        font-size: 0.9rem;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero-title {
-          font-size: 2.2rem;
-        }
-
-        .hero-subtitle {
-          font-size: 1rem;
-          padding: 0 1rem;
-        }
-
-        .main-content {
-          padding: 1rem;
-        }
-
-        .courses-grid {
-          grid-template-columns: 1fr;
-          gap: 1.5rem;
-        }
-
-        .course-card {
-          padding: 1.5rem;
-        }
-
-        .card-title {
-          font-size: 1.3rem;
-        }
-
-        .card-stats {
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .hero-title {
-          font-size: 1.8rem;
-        }
-
-        .hero-subtitle {
-          font-size: 0.9rem;
-        }
-
-        .main-content {
-          padding: 0.75rem 0.5rem;
-        }
-
-        .course-card {
-          padding: 1.25rem;
-        }
-
-        .card-icon {
-          font-size: 2rem;
-        }
-
-        .card-title {
-          font-size: 1.2rem;
-        }
-
-        .card-description {
-          font-size: 0.9rem;
-        }
-
-        .card-button {
-          padding: 0.7rem 1.2rem;
-          font-size: 0.9rem;
-        }
-      }
-    </style>
   </body>
 </html>

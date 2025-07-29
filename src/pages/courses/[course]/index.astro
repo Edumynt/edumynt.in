@@ -1,6 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import Navigation from '../../../components/Navigation.astro';
+import Button from '../../../components/ui/Button.astro';
+import Card from '../../../components/ui/Card.astro';
+import '../../../styles/global.css';
 
 export async function getStaticPaths() {
   const courses = await getCollection('courses');
@@ -159,442 +162,183 @@ const firstLesson = lessons[0];
     <title>{courseName} - Course Overview</title>
     <meta name="description" content={`Learn ${courseName} with our comprehensive course featuring ${hierarchySections.length} sections and ${lessons.length} lessons.`} />
   </head>
-  <body>
+  <body class="min-h-screen bg-background text-foreground">
     <Navigation pageType="course" currentCourse={course} />
 
-    <nav class="breadcrumb">
-      <a href="/courses">← All Courses</a>
+    <!-- Breadcrumb -->
+    <nav class="border-b bg-muted/30">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="flex items-center py-4">
+          <Button variant="ghost" href="/courses" class="text-sm">
+            <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            All Courses
+          </Button>
+        </div>
+      </div>
     </nav>
 
-    <main class="container">
-      <header class="course-header">
-        <h1>{courseName}</h1>
-        <p>{firstLesson?.data.description || `Complete course on ${courseName}`}</p>
-        <div class="course-stats">
-          <span>{hierarchySections.length} sections</span>
-          <span>{lessons.length} lessons</span>
-        </div>
-      </header>
-
-      <div class="chapters-list">
-        {hierarchySections.map((section, index) => (
-          section.isIndividualFile ? (
-            // Render individual files as direct links without section wrapper
-            <div class="lesson-direct">
-              <a href={generateLessonUrl(section.lessons[0], course)} class="lesson-direct-link">
-                <span class="lesson-number">{index + 1}</span>
-                <span class="lesson-title">{section.name}</span>
-                <span class="lesson-arrow">→</span>
-              </a>
+    <main class="flex-1">
+      <!-- Course Header -->
+      <section class="py-16 border-b">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8">
+          <div class="text-center">
+            <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl mb-4">
+              {courseName}
+            </h1>
+            <p class="text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto">
+              {firstLesson?.data.description || `Complete course on ${courseName}`}
+            </p>
+            <div class="flex items-center justify-center gap-8 text-sm text-muted-foreground">
+              <div class="flex items-center gap-2">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <span>{hierarchySections.length} sections</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>{lessons.length} lessons</span>
+              </div>
             </div>
-          ) : (
-            // Render folder sections
-            <section class="chapter">
-              <div class="chapter-header">
-                <h2 class="chapter-title" data-section={`section-${index}`}>
-                  {section.name}
-                  {(section.lessons.length > 0 || (section.subsections && section.subsections.length > 0)) && (
-                    <span class="toggle-icon" id={`toggle-section-${index}`}>▼</span>
-                  )}
-                </h2>
-              </div>
-              <div class="chapter-content" id={`section-${index}`}>
-                {section.lessons && section.lessons.length > 0 && (
-                  <ul class="lessons-list">
-                    {section.lessons.map((lesson, lessonIndex) => {
-                      const linkUrl = generateLessonUrl(lesson, course);
-                      
-                      return (
-                        <li class="lesson-item">
-                          <a href={linkUrl}>
-                            <span class="lesson-number">{lessonIndex + 1}</span>
-                            <span class="lesson-title">{lesson.data.title}</span>
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-                {section.subsections && section.subsections.length > 0 && (
-                  <div class="subsections">
-                    {section.subsections.map((subsection, subIndex) => (
-                      <div class="subsection">
-                        <div class="subsection-header">
-                          <h3 class="subsection-title" data-section={`subsection-${index}-${subIndex}`}>
-                            {subsection.name}
-                            <span class="toggle-icon" id={`toggle-subsection-${index}-${subIndex}`}>▼</span>
-                          </h3>
-                        </div>
-                        <div class="subsection-content" id={`subsection-${index}-${subIndex}`}>
-                          {subsection.lessons && subsection.lessons.length > 0 && (
-                            <ul class="lessons-list">
-                              {subsection.lessons.map((lesson, lessonIndex) => {
-                                const linkUrl = generateLessonUrl(lesson, course);
-                                
-                                return (
-                                  <li class="lesson-item">
-                                    <a href={linkUrl}>
-                                      <span class="lesson-number">{lessonIndex + 1}</span>
-                                      <span class="lesson-title">{lesson.data.title}</span>
-                                    </a>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          )}
-                        </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Course Content -->
+      <section class="py-16">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8">
+          <div class="space-y-6">
+            {hierarchySections.map((section, index) => (
+              section.isIndividualFile ? (
+                <!-- Direct lesson link -->
+                <Card variant="interactive" class="group">
+                  <a href={generateLessonUrl(section.lessons[0], course)} class="flex items-center justify-between p-6 text-left">
+                    <div class="flex items-center gap-4">
+                      <div class="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg text-primary font-semibold group-hover:bg-primary/20 transition-colors">
+                        {index + 1}
                       </div>
-                    ))}
+                      <div>
+                        <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {section.name}
+                        </h3>
+                      </div>
+                    </div>
+                    <svg class="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </a>
+                </Card>
+              ) : (
+                <!-- Section with lessons -->
+                <Card class="overflow-hidden">
+                  <div class="border-b bg-muted/30">
+                    <button 
+                      class="w-full text-left p-6 flex items-center justify-between hover:bg-muted/50 transition-colors chapter-toggle"
+                      data-target={`section-${index}`}
+                    >
+                      <h2 class="text-xl font-semibold text-foreground">
+                        {section.name}
+                      </h2>
+                      <svg class="h-5 w-5 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
                   </div>
-                )}
-              </div>
-            </section>
-          )
-        ))}
-      </div>
+                  
+                  <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`section-${index}`}>
+                    {section.lessons && section.lessons.length > 0 && (
+                      <div class="divide-y">
+                        {section.lessons.map((lesson, lessonIndex) => {
+                          const linkUrl = generateLessonUrl(lesson, course);
+                          return (
+                            <a href={linkUrl} class="flex items-center gap-4 p-4 hover:bg-muted/30 transition-colors group">
+                              <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-medium text-primary group-hover:bg-primary/20 transition-colors">
+                                {lessonIndex + 1}
+                              </div>
+                              <span class="text-foreground group-hover:text-primary transition-colors">
+                                {lesson.data.title}
+                              </span>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+                    
+                    {section.subsections && section.subsections.length > 0 && (
+                      <div class="border-t">
+                        {section.subsections.map((subsection, subIndex) => (
+                          <div class="border-b last:border-b-0">
+                            <button 
+                              class="w-full text-left p-4 pl-8 flex items-center justify-between hover:bg-muted/50 transition-colors bg-muted/20 chapter-toggle"
+                              data-target={`subsection-${index}-${subIndex}`}
+                            >
+                              <h3 class="text-lg font-medium text-foreground">
+                                {subsection.name}
+                              </h3>
+                              <svg class="h-4 w-4 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+                            
+                            <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`subsection-${index}-${subIndex}`}>
+                              {subsection.lessons && subsection.lessons.length > 0 && (
+                                <div class="divide-y bg-muted/10">
+                                  {subsection.lessons.map((lesson, lessonIndex) => {
+                                    const linkUrl = generateLessonUrl(lesson, course);
+                                    return (
+                                      <a href={linkUrl} class="flex items-center gap-4 p-4 pl-12 hover:bg-muted/30 transition-colors group">
+                                        <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-medium text-primary group-hover:bg-primary/20 transition-colors">
+                                          {lessonIndex + 1}
+                                        </div>
+                                        <span class="text-foreground group-hover:text-primary transition-colors">
+                                          {lesson.data.title}
+                                        </span>
+                                      </a>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              )
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
 
-    <style>
-      :root {
-        --bg-color: #f8fafc;
-        --text-color: #1a1a1a;
-        --card-bg: white;
-        --border-color: #e5e7eb;
-        --accent-color: #667eea;
-        --hover-bg: #f3f4f6;
-      }
-
-      :root[data-theme="dark"] {
-        --bg-color: #0f172a;
-        --text-color: #f1f5f9;
-        --card-bg: #1e293b;
-        --border-color: #334155;
-        --accent-color: #818cf8;
-        --hover-bg: #334155;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        line-height: 1.6;
-        color: var(--text-color);
-        background: var(--bg-color);
-        margin: 0;
-        padding: 0;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .breadcrumb {
-        padding: 1rem 2rem;
-        background: var(--hover-bg);
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .breadcrumb a {
-        color: var(--accent-color);
-        text-decoration: none;
-      }
-
-      .breadcrumb a:hover {
-        text-decoration: underline;
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-      }
-
-      .course-header {
-        text-align: center;
-        margin-bottom: 3rem;
-        padding-bottom: 2rem;
-        border-bottom: 2px solid #e5e7eb;
-      }
-
-      .course-header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: var(--text-color);
-      }
-
-      .course-header p {
-        font-size: 1.2rem;
-        color: #6b7280;
-        margin-bottom: 1rem;
-      }
-
-      .course-stats {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        font-size: 1rem;
-        color: #9ca3af;
-      }
-
-      .chapter {
-        margin-bottom: 2rem;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        overflow: hidden;
-      }
-
-      .chapter-header {
-        background: var(--hover-bg);
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .chapter-title {
-        padding: 1rem 1.5rem;
-        margin: 0;
-        font-size: 1.3rem;
-        color: var(--text-color);
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        user-select: none;
-      }
-
-      .chapter-title:hover {
-        background: var(--border-color);
-      }
-
-      .toggle-icon {
-        transition: transform 0.3s ease;
-        font-size: 0.8rem;
-        color: #6b7280;
-      }
-
-      .toggle-icon.rotated {
-        transform: rotate(-90deg);
-      }
-
-      .chapter-content {
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-
-      .chapter-content.collapsed {
-        max-height: 0;
-      }
-
-      .subsections {
-        border-top: 1px solid #f3f4f6;
-      }
-
-      .subsection {
-        border-bottom: 1px solid #f9fafb;
-      }
-
-      .subsection:last-child {
-        border-bottom: none;
-      }
-
-      .subsection-header {
-        background: #f9fafb;
-      }
-
-      .subsection-title {
-        padding: 0.75rem 2rem;
-        margin: 0;
-        font-size: 1.1rem;
-        color: #4b5563;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        user-select: none;
-      }
-
-      .subsection-title:hover {
-        background: #f3f4f6;
-      }
-
-      .subsection-content {
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-
-      .subsection-content.collapsed {
-        max-height: 0;
-      }
-
-      .subsection .lessons-list {
-        background: white;
-      }
-
-      .lessons-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .lesson-item {
-        border-bottom: 1px solid #f3f4f6;
-      }
-
-      .lesson-item:last-child {
-        border-bottom: none;
-      }
-
-      .lesson-item a {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem 1.5rem;
-        text-decoration: none;
-        color: var(--text-color);
-        transition: background 0.2s;
-      }
-
-      .lesson-item a:hover {
-        background: var(--hover-bg);
-      }
-
-      .lesson-number {
-        background: var(--accent-color);
-        color: white;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-        font-weight: bold;
-        flex-shrink: 0;
-      }
-
-      .lesson-title {
-        flex: 1;
-        font-weight: 500;
-      }
-
-      .lesson-direct {
-        margin-bottom: 1rem;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        overflow: hidden;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .lesson-direct:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      .lesson-direct-link {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1.25rem 1.5rem;
-        text-decoration: none;
-        color: var(--text-color);
-        transition: background 0.2s;
-      }
-
-      .lesson-direct-link:hover {
-        background: var(--hover-bg);
-      }
-
-      .lesson-arrow {
-        color: var(--accent-color);
-        font-weight: bold;
-        opacity: 0.7;
-        transition: opacity 0.2s, transform 0.2s;
-      }
-
-      .lesson-direct:hover .lesson-arrow {
-        opacity: 1;
-        transform: translateX(4px);
-      }
-
-      @media (max-width: 768px) {
-        .container {
-          padding: 1rem;
-        }
-
-        .breadcrumb {
-          padding: 0.75rem 1rem;
-        }
-
-        .course-header h1 {
-          font-size: 2rem;
-        }
-
-        .course-header p {
-          font-size: 1rem;
-        }
-
-        .course-stats {
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        .chapter-title {
-          font-size: 1.1rem;
-          padding: 0.75rem 1rem;
-        }
-
-        .lesson-item a {
-          padding: 0.75rem 1rem;
-        }
-      }
-    </style>
-
     <script>
-      function toggleSection(sectionId) {
-        const content = document.getElementById(sectionId);
-        const toggleIcon = document.getElementById(`toggle-${sectionId}`);
-        
-        if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-          // Collapse
-          content.style.maxHeight = '0px';
-          content.classList.add('collapsed');
-          if (toggleIcon) {
-            toggleIcon.classList.add('rotated');
-          }
-        } else {
-          // Expand
-          content.style.maxHeight = content.scrollHeight + 'px';
-          content.classList.remove('collapsed');
-          if (toggleIcon) {
-            toggleIcon.classList.remove('rotated');
-          }
-        }
-      }
-
-      // Initialize all sections as collapsed and add event listeners
       document.addEventListener('DOMContentLoaded', function() {
-        // Initialize content heights as collapsed
-        const allContents = document.querySelectorAll('.chapter-content, .subsection-content');
-        allContents.forEach(content => {
-          content.style.maxHeight = '0px';
-          content.classList.add('collapsed');
-        });
-
-        // Initialize all toggle icons as rotated (collapsed state)
-        const allToggleIcons = document.querySelectorAll('.toggle-icon');
-        allToggleIcons.forEach(icon => {
-          icon.classList.add('rotated');
-        });
-
-        // Add click event listeners
-        const chapterTitles = document.querySelectorAll('.chapter-title[data-section]');
-        chapterTitles.forEach(title => {
-          title.addEventListener('click', function() {
-            const sectionId = this.getAttribute('data-section');
-            toggleSection(sectionId);
-          });
-        });
-
-        const subsectionTitles = document.querySelectorAll('.subsection-title[data-section]');
-        subsectionTitles.forEach(title => {
-          title.addEventListener('click', function() {
-            const sectionId = this.getAttribute('data-section');
-            toggleSection(sectionId);
+        const toggleButtons = document.querySelectorAll('.chapter-toggle');
+        
+        toggleButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const content = document.getElementById(targetId);
+            const icon = this.querySelector('.toggle-icon');
+            
+            if (content && icon) {
+              const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
+              
+              if (isExpanded) {
+                // Collapse
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+              } else {
+                // Expand
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+              }
+            }
           });
         });
       });

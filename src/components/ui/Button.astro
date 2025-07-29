@@ -1,0 +1,19 @@
+---
+import { cn, buttonVariants, type ButtonProps } from "../../lib/utils";
+
+export interface Props extends ButtonProps {
+  class?: string;
+  href?: string;
+}
+
+const { variant, size, class: className, href, ...props } = Astro.props;
+const Component = href ? "a" : "button";
+---
+
+<Component
+  class={cn(buttonVariants({ variant, size }), className)}
+  href={href}
+  {...props}
+>
+  <slot />
+</Component>

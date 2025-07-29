@@ -1,0 +1,47 @@
+---
+import { cn } from "../../lib/utils";
+
+export interface Props {
+  class?: string;
+  open?: boolean;
+  onOpenChange?: string;
+}
+
+const { class: className, open = false, ...props } = Astro.props;
+---
+
+<!-- Backdrop -->
+{open && (
+  <div 
+    class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+    data-sheet-backdrop
+  ></div>
+)}
+
+<!-- Sheet Container -->
+<div
+  class={cn(
+    "fixed z-50 transition-transform duration-300 ease-in-out",
+    "bg-background border shadow-lg",
+    open ? "translate-x-0" : "translate-x-full",
+    className
+  )}
+  data-sheet-content
+  {...props}
+>
+  <slot />
+</div>
+
+<script>
+  // Handle sheet backdrop clicks
+  document.addEventListener('click', (e) => {
+    const backdrop = e.target.closest('[data-sheet-backdrop]');
+    if (backdrop) {
+      const sheet = document.querySelector('[data-sheet-content]');
+      if (sheet) {
+        sheet.classList.add('translate-x-full');
+        backdrop.remove();
+      }
+    }
+  });
+</script>

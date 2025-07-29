@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Navigation from '../../../components/Navigation.astro';
+import Button from '../../../components/ui/Button.astro';
+import '../../../styles/global.css';
 
 export async function getStaticPaths() {
   const courses = await getCollection('courses');
@@ -87,366 +89,159 @@ const lessonContent = lesson.body;
     <title>{lesson.data.title} - {lesson.data.course}</title>
     <meta name="description" content={lesson.data.description} />
   </head>
-  <body>
+  <body class="min-h-screen bg-background text-foreground">
     <Navigation 
       pageType="lesson" 
       currentCourse={course} 
       currentLesson={slug} 
       lessonContent={lessonContent}
     />
-    <nav class="breadcrumb">
-      {breadcrumbs.map((crumb, index) => (
-        <>
-          {crumb.url ? (
-            <a href={crumb.url}>{crumb.name}</a>
-          ) : (
-            <span>{crumb.name}</span>
-          )}
-          {index < breadcrumbs.length - 1 && <span class="separator">/</span>}
-        </>
-      ))}
+    
+    <!-- Breadcrumb -->
+    <nav class="border-b bg-muted/30">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="flex items-center py-4 text-sm">
+          {breadcrumbs.map((crumb, index) => (
+            <div class="flex items-center">
+              {crumb.url ? (
+                <Button variant="ghost" href={crumb.url} class="text-sm p-0 h-auto font-normal">
+                  {crumb.name}
+                </Button>
+              ) : (
+                <span class="text-muted-foreground">{crumb.name}</span>
+              )}
+              {index < breadcrumbs.length - 1 && (
+                <svg class="mx-2 h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     </nav>
 
-    <div class="layout">
-      <aside class="sidebar">
-        <h3>Course Navigation</h3>
-        <div class="folders-nav">
-          {Object.entries(lessonsByFolder)
-            .sort(([a], [b]) => {
-              if (a === 'root') return -1;
-              if (b === 'root') return 1;
-              return a.localeCompare(b);
-            })
-            .map(([folderPath, lessons]) => (
-              <div class="folder-section">
-                <h4>
-                  {folderPath === 'root' 
-                    ? 'Course Files' 
-                    : folderPath.split('/').map(part => 
-                        part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ')
-                      ).join(' / ')
-                  }
-                </h4>
-                <ul>
-                  {lessons.map(l => (
-                    <li class={l.slug === lesson.slug ? 'current-lesson' : ''}>
-                      <a href={generateLessonUrl(l)}>
+    <div class="flex min-h-screen">
+      <!-- Desktop Sidebar -->
+      <aside class="hidden lg:flex w-80 bg-card border-r flex-col">
+        <div class="p-6 border-b">
+          <h3 class="text-lg font-semibold text-foreground">Course Navigation</h3>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4">
+          <div class="space-y-6">
+            {Object.entries(lessonsByFolder)
+              .sort(([a], [b]) => {
+                if (a === 'root') return -1;
+                if (b === 'root') return 1;
+                return a.localeCompare(b);
+              })
+              .map(([folderPath, lessons]) => (
+                <div class="space-y-2">
+                  <h4 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                    {folderPath === 'root' 
+                      ? 'Course Files' 
+                      : folderPath.split('/').map(part => 
+                          part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ')
+                        ).join(' / ')
+                    }
+                  </h4>
+                  <div class="space-y-1">
+                    {lessons.map(l => (
+                      <a 
+                        href={generateLessonUrl(l)} 
+                        class={`block px-3 py-2 text-sm rounded-md transition-colors ${
+                          l.slug === lesson.slug 
+                            ? 'bg-primary text-primary-foreground font-medium' 
+                            : 'text-foreground hover:bg-accent hover:text-accent-foreground'
+                        }`}
+                      >
                         {l.data.title}
                       </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </aside>
 
-      <main class="content">
-        <article class="lesson">
-          <header class="lesson-header">
-            <h1>{lesson.data.title}</h1>
-            {lesson.data.tags && (
-              <div class="tags">
-                {lesson.data.tags.map(tag => (
-                  <span class="tag">{tag}</span>
-                ))}
+      <!-- Main Content -->
+      <main class="flex-1 overflow-hidden">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8 py-8">
+          <article class="space-y-8">
+            <!-- Lesson Header -->
+            <header class="space-y-4 pb-8 border-b">
+              <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+                {lesson.data.title}
+              </h1>
+              
+              <div class="flex flex-wrap items-center gap-4">
+                {lesson.data.tags && (
+                  <div class="flex flex-wrap gap-2">
+                    {lesson.data.tags.map(tag => (
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {lesson.data.date && (
+                  <time class="text-sm text-muted-foreground">
+                    {new Date(lesson.data.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                )}
               </div>
-            )}
-            {lesson.data.date && (
-              <time class="date">
-                {new Date(lesson.data.date).toLocaleDateString()}
-              </time>
-            )}
-          </header>
+            </header>
 
-          <div class="lesson-content">
-            <Content />
-          </div>
+            <!-- Lesson Content -->
+            <div class="prose prose-slate max-w-none dark:prose-invert prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-slate-500 dark:prose-lead:text-slate-400 prose-a:font-semibold dark:prose-a:text-slate-300 prose-a:no-underline prose-a:shadow-[inset_0_-2px_0_0_var(--tw-prose-background,#fff),inset_0_calc(-1*(var(--tw-prose-underline-size,4px)+2px))_0_0_var(--tw-prose-underline,theme(colors.slate.300))] hover:prose-a:[--tw-prose-underline-size:6px] dark:[--tw-prose-background:theme(colors.slate.900)] dark:prose-a:shadow-[inset_0_calc(-1*var(--tw-prose-underline-size,2px))_0_0_var(--tw-prose-underline,theme(colors.slate.600))] dark:hover:prose-a:[--tw-prose-underline-size:6px] prose-pre:rounded-xl prose-pre:bg-slate-900 prose-pre:shadow-lg dark:prose-pre:bg-slate-800/60 dark:prose-pre:shadow-none dark:prose-pre:ring-1 dark:prose-pre:ring-slate-300/10 prose-th:border-slate-200 prose-td:border-slate-200 dark:prose-th:border-slate-700 dark:prose-td:border-slate-700">
+              <Content />
+            </div>
 
-          <nav class="lesson-nav">
-            {prevLesson && (
-              <a href={generateLessonUrl(prevLesson)} class="nav-link prev">
-                ← Previous: {prevLesson.data.title}
-              </a>
-            )}
-            {nextLesson && (
-              <a href={generateLessonUrl(nextLesson)} class="nav-link next">
-                Next: {nextLesson.data.title} →
-              </a>
-            )}
-          </nav>
-        </article>
+            <!-- Navigation -->
+            <nav class="flex flex-col sm:flex-row justify-between gap-4 pt-8 border-t">
+              {prevLesson ? (
+                <Button 
+                  variant="outline" 
+                  href={generateLessonUrl(prevLesson)} 
+                  class="flex items-center gap-2 flex-1 max-w-sm"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  <div class="text-left">
+                    <div class="text-xs text-muted-foreground">Previous</div>
+                    <div class="font-medium truncate">{prevLesson.data.title}</div>
+                  </div>
+                </Button>
+              ) : (
+                <div class="flex-1 max-w-sm"></div>
+              )}
+              
+              {nextLesson ? (
+                <Button 
+                  href={generateLessonUrl(nextLesson)} 
+                  class="flex items-center gap-2 flex-1 max-w-sm ml-auto"
+                >
+                  <div class="text-right">
+                    <div class="text-xs text-primary-foreground/80">Next</div>
+                    <div class="font-medium truncate">{nextLesson.data.title}</div>
+                  </div>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m-7-7h18" />
+                  </svg>
+                </Button>
+              ) : (
+                <div class="flex-1 max-w-sm"></div>
+              )}
+            </nav>
+          </article>
+        </div>
       </main>
     </div>
-
-    <style>
-      :root {
-        --bg-color: #f8fafc;
-        --text-color: #1a1a1a;
-        --card-bg: white;
-        --border-color: #e5e7eb;
-        --accent-color: #667eea;
-        --hover-bg: #f3f4f6;
-      }
-
-      :root[data-theme="dark"] {
-        --bg-color: #0f172a;
-        --text-color: #f1f5f9;
-        --card-bg: #1e293b;
-        --border-color: #334155;
-        --accent-color: #818cf8;
-        --hover-bg: #334155;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        line-height: 1.6;
-        color: var(--text-color);
-        background: var(--bg-color);
-        margin: 0;
-        padding: 0;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .breadcrumb {
-        padding: 1rem 2rem;
-        background: var(--hover-bg);
-        border-bottom: 1px solid var(--border-color);
-        font-size: 0.9rem;
-      }
-
-      .breadcrumb a {
-        color: var(--accent-color);
-        text-decoration: none;
-      }
-
-      .breadcrumb a:hover {
-        text-decoration: underline;
-      }
-
-      .breadcrumb span {
-        color: var(--text-color);
-      }
-
-      .separator {
-        margin: 0 0.5rem;
-        color: #9ca3af;
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 300px 1fr;
-        min-height: calc(100vh - 60px);
-      }
-
-      .sidebar {
-        background: var(--card-bg);
-        padding: 2rem;
-        border-right: 1px solid var(--border-color);
-        overflow-y: auto;
-      }
-
-      .sidebar h3 {
-        margin: 0 0 1.5rem 0;
-        color: var(--text-color);
-        font-size: 1.1rem;
-      }
-
-      .folder-section {
-        margin-bottom: 1.5rem;
-      }
-
-      .folder-section h4 {
-        margin: 0 0 0.5rem 0;
-        color: var(--text-color);
-        font-size: 0.9rem;
-        font-weight: 600;
-      }
-
-      .folder-section ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .folder-section li {
-        margin-bottom: 0.25rem;
-      }
-
-      .folder-section a {
-        display: block;
-        padding: 0.5rem 0.75rem;
-        color: var(--text-color);
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-      }
-
-      .folder-section a:hover {
-        background: var(--hover-bg);
-      }
-
-      .current-lesson a {
-        background: var(--accent-color);
-        color: white;
-      }
-
-      .current-lesson a:hover {
-        background: var(--accent-color);
-        filter: brightness(0.9);
-      }
-
-      .content {
-        padding: 2rem;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      .lesson-header {
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid var(--border-color);
-      }
-
-      .lesson-header h1 {
-        margin: 0 0 1rem 0;
-        font-size: 2.5rem;
-        color: var(--text-color);
-      }
-
-      .tags {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .tag {
-        background: var(--hover-bg);
-        color: var(--accent-color);
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        border: 1px solid var(--border-color);
-      }
-
-      .date {
-        color: #6b7280;
-        font-size: 0.9rem;
-      }
-
-      .lesson-content {
-        line-height: 1.7;
-        color: var(--text-color);
-      }
-
-      .lesson-content :global(h2) {
-        margin: 2rem 0 1rem 0;
-        color: var(--text-color);
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 0.5rem;
-      }
-
-      .lesson-content :global(h3) {
-        margin: 1.5rem 0 0.75rem 0;
-        color: var(--text-color);
-      }
-
-      .lesson-content :global(p) {
-        margin-bottom: 1rem;
-      }
-
-      .lesson-content :global(code) {
-        background: var(--hover-bg);
-        padding: 0.2rem 0.4rem;
-        border-radius: 3px;
-        font-size: 0.9rem;
-        border: 1px solid var(--border-color);
-      }
-
-      .lesson-content :global(pre) {
-        background: var(--card-bg);
-        color: var(--text-color);
-        padding: 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        margin: 1rem 0;
-        border: 1px solid var(--border-color);
-      }
-
-      .lesson-content :global(blockquote) {
-        border-left: 4px solid var(--accent-color);
-        padding-left: 1rem;
-        margin: 1rem 0;
-        background: var(--hover-bg);
-        padding: 1rem;
-        border-radius: 0 4px 4px 0;
-      }
-
-      .lesson-nav {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--border-color);
-        gap: 1rem;
-      }
-
-      .nav-link {
-        display: block;
-        padding: 1rem;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        text-decoration: none;
-        color: var(--text-color);
-        transition: all 0.2s;
-        flex: 1;
-        max-width: 300px;
-      }
-
-      .nav-link:hover {
-        background: var(--hover-bg);
-        transform: translateY(-1px);
-      }
-
-      .nav-link.prev {
-        text-align: left;
-      }
-
-      .nav-link.next {
-        text-align: right;
-        margin-left: auto;
-      }
-
-      @media (max-width: 768px) {
-        .layout {
-          grid-template-columns: 1fr;
-        }
-
-        .sidebar {
-          display: none;
-        }
-
-        .content {
-          padding: 1rem;
-        }
-
-        .lesson-header h1 {
-          font-size: 2rem;
-        }
-
-        .lesson-nav {
-          flex-direction: column;
-        }
-
-        .nav-link.next {
-          margin-left: 0;
-          text-align: left;
-        }
-      }
-    </style>
   </body>
 </html>
