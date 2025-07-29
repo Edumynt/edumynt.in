@@ -1,0 +1,866 @@
+---
+import { getCollection } from 'astro:content';
+
+export interface Props {
+  pageType: 'home' | 'courses' | 'course' | 'lesson';
+  currentCourse?: string;
+  currentLesson?: string;
+  lessonContent?: string;
+}
+
+const { pageType, currentCourse, currentLesson, lessonContent } = Astro.props;
+
+// Get all courses for navigation
+const courses = await getCollection('courses');
+const courseGroups = courses.reduce((acc, course) => {
+  const courseName = course.data.course;
+  if (!acc[courseName]) {
+    acc[courseName] = [];
+  }
+  acc[courseName].push(course);
+  return acc;
+}, {});
+
+const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) => {
+  const chapters = {};
+  lessons.forEach(lesson => {
+    const chapter = lesson.data.chapter || 'General';
+    if (!chapters[chapter]) {
+      chapters[chapter] = [];
+    }
+    chapters[chapter].push(lesson);
+  });
+  
+  return {
+    name: courseName,
+    slug: courseName.toLowerCase().replace(/\s+/g, '-'),
+    chapters: Object.entries(chapters).map(([chapterName, chapterLessons]) => ({
+      name: chapterName,
+      lessons: chapterLessons.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+    }))
+  };
+});
+
+// Extract headings from lesson content for TOC
+function extractHeadings(content) {
+  if (!content) return [];
+  
+  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+  const headings = [];
+  let match;
+  
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1].length;
+    const text = match[2].trim();
+    const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    
+    headings.push({
+      level,
+      text,
+      id,
+      children: []
+    });
+  }
+  
+  // Build hierarchy
+  const hierarchicalHeadings = [];
+  const stack = [];
+  
+  headings.forEach(heading => {
+    while (stack.length > 0 && stack[stack.length - 1].level >= heading.level) {
+      stack.pop();
+    }
+    
+    if (stack.length === 0) {
+      hierarchicalHeadings.push(heading);
+    } else {
+      stack[stack.length - 1].children.push(heading);
+    }
+    
+    stack.push(heading);
+  });
+  
+  return hierarchicalHeadings;
+}
+
+const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
+---
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Sidebar Drawer -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3 id="sidebarTitle">Navigation</h3>
+    <button class="close-btn" id="closeSidebar">×</button>
+  </div>
+  <div class="sidebar-content">
+    <!-- Home Navigation Item -->
+    <div class="nav-item">
+      <a href="/" class="nav-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12L5 10L12 3L19 10L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 12V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Home
+      </a>
+    </div>
+    
+    <!-- Course Navigation -->
+    {pageType === 'home' && (
+      <div class="nav-item">
+        <div class="courses-nav">
+          <a href="/courses" class="nav-link courses-main">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.5 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Courses
+          </a>
+          <button class="dropdown-toggle" id="coursesDropdown">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="courses-dropdown" id="coursesDropdownContent">
+          {uniqueCourses.map((course) => (
+            <a href={`/courses/${course.slug}`} class="course-dropdown-item">
+              <div class="course-dropdown-name">{course.name}</div>
+              <div class="course-dropdown-meta">{course.chapters.length} chapters</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+    
+    <!-- Hierarchical Course Navigation for courses/course/lesson pages -->
+    {(pageType === 'courses' || pageType === 'course' || pageType === 'lesson') && (
+      <div class="course-hierarchy">
+        {uniqueCourses.map((course) => (
+          <div class="course-section">
+            <div class="course-header" data-course={course.slug}>
+              <a href={`/courses/${course.slug}`} class="course-title-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.5 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {course.name}
+              </a>
+              <button class="course-expand-btn" data-target={`course-${course.slug}`}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div class="course-chapters" id={`course-${course.slug}`}>
+              {course.chapters.map((chapter) => (
+                <div class="chapter-section">
+                  <div class="chapter-header" data-chapter={`${course.slug}-${chapter.name}`}>
+                    <span class="chapter-title">{chapter.name}</span>
+                    <button class="chapter-expand-btn" data-target={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <div class="chapter-lessons" id={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
+                    {chapter.lessons.map((lesson) => {
+                      const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
+                      const isActive = currentLesson && lesson.slug.includes(currentLesson);
+                      return (
+                        <a href={lessonUrl} class={`lesson-link ${isActive ? 'active' : ''}`}>
+                          {lesson.data.title}
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+    
+    <!-- Table of Contents for lesson pages -->
+    {pageType === 'lesson' && tocHeadings.length > 0 && (
+      <div class="toc-section" id="tocSection" style="display: none;">
+        <div class="toc-header">
+          <h4>Table of Contents</h4>
+        </div>
+        <div class="toc-content">
+          {tocHeadings.map((heading) => (
+            <div class="toc-item">
+              <a href={`#${heading.id}`} class="toc-link" data-level={heading.level}>
+                {heading.text}
+              </a>
+              {heading.children.length > 0 && (
+                <div class="toc-children">
+                  {heading.children.map((child) => (
+                    <a href={`#${child.id}`} class="toc-link toc-child" data-level={child.level}>
+                      {child.text}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="nav-container">
+    <button class="menu-button" id="menuButton">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <h1 class="logo">
+      <a href="/">Edumynt</a>
+    </h1>
+    
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle">
+        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="m12 2-3 3m0 0-3-3m3 3v6m7.5-1.5L18 9m0 0 1.5-1.5M18 9h-6m4.5 7.5L15 15m0 0-1.5 1.5M15 15v6m-7.5-1.5L6 15m0 0 1.5 1.5M6 15h6m-4.5-7.5L9 9m0 0-1.5-1.5M9 9v6" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+      
+      {pageType === 'lesson' ? (
+        <button class="toc-toggle" id="tocToggle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 6H21M8 12H21M8 18H21M3 6H3.01M3 12H3.01M3 18H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      ) : (
+        <button class="search-button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      )}
+    </div>
+  </div>
+</nav>
+
+<style>
+  :root {
+    --bg-color: #f8fafc;
+    --text-color: #1a1a1a;
+    --card-bg: white;
+    --border-color: #e5e7eb;
+    --accent-color: #667eea;
+    --hover-bg: #f3f4f6;
+    --sidebar-bg: white;
+    --nav-bg: white;
+  }
+
+  :root[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --text-color: #f1f5f9;
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    --accent-color: #818cf8;
+    --hover-bg: #334155;
+    --sidebar-bg: #1e293b;
+    --nav-bg: #1e293b;
+  }
+
+  /* Sidebar Overlay */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 998;
+  }
+
+  .sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Navigation */
+  .navbar {
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background-color 0.3s ease;
+  }
+
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .menu-button, .search-button, .theme-toggle, .toc-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  .menu-button:hover, .search-button:hover, .theme-toggle:hover, .toc-toggle:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .logo a {
+    background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 100%;
+    background: var(--sidebar-bg);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    z-index: 999;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  .close-btn:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 0;
+  }
+
+  /* Home page navigation */
+  .nav-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 2rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .courses-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .courses-main {
+    flex: 1;
+  }
+
+  .dropdown-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    transition: background-color 0.2s ease, transform 0.3s ease;
+  }
+
+  .dropdown-toggle:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .dropdown-toggle.expanded {
+    transform: rotate(180deg);
+  }
+
+  .courses-dropdown {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: var(--hover-bg);
+  }
+
+  .courses-dropdown.show {
+    max-height: 400px;
+  }
+
+  .course-dropdown-item {
+    display: block;
+    padding: 0.75rem 3rem;
+    text-decoration: none;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+  }
+
+  .course-dropdown-item:hover {
+    background-color: var(--card-bg);
+  }
+
+  .course-dropdown-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .course-dropdown-meta {
+    font-size: 0.8rem;
+    color: #888;
+  }
+
+  /* Hierarchical course navigation */
+  .course-hierarchy {
+    padding: 0;
+  }
+
+  .course-section {
+    margin-bottom: 1rem;
+  }
+
+  .course-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .course-title-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .course-title-link:hover {
+    color: var(--accent-color);
+  }
+
+  .course-expand-btn, .chapter-expand-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, transform 0.3s ease;
+  }
+
+  .course-expand-btn:hover, .chapter-expand-btn:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .course-expand-btn.expanded, .chapter-expand-btn.expanded {
+    transform: rotate(180deg);
+  }
+
+  .course-chapters {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .course-chapters.show {
+    max-height: 600px;
+  }
+
+  .chapter-section {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .chapter-header:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .chapter-title {
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.9rem;
+  }
+
+  .chapter-lessons {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .chapter-lessons.show {
+    max-height: 300px;
+  }
+
+  .lesson-link {
+    display: block;
+    padding: 0.5rem 3rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .lesson-link:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .lesson-link.active {
+    background-color: var(--hover-bg);
+    border-left-color: var(--accent-color);
+    font-weight: 500;
+  }
+
+  /* Table of Contents */
+  .toc-section {
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .toc-header h4 {
+    padding: 0 2rem;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .toc-content {
+    padding: 0;
+  }
+
+  .toc-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 0.4rem 2rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .toc-link:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .toc-link.active {
+    background-color: var(--hover-bg);
+    border-left-color: var(--accent-color);
+    font-weight: 500;
+  }
+
+  .toc-link[data-level="1"] { padding-left: 2rem; font-weight: 500; }
+  .toc-link[data-level="2"] { padding-left: 2.5rem; }
+  .toc-link[data-level="3"] { padding-left: 3rem; }
+  .toc-link[data-level="4"] { padding-left: 3.5rem; }
+  .toc-link[data-level="5"] { padding-left: 4rem; }
+  .toc-link[data-level="6"] { padding-left: 4.5rem; }
+
+  .toc-children {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .toc-child {
+    font-size: 0.8rem;
+    padding-left: 3rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 0.75rem 1rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+    }
+
+    .menu-button, .search-button, .theme-toggle, .toc-toggle {
+      padding: 10px;
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    .sidebar {
+      width: 85%;
+      max-width: 300px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-container {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+    }
+
+    .sidebar {
+      width: 90%;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Theme management
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = themeToggle?.querySelector('.sun-icon');
+    const moonIcon = themeToggle?.querySelector('.moon-icon');
+    
+    // Sidebar elements
+    const menuButton = document.getElementById('menuButton');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sidebarTitle = document.getElementById('sidebarTitle');
+    const tocSection = document.getElementById('tocSection');
+    const tocToggle = document.getElementById('tocToggle');
+    
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+    
+    function updateThemeIcon(theme) {
+      if (sunIcon && moonIcon) {
+        if (theme === 'dark') {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        } else {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        }
+      }
+    }
+    
+    themeToggle?.addEventListener('click', function() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    });
+
+    // Sidebar functionality
+    const coursesDropdown = document.getElementById('coursesDropdown');
+    const coursesDropdownContent = document.getElementById('coursesDropdownContent');
+
+    function openSidebar() {
+      sidebar.classList.add('show');
+      sidebarOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebarFunc() {
+      sidebar.classList.remove('show');
+      sidebarOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    menuButton?.addEventListener('click', openSidebar);
+    closeSidebar?.addEventListener('click', closeSidebarFunc);
+    sidebarOverlay?.addEventListener('click', closeSidebarFunc);
+
+    // Courses dropdown in sidebar (home page)
+    coursesDropdown?.addEventListener('click', function() {
+      const isExpanded = coursesDropdownContent.classList.contains('show');
+      
+      if (isExpanded) {
+        coursesDropdownContent.classList.remove('show');
+        coursesDropdown.classList.remove('expanded');
+      } else {
+        coursesDropdownContent.classList.add('show');
+        coursesDropdown.classList.add('expanded');
+      }
+    });
+
+    // Course hierarchy navigation
+    const courseExpandBtns = document.querySelectorAll('.course-expand-btn');
+    courseExpandBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const target = document.getElementById(targetId);
+        const isExpanded = target.classList.contains('show');
+        
+        if (isExpanded) {
+          target.classList.remove('show');
+          this.classList.remove('expanded');
+        } else {
+          target.classList.add('show');
+          this.classList.add('expanded');
+        }
+      });
+    });
+
+    const chapterExpandBtns = document.querySelectorAll('.chapter-expand-btn');
+    chapterExpandBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const target = document.getElementById(targetId);
+        const isExpanded = target.classList.contains('show');
+        
+        if (isExpanded) {
+          target.classList.remove('show');
+          this.classList.remove('expanded');
+        } else {
+          target.classList.add('show');
+          this.classList.add('expanded');
+        }
+      });
+    });
+
+    // TOC toggle functionality
+    tocToggle?.addEventListener('click', function() {
+      alert('TOC button clicked!');
+      
+      // First, open the sidebar if it's not already open
+      if (!sidebar.classList.contains('show')) {
+        openSidebar();
+      }
+      
+      if (tocSection) {
+        const isShowing = tocSection.style.display !== 'none';
+        
+        if (isShowing) {
+          // Hide TOC, show navigation
+          tocSection.style.display = 'none';
+          sidebarTitle.textContent = 'Navigation';
+          // Show navigation content (course hierarchy)
+          const courseHierarchy = document.querySelector('.course-hierarchy');
+          if (courseHierarchy) {
+            courseHierarchy.style.display = 'block';
+          }
+        } else {
+          // Show TOC, hide navigation
+          tocSection.style.display = 'block';
+          sidebarTitle.textContent = 'Table of Contents';
+          // Hide navigation content (course hierarchy)
+          const courseHierarchy = document.querySelector('.course-hierarchy');
+          if (courseHierarchy) {
+            courseHierarchy.style.display = 'none';
+          }
+        }
+      }
+    });
+
+    // Auto-expand current course and chapter
+    const currentUrl = window.location.pathname;
+    if (currentUrl.includes('/courses/')) {
+      const pathParts = currentUrl.split('/');
+      const courseSlug = pathParts[2];
+      
+      // Expand current course
+      const currentCourseContent = document.getElementById(`course-${courseSlug}`);
+      const currentCourseBtn = document.querySelector(`[data-target="course-${courseSlug}"]`);
+      
+      if (currentCourseContent && currentCourseBtn) {
+        currentCourseContent.classList.add('show');
+        currentCourseBtn.classList.add('expanded');
+      }
+    }
+  });
+</script>
