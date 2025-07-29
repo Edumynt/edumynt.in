@@ -85,25 +85,26 @@ function renderHierarchy(hierarchy, depth = 0) {
   
   console.log(`[Depth ${depth}] Processing hierarchy:`, Object.keys(hierarchy));
   
+  // First, handle root level files (only at depth 0)
+  if (depth === 0 && hierarchy._files && hierarchy._files.length > 0) {
+    console.log(`[Depth ${depth}] Adding root level files individually: ${hierarchy._files.length}`);
+    const sortedFiles = hierarchy._files.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+    sortedFiles.forEach(lesson => {
+      sections.push({
+        name: lesson.data.title,
+        isRoot: true,
+        isIndividualFile: true,
+        lessons: [lesson],
+        subsections: []
+      });
+    });
+  }
+  
+  // Then, handle all folder sections
   Object.entries(hierarchy).forEach(([key, value]) => {
     console.log(`[Depth ${depth}] Processing key: ${key}`);
     
-    if (key === '_files' && value.length > 0) {
-      // Root level files - add each individually without folder grouping
-      if (depth === 0) {
-        console.log(`[Depth ${depth}] Adding root level files individually: ${value.length}`);
-        const sortedFiles = value.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
-        sortedFiles.forEach(lesson => {
-          sections.push({
-            name: lesson.data.title,
-            isRoot: true,
-            isIndividualFile: true,
-            lessons: [lesson],
-            subsections: []
-          });
-        });
-      }
-    } else if (key !== '_files' && key !== '_folders' && key !== '_path' && key !== '_name') {
+    if (key !== '_files' && key !== '_folders' && key !== '_path' && key !== '_name') {
       // Folder section
       const folderData = value;
       console.log(`[Depth ${depth}] Folder ${key}:`, {
@@ -565,12 +566,19 @@ const firstLesson = lessons[0];
         }
       }
 
-      // Initialize all sections as expanded and add event listeners
+      // Initialize all sections as collapsed and add event listeners
       document.addEventListener('DOMContentLoaded', function() {
-        // Initialize content heights
+        // Initialize content heights as collapsed
         const allContents = document.querySelectorAll('.chapter-content, .subsection-content');
         allContents.forEach(content => {
-          content.style.maxHeight = content.scrollHeight + 'px';
+          content.style.maxHeight = '0px';
+          content.classList.add('collapsed');
+        });
+
+        // Initialize all toggle icons as rotated (collapsed state)
+        const allToggleIcons = document.querySelectorAll('.toggle-icon');
+        allToggleIcons.forEach(icon => {
+          icon.classList.add('rotated');
         });
 
         // Add click event listeners
