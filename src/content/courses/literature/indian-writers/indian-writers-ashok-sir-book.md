@@ -1,3 +1,8 @@
+---
+title: "Indian Literature (Ashok Sir's Book)"
+course: "literature"
+---
+
 ## Indian Literature
 
 ### Toru Dutt
