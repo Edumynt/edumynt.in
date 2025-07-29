@@ -1,3 +1,8 @@
+---
+title: "Indian Writers - Ashok Sir's Notes"
+course: "literature"
+---
+
 ## Rabindranath Tagore
 (7 May 1861 – 7 August 1941)
 
