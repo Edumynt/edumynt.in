@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Arun Kolatkar
 
 This section provides a comprehensive catalog of Arun Kolatkar's major works in both English and Marathi, and the significant awards he received for his contributions to poetry.

@@ -1,3 +1,8 @@
+---
+title: Small Remedies
+course: literature
+---
+
 # Analysis of *Small Remedies*
 
 ## Introduction
@@ -35,7 +40,7 @@ The novel moves fluidly between Madhu's present grief and her past memories, as 
 ## Literary Style
 
 *   **First-Person Narrative:** The novel is told from Madhu's perspective, allowing for an intimate and deeply personal exploration of her grief and her journey.
-*   **Non-Linear Structure:** The narrative moves fluidly between past and present, and between Madhu's story and Leela's, mirroring the fragmented nature of memory and the process of understanding.
+*   **Non-Linear Structure:** The narrative moves fluidly between Madhu's present and her past memories, as well as the stories of Leela and other women. This mirrors the fragmented nature of memory and the process of understanding.
 *   **Introspective and Meditative Tone:** The prose is highly introspective, focusing on Madhu's internal world and her reflections on life, loss, and healing.
 *   **Understated Emotion:** Deshpande conveys profound emotional pain with subtlety and restraint, avoiding melodrama and allowing the reader to connect with the raw honesty of Madhu's experience.
 *   **Symbolism:** The "small remedies" themselves are symbolic of the incremental, often quiet, ways in which individuals find strength and meaning after devastating loss.

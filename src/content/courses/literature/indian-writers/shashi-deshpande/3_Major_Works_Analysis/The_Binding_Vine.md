@@ -1,3 +1,8 @@
+---
+title: The Binding Vine
+course: literature
+---
+
 # Analysis of *The Binding Vine*
 
 ## Introduction

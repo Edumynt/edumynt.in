@@ -1,5 +1,6 @@
 ---
 title: Stream of Consciousness
+course: literature
 tags:
   - literary-movements
   - literature

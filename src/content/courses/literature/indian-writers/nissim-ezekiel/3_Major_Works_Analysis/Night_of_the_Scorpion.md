@@ -1,3 +1,8 @@
+---
+title: Night of the Scorpion
+course: literature
+---
+
 # Analysis of "Night of the Scorpion"
 
 ## Introduction

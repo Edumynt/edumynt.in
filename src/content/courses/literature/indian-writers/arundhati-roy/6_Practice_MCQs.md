@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Arundhati Roy
 
 [Previous: Mindmap](5_Mindmap.md)
@@ -457,7 +463,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
 **46. *The Ministry of Utmost Happiness* explores themes of love, loss, violence, resistance, and the search for dignity and belonging in a world marked by:**
     a) Peace and harmony
     b) Injustice and political upheaval
-    c) Economic stability
+    c) Economic prosperity
     d) Social conformity
     <details>
     <summary>Answer</summary>

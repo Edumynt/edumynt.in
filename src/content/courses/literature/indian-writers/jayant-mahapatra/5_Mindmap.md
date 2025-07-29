@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Jayant Mahapatra: A Mindmap
 
 - **Jayant Mahapatra (1928 – 2023)**

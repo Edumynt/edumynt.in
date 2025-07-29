@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Shashi Deshpande
 
 This section contains 100 multiple-choice questions to test your knowledge of Shashi Deshpande. Click on "Answer" to reveal the correct choice.
@@ -442,24 +448,24 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     c) Women
     </details>
 
-**45. The novel *A Matter of Time* explores the search for meaning and connection across:**
-    a) Different countries
+**45. The novel *A Matter of Time* reveals the cyclical nature of abandonment and emotional detachment that seems to plague the women in the family across:**
+    a) Different cities
     b) Generations
     c) Social classes
-    d) Political ideologies
+    d) Professions
     <details>
     <summary>Answer</summary>
     b) Generations
     </details>
 
-**46. In *Small Remedies*, Madhu finds solace in her memories and her attempts to make sense of her:**
-    a) Success
-    b) Loss
-    c) Future
-    d) Relationships
+**46. In *Small Remedies*, the act of writing becomes a means for Madhu to:**
+    a) Escape reality
+    b) Express her grief and find healing
+    c) Gain fame
+    d) Forget her past
     <details>
     <summary>Answer</summary>
-    b) Loss
+    b) Express her grief and find healing
     </details>
 
 **47. Deshpande's novels are often driven by the ________ journeys of her characters rather than external events.**
@@ -492,14 +498,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     c) *The Legacy*
     </details>
 
-**50. Deshpande's work is often seen as a feminist voice, exploring women's struggles for:**
-    a) Political power
-    b) Agency and self-realization
-    c) Economic dominance
-    d) Social conformity
+**50. Deshpande's work is often seen as a feminist voice, not through overt political statements, but through:**
+    a) Historical analysis
+    b) Nuanced portrayal of women's struggles
+    c) Economic theories
+    d) Scientific research
     <details>
     <summary>Answer</summary>
-    b) Agency and self-realization
+    b) Nuanced portrayal of women's struggles
     </details>
 
 **51. Shashi Deshpande began her literary career with:**
@@ -532,14 +538,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     b) Women's voices and experiences
     </details>
 
-**54. The novel *The Binding Vine* highlights the "silence" that surrounds:**
-    a) Political discussions
-    b) Violence against women
-    c) Economic issues
-    d) Religious rituals
+**54. The novel *The Binding Vine* highlights the pervasive nature of violence against women, often hidden within the:**
+    a) Public sphere
+    b) Domestic sphere
+    c) Political arena
+    d) Professional world
     <details>
     <summary>Answer</summary>
-    b) Violence against women
+    b) Domestic sphere
     </details>
 
 **55. The novel *A Matter of Time* is a meditative work that examines the nature of time, memory, and the cyclical patterns of:**
@@ -572,14 +578,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     b) Confinement and psychological struggle
     </details>
 
-**58. The theme of "Memory and the Past" in Deshpande's work suggests that:**
-    a) The past is irrelevant
-    b) The past continues to shape the present
-    c) Memories should be suppressed
-    d) Only happy memories matter
+**58. The theme of "Memory and the Past" in Deshpande's work is often a path to:**
+    a) Confusion
+    b) Self-understanding
+    c) Forgetting
+    d) Denial
     <details>
     <summary>Answer</summary>
-    b) The past continues to shape the present
+    b) Self-understanding
     </details>
 
 **59. Which of these is a novel by Shashi Deshpande that explores the complexities of the mother-daughter relationship?**
@@ -622,7 +628,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     b) Past and present wounds
     </details>
 
-**63. Jaya in *That Long Silence* realizes that she has suppressed her own voice, choosing instead to maintain a facade of:**
+**63. Jaya in *That Long Silence* realizes that she has suppressed her own voice and aspirations, choosing instead to maintain a facade of:**
     a) Professional success
     b) Domestic harmony
     c) Political activism
@@ -682,14 +688,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     b) Break their silence and find their voice
     </details>
 
-**69. Which of these is a novel by Shashi Deshpande that explores the life of Saru (Sarita)?**
-    a) *That Long Silence*
-    b) *The Dark Holds No Terrors*
-    c) *Roots and Shadows*
-    d) *The Binding Vine*
+**69. Which of these is a novel by Shashi Deshpande that explores the complexities of the mother-daughter relationship?**
+    a) *The Dark Holds No Terrors*
+    b) *That Long Silence*
+    c) *A Matter of Time*
+    d) *Small Remedies*
     <details>
     <summary>Answer</summary>
-    b) *The Dark Holds No Terrors*
+    c) *A Matter of Time*
     </details>
 
 **70. Deshpande's work has earned her significant critical acclaim for her:**
@@ -732,14 +738,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     c) Experiences
     </details>
 
-**74. The novel *The Binding Vine* explores the interconnected lives of women across generations, revealing the hidden:**
-    a) Joys
-    b) Successes
-    c) Traumas
-    d) Celebrations
+**74. The novel *The Binding Vine* highlights the pervasive nature of violence against women, often hidden within the:**
+    a) Public sphere
+    b) Domestic sphere
+    c) Political arena
+    d) Professional world
     <details>
     <summary>Answer</summary>
-    c) Traumas
+    b) Domestic sphere
     </details>
 
 **75. The novel *A Matter of Time* is less about finding definitive answers to Gopal's departure and more about:**
@@ -832,24 +838,24 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
     b) True self
     </details>
 
-**84. The novel *The Binding Vine* is a powerful and complex novel that delves into the interconnected lives of women across:**
-    a) Different countries
-    b) Generations
-    c) Social classes
-    d) Professions
+**84. The novel *The Binding Vine* highlights the pervasive nature of violence against women, often hidden within the:**
+    a) Public sphere
+    b) Domestic sphere
+    c) Political arena
+    d) Professional world
     <details>
     <summary>Answer</summary>
-    b) Generations
+    b) Domestic sphere
     </details>
 
-**85. The novel *A Matter of Time* explores the search for meaning and connection across generations, revealing the unspoken:**
-    a) Joys
-    b) Burdens
-    c) Successes
-    d) Celebrations
+**85. The novel *A Matter of Time* explores the quiet resilience and enduring bonds that shape the destinies of:**
+    a) Men
+    b) Children
+    c) Three generations of women
+    d) Entire communities
     <details>
     <summary>Answer</summary>
-    b) Burdens
+    c) Three generations of women
     </details>
 
 **86. In *Small Remedies*, the novel highlights the quiet strength and resilience of women who face:**
@@ -885,8 +891,8 @@ This section contains 100 multiple-choice questions to test your knowledge of Sh
 **89. Which of these is a novel by Shashi Deshpande that explores the complexities of marital relationships?**
     a) *The Dark Holds No Terrors*
     b) *That Long Silence*
-    c) *The Binding Vine*
-    d) All of the above
+    c) *A Matter of Time*
+    d) *Small Remedies*
     <details>
     <summary>Answer</summary>
     d) All of the above

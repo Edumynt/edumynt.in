@@ -1,3 +1,8 @@
+---
+title: Bhijki Vahi
+course: literature
+---
+
 # Analysis of *Bhijki Vahi* (The Wet Notebook)
 
 ## Introduction

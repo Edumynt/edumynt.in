@@ -1,5 +1,6 @@
 ---
 title: The Metaphysical Poets c 1600-1660
+course: literature
 tags:
   - literary-periods
   - literature

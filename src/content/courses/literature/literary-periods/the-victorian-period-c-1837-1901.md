@@ -1,5 +1,6 @@
 ---
 title: The Victorian Period c 1837-1901
+course: literature
 tags:
   - literary-periods
   - literature

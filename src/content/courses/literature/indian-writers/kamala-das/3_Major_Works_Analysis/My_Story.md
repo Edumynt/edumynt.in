@@ -1,3 +1,8 @@
+---
+title: My Story
+course: literature
+---
+
 # Analysis of *My Story*
 
 ## Introduction

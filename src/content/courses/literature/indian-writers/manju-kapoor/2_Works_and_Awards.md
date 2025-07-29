@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Manju Kapur
 
 This section provides a comprehensive catalog of Manju Kapur's major works and the significant awards and honors she has received for her contributions to literature.

@@ -1,3 +1,9 @@
+---
+title: Literary Style and Themes
+course: literature
+order: 4
+---
+
 # 4. Literary Style and Themes of Toru Dutt
 
 ## Literary Style

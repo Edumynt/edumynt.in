@@ -1,3 +1,8 @@
+---
+title: Relationship
+course: literature
+---
+
 # Analysis of *Relationship*
 
 ## Introduction

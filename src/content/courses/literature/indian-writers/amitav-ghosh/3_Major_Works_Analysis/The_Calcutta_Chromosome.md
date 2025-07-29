@@ -1,3 +1,8 @@
+---
+title: The Calcutta Chromosome
+course: literature
+---
+
 # Analysis of *The Calcutta Chromosome*
 
 [Previous: The Shadow Lines](The_Shadow_Lines.md) | [Next: The Glass Palace](The_Glass_Palace.md)

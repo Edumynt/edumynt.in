@@ -1,3 +1,8 @@
+---
+title: The Glass Palace
+course: literature
+---
+
 # Analysis of *The Glass Palace*
 
 [Previous: The Calcutta Chromosome](The_Calcutta_Chromosome.md) | [Next: The Hungry Tide](The_Hungry_Tide.md)

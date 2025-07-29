@@ -1,3 +1,8 @@
+---
+title: An Introduction
+course: literature
+---
+
 # Analysis of "An Introduction"
 
 ## Introduction
@@ -6,7 +11,7 @@
 
 ## Plot Summary (or Poetic Narrative)
 
-"An Introduction" is a dramatic monologue where the speaker directly addresses the reader, introducing herself and her life experiences. She begins by stating her age (sixteen) and the conventional expectations placed upon her as a woman in Indian society—to be a wife, to bear children, to conform. She recounts her early marriage and the disillusionment that followed, particularly the lack of emotional and sexual fulfillment.
+The poem is a dramatic monologue where the speaker directly addresses the reader, introducing herself and her life experiences. She begins by stating her age (sixteen) and the conventional expectations placed upon her as a woman in Indian society—to be a wife, to bear children, to conform. She recounts her early marriage and the disillusionment that followed, particularly the lack of emotional and sexual fulfillment.
 
 She then asserts her right to her own body and her own desires, challenging the patriarchal control over female sexuality. The poem moves to a broader critique of societal hypocrisy and the suppression of women's voices. She speaks of her decision to write in English, despite being told it is not her language, and her determination to express her authentic self, regardless of criticism.
 

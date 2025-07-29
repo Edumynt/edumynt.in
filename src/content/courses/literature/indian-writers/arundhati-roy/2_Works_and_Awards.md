@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Arundhati Roy
 
 [Previous: Biography](1_Biography.md) | [Next: Literary Style and Themes](4_Literary_Style_and_Themes.md)

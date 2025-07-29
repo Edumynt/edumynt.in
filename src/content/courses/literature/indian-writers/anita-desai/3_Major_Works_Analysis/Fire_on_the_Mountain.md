@@ -1,3 +1,8 @@
+---
+title: Fire on the Mountain
+course: literature
+---
+
 # Analysis of *Fire on the Mountain*
 
 ## Introduction

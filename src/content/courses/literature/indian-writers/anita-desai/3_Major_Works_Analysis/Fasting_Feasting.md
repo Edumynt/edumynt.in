@@ -1,3 +1,8 @@
+---
+title: Fasting Feasting
+course: literature
+---
+
 # Analysis of *Fasting, Feasting*
 
 ## Introduction

@@ -1,3 +1,8 @@
+---
+title: Clear Light of Day
+course: literature
+---
+
 # Analysis of *Clear Light of Day*
 
 ## Introduction
@@ -47,4 +52,4 @@ As the sisters revisit their past, they confront their differing choices, their 
 
 ## Critical Reception and Legacy
 
-*Clear Light of Day* is widely considered one of Anita Desai's masterpieces. Its Booker Prize shortlisting brought her significant international recognition. The novel is praised for its psychological depth, its sensitive portrayal of family dynamics, and its lyrical prose. It remains a powerful and poignant exploration of memory, loss, and the enduring bonds that shape human lives, solidifying Desai's reputation as a master of psychological fiction.
+*Clear Light of Day* is widely considered one of Anita Desai's masterpieces. Its Booker Prize shortlisting brought her significant international recognition. The novel remains a powerful and poignant exploration of memory, loss, and the enduring bonds that shape human lives, solidifying Desai's reputation as a master of psychological fiction.

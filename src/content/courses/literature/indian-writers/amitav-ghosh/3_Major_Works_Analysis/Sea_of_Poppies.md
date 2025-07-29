@@ -1,3 +1,8 @@
+---
+title: Sea of Poppies
+course: literature
+---
+
 # Analysis of *Sea of Poppies*
 
 [Previous: The Hungry Tide](The_Hungry_Tide.md) | [Next: Mindmap](../../5_Mindmap.md)

@@ -1,3 +1,9 @@
+---
+title: Biography
+course: literature
+order: 1
+---
+
 # 1. Biography of Arun Kolatkar
 
 **(November 1, 1932 – September 25, 2004)**
@@ -21,7 +27,7 @@ Kolatkar's literary career began to gain prominence in the 1960s. He was part of
 
 His first collection of English poetry, **_Jejuri_** (1976), is his most famous work. It won him the prestigious **Commonwealth Poetry Prize in 1977**. *Jejuri* is a sequence of 31 poems that chronicle a visit to the temple town of Jejuri in Maharashtra, famous for its temple of Khandoba. The poems offer a skeptical yet deeply observant commentary on faith, superstition, and the human condition.
 
-His Marathi verse collection, **_Bhijki Vahi_** (The Wet Notebook), won the **Sahitya Akademi Award in 2004**, the year of his death, further cementing his status as a major literary figure in India.
+His Marathi verse collection, **_Bhijki Vahi_** (The Wet Notebook) (2003), won the **Sahitya Akademi Award in 2004**, the year of his death, further cementing his status as a major literary figure in India.
 
 ## Later Life and Legacy
 

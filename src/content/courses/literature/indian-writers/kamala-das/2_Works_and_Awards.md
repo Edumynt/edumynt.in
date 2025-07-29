@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Kamala Das
 
 This section provides a comprehensive catalog of Kamala Das's major works in both English and Malayalam, and the significant awards and honors she received for her groundbreaking contributions to literature.

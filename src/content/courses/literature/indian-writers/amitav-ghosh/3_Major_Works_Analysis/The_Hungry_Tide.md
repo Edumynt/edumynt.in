@@ -1,3 +1,8 @@
+---
+title: The Hungry Tide
+course: literature
+---
+
 # Analysis of *The Hungry Tide*
 
 [Previous: The Glass Palace](The_Glass_Palace.md) | [Next: Sea of Poppies](Sea_of_Poppies.md)
@@ -50,4 +55,4 @@ As Piya and Fokir navigate the dangerous tides and encounter the rich biodiversi
 
 ## Critical Reception and Legacy
 
-*The Hungry Tide* was widely praised for its ambitious scope, its lyrical prose, and its insightful exploration of environmental themes. It solidified Amitav Ghosh's reputation as a writer who engages with pressing global issues through compelling storytelling. The novel remains a significant work for its powerful portrayal of the human-nature relationship and its contribution to environmental literature, particularly in the context of climate change and displacement.
+*The Hungry Tide* was well-received for its ambitious scope, its lyrical prose, and its insightful exploration of environmental themes. It solidified Amitav Ghosh's reputation as a writer who engages with pressing global issues through compelling storytelling. The novel remains a significant work for its powerful portrayal of the human-nature relationship and its contribution to environmental literature, particularly in the context of climate change and displacement.

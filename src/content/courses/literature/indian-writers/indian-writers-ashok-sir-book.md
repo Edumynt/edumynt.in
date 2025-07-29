@@ -1,3 +1,8 @@
+---
+title: Indian Writers Ashok Sir Book
+course: literature
+---
+
 ## Indian Literature
 
 ### Toru Dutt

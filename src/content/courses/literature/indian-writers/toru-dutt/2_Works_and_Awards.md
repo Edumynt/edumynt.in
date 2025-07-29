@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Toru Dutt
 
 This section provides a comprehensive catalog of Toru Dutt's major works, highlighting her contributions to both English and French literature, especially given her tragically short but prolific life.
@@ -44,5 +50,5 @@ Toru Dutt wrote in both English and French, showcasing her remarkable linguistic
 Given her early death, Toru Dutt did not receive formal literary awards during her lifetime. However, her work garnered significant critical acclaim and recognition posthumously:
 
 *   **Critical Acclaim:** Her work, particularly *A Sheaf Gleaned in French Fields*, was highly praised by contemporary critics like Andre Theuriet and Edmund Gosse, who recognized her exceptional talent.
-*   **Founding Figure:** She is widely recognized as one of the founding figures of Indo-Anglian literature, having demonstrated the potential for Indian writers to excel in English and French.
+*   **Founding Figure:** She is widely recognized as one of the earliest and most significant figures to write in English from India, having demonstrated the potential for Indian writers to excel in English and French.
 *   **Pioneer of Indian English Novel:** Her novel *Bianca* holds the distinction of being the first novel in English by an Indian woman writer.

@@ -1,3 +1,8 @@
+---
+title: The Room on the Roof
+course: literature
+---
+
 # Analysis of *The Room on the Roof*
 
 ## Introduction
@@ -32,7 +37,7 @@ Rusty takes up a job teaching English to a young boy, Kishen, and forms a close 
 
 *   **Cross-Cultural Friendship:** The novel beautifully portrays the development of genuine friendships between Rusty and his Indian companions, transcending racial and cultural barriers. It highlights the warmth and acceptance he finds in the Indian community.
 
-*   **The Beauty of Simple Living:** Through Rusty's experiences in the bazaar, the novel celebrates the simple joys of everyday life, the warmth of human connection, and the contentment found in modest circumstances.
+*   **The Beauty of Simple Living:** Through Rusty's experiences in the bazaar, the novel celebrates the simple joys of life, the quiet moments, and the everyday experiences of ordinary people, often highlighting their resilience and humanity.
 
 *   **Coming of Age:** The novel is a classic coming-of-age story, depicting Rusty's transition from adolescence to young adulthood, marked by his first experiences with love, responsibility, and the complexities of the world.
 

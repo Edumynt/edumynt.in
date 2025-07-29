@@ -1,3 +1,8 @@
+---
+title: Sarpa Satra
+course: literature
+---
+
 # Analysis of *Sarpa Satra*
 
 ## Introduction

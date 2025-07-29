@@ -1,3 +1,8 @@
+---
+title: Rabindranath Tagore - Biography
+course: literature
+---
+
 # 1. Biography of Rabindranath Tagore
 
 [Next: Works and Awards](2_Works_and_Awards.md)

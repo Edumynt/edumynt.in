@@ -1,3 +1,8 @@
+---
+title: The Shadow Lines
+course: literature
+---
+
 # Analysis of *The Shadow Lines*
 
 [Previous: The Circle of Reason](The_Circle_of_Reason.md) | [Next: The Calcutta Chromosome](The_Calcutta_Chromosome.md)
@@ -30,7 +35,7 @@ The novel is less about a linear plot and more about the narrator's journey of u
 
 *   **Memory and History:** The novel is a profound meditation on the nature of memory, both personal and collective, and its relationship to history. It explores how memories are constructed, fragmented, and passed down through generations, shaping our understanding of the past.
 
-*   **Nationalism and Borders:** Ghosh critiques the narrowness of nationalism and the arbitrary nature of national borders. The "shadow lines" are artificial divisions that lead to violence and separate people who share common histories and cultures.
+*   **Nationalism and Borders:** Ghosh critiques the narrowness of nationalism and the arbitrary nature of national borders. The "shadow lines" are artificial divisions that lead to violence and separate people who were once united.
 
 *   **Identity and Belonging:** The characters grapple with questions of identity—national, cultural, and personal—and the search for a place where they truly belong, often feeling displaced even in their own homes.
 

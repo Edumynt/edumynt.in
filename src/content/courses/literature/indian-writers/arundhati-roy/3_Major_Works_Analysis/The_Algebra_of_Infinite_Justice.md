@@ -1,3 +1,8 @@
+---
+title: The Algebra of Infinite Justice
+course: literature
+---
+
 # Analysis of *The Algebra of Infinite Justice*
 
 [Previous: The Ministry of Utmost Happiness](The_Ministry_of_Utmost_Happiness.md) | [Next: Power Politics](Power_Politics.md)

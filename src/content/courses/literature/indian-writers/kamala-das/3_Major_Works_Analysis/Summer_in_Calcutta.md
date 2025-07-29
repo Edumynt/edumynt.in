@@ -1,3 +1,8 @@
+---
+title: Summer in Calcutta
+course: literature
+---
+
 # Analysis of *Summer in Calcutta*
 
 ## Introduction

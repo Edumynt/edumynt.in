@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Nissim Ezekiel
 
 This section contains 100 multiple-choice questions to test your knowledge of Nissim Ezekiel. Click on "Answer" to reveal the correct choice.
@@ -299,107 +305,107 @@ This section contains 100 multiple-choice questions to test your knowledge of Ni
     d) Physical impairment
     <details>
     <summary>Answer</summary>
-    b) Detachment from immediate reality
+    b) Detachment from concrete experience
     </details>
 
-**31. Ezekiel's first book of poetry was titled:**
-    a) *Latter-Day Psalms*
-    b) *The Exact Name*
-    c) *A Time to Change*
-    d) *Hymns in Darkness*
+**31. Ezekiel was a professor of English at:**
+    a) Delhi University
+    b) Calcutta University
+    c) Bombay University
+    d) Madras University
     <details>
     <summary>Answer</summary>
-    c) *A Time to Change*
+    c) Bombay University
     </details>
 
-**32. The poem "Background, Casually" is considered:**
-    a) A fictional narrative
-    b) A historical account
-    c) Autobiographical and confessional
-    d) A critical essay
+**32. The mother's final words in "Night of the Scorpion" are a testament to her:**
+    a) Anger
+    b) Selfless maternal love
+    c) Fear
+    d) Resignation
     <details>
     <summary>Answer</summary>
-    c) Autobiographical and confessional
+    b) Selfless maternal love
     </details>
 
-**33. Ezekiel's poetry often explores the tension between traditional faith and:**
-    a) Blind acceptance
-    b) Modern skepticism
-    c) Religious fanaticism
-    d) Spiritual dogma
+**33. The "enterprise" in the poem of the same name ultimately ends with a sense of:**
+    a) Triumph and glory
+    b) Emptiness and anti-climax
+    c) Spiritual enlightenment
+    d) Financial success
     <details>
     <summary>Answer</summary>
-    b) Modern skepticism
+    b) Emptiness and anti-climax
     </details>
 
-**34. The poem "Night of the Scorpion" is set in a:**
-    a) Bustling city
-    b) Rural Indian village
-    c) Foreign land
-    d) Modern hospital
+**34. The humor in "Goodbye Party for Miss Pushpa T.S." primarily arises from the speaker's:**
+    a) Witty remarks
+    b) Misuse of English
+    c) Sarcastic tone
+    d) Physical comedy
     <details>
     <summary>Answer</summary>
-    b) Rural Indian village
+    b) Misuse of English
     </details>
 
-**35. The "casual" tone in "Background, Casually" contributes to a sense of:**
-    a) Formality
-    b) Intimacy with the reader
-    c) Detachment
-    d) Seriousness
+**35. The poem "Philosophy" suggests that the pursuit of abstract truth can lead to:**
+    a) Greater understanding of reality
+    b) Detachment from concrete experience
+    c) Spiritual fulfillment
+    d) Social harmony
     <details>
     <summary>Answer</summary>
-    b) Intimacy with the reader
+    b) Detachment from concrete experience
     </details>
 
-**36. Ezekiel's poetry is known for its precision and:**
-    a) Ambiguity
-    b) Obscurity
-    c) Clarity
-    d) Vagueness
+**36. Ezekiel received the Padma Shri in which year?**
+    a) 1983
+    b) 1988
+    c) 1990
+    d) 2004
     <details>
     <summary>Answer</summary>
-    c) Clarity
+    b) 1988
     </details>
 
-**37. The collection *Latter-Day Psalms* is a reinterpretation of:**
-    a) Hindu scriptures
-    b) Buddhist texts
-    c) Biblical Psalms
-    d) Sufi poetry
+**37. The collection *Latter-Day Psalms* reinterprets the ancient biblical Psalms through a ________ lens.**
+    a) Devotional
+    b) Traditional
+    c) Modern, skeptical, and ironic
+    d) Historical
     <details>
     <summary>Answer</summary>
-    c) Biblical Psalms
+    c) Modern, skeptical, and ironic
     </details>
 
-**38. The poem "Enterprise" suggests that without a clear inner purpose, even a grand endeavor can become:**
-    a) More successful
-    b) Spiritually fulfilling
-    c) Hollow and meaningless
-    d) Easier to achieve
+**38. Ezekiel's poetic style is characterized by its conversational and ________ language.**
+    a) Formal
+    b) Archaic
+    c) Colloquial
+    d) Ornate
     <details>
     <summary>Answer</summary>
-    c) Hollow and meaningless
+    c) Colloquial
     </details>
 
-**39. The speaker in "Goodbye Party for Miss Pushpa T.S." uses English that is:**
-    a) Flawless and eloquent
-    b) Grammatically incorrect and comical
-    c) Highly formal and academic
-    d) Poetic and metaphorical
+**39. The theme of "Selfless Maternal Love" is central to which poem?**
+    a) "Enterprise"
+    b) "Philosophy"
+    c) "Night of the Scorpion"
+    d) "Background, Casually"
     <details>
     <summary>Answer</summary>
-    b) Grammatically incorrect and comical
+    c) "Night of the Scorpion"
     </details>
 
-**40. The poem "Philosophy" implicitly champions the importance of:**
-    a) Abstract theories
-    b) Direct, sensory experience
-    c) Religious rituals
-    d) Political ideologies
+**40. Ezekiel's plays include:**
+    a) *The Post Office*
+    b) *Nalini*
+    c) *Gora*
+    d) *The Guide*
     <details>
     <summary>Answer</summary>
-    b) Direct, sensory experience
+    b) *Nalini*
     </details>
 
 **41. Ezekiel was a professor of English at:**
@@ -442,14 +448,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ni
     b) Cultural pretensions
     </details>
 
-**45. The poem "Philosophy" suggests that excessive intellectualization can lead to:**
+**45. The poem "Philosophy" suggests that the pursuit of abstract truth can lead to:**
     a) Greater wisdom
-    b) Detachment and isolation
-    c) Spiritual enlightenment
+    b) Detachment from concrete experience
+    c) Spiritual fulfillment
     d) Social harmony
     <details>
     <summary>Answer</summary>
-    b) Detachment and isolation
+    b) Detachment from concrete experience
     </details>
 
 **46. Ezekiel's poetry is often described as:**
@@ -572,7 +578,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Ni
     b) Burn away her sins
     </details>
 
-**58. "Background, Casually" explores the speaker's sense of being an outsider both in the West and in:**
+**58. The poem "Background, Casually" explores the speaker's sense of being an outsider both in the West and in:**
     a) His own family
     b) His own country
     c) His profession
@@ -682,14 +688,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ni
     c) Otherness
     </details>
 
-**69. *Latter-Day Psalms* explores the tension between traditional faith and:**
-    a) Blind acceptance
-    b) Modern skepticism
-    c) Religious fanaticism
-    d) Spiritual dogma
+**69. *Latter-Day Psalms* explores what it means to be moral in a:**
+    a) Traditional society
+    b) Complex, often corrupt, urban environment
+    c) Rural setting
+    d) Religious community
     <details>
     <summary>Answer</summary>
-    b) Modern skepticism
+    b) Complex, often corrupt, urban environment
     </details>
 
 **70. Ezekiel's poetic craftsmanship is characterized by his:**

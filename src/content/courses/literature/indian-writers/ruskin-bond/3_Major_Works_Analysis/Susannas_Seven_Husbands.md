@@ -1,3 +1,8 @@
+---
+title: Susannas Seven Husbands
+course: literature
+---
+
 # Analysis of "Susanna's Seven Husbands"
 
 ## Introduction

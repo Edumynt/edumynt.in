@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Nissim Ezekiel
 
 This section provides a comprehensive catalog of Nissim Ezekiel's major works across various genres and the significant awards and honors he received for his contributions to Indian English literature.

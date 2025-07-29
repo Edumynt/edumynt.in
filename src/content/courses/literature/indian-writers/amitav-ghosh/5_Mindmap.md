@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Amitav Ghosh: A Mindmap
 
 [Previous: Literary Style and Themes](4_Literary_Style_and_Themes.md) | [Next: Practice MCQs](6_Practice_MCQs.md)

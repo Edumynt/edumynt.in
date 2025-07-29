@@ -1,3 +1,9 @@
+---
+title: Biography
+course: literature
+order: 1
+---
+
 # 1. Biography of Ruskin Bond
 
 **(May 19, 1934 – Present)**
@@ -16,7 +22,7 @@ He received his education at Bishop Cotton School in Shimla, where he developed 
 
 After completing his schooling, Bond moved to the UK in search of better prospects but eventually returned to India, the land he deeply loved and considered his home. He began his literary career by writing short stories and poems for newspapers and magazines.
 
-His first novel, **_The Room on the Roof_**, was written when he was just 17 and published when he was 21 (1956). This semi-autobiographical story of an orphaned Anglo-Indian boy named Rusty resonated with readers and established him as a promising young writer. Its sequel was *Vagrants in the Valley*.
+His first novel, **_The Room on the Roof_** (1956), was written when he was just 17 and published when he was 21. This semi-autobiographical story of an orphaned Anglo-Indian boy named Rusty resonated with readers and established him as a promising young writer. Its sequel was *Vagrants in the Valley*.
 
 Bond is a prolific writer, having penned hundreds of short stories, essays, and novels. His works often focus on the flora and fauna in and around the Himalayas, reflecting his deep love for nature and his idyllic surroundings in Mussoorie, where he has lived for over 40 years with his adopted family.
 

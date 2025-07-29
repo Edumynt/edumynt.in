@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Toru Dutt
 
 This section contains 100 multiple-choice questions to test your knowledge of Toru Dutt. Click on "Answer" to reveal the correct choice.
@@ -459,7 +465,7 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     d) Autobiographical insights
     <details>
     <summary>Answer</summary>
-    b) Original poetic voice on Indian themes
+    b) Showcased her original poetic voice on Indian themes
     </details>
 
 **47. The poem "The Lotus" explores the conflict between which two flowers?**
@@ -474,19 +480,19 @@ This section contains 100 multiple-choice questions to test your knowledge of To
 
 **48. Toru Dutt's literary style is often described as:**
     a) Dry and academic
-    b) Lyrical and musical
-    c) Harsh and critical
-    d) Simple and direct
+    b) Lyrical and evocative
+    c) Didactic and moralistic
+    d) Experimental and abstract
     <details>
     <summary>Answer</summary>
-    b) Lyrical and musical
+    b) Lyrical and evocative
     </details>
 
 **49. Despite her European education, she was able to infuse her English writings with a distinct:**
     a) American sensibility
     b) African sensibility
     c) Indian sensibility
-    d) Chinese sensibility
+    d) Japanese aesthetics
     <details>
     <summary>Answer</summary>
     c) Indian sensibility
@@ -552,34 +558,34 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     b) Indian myths
     </details>
 
-**56. *Ancient Ballads and Legends of Hindustan* contains how many sonnets?**
+**56. *Ancient Ballads and Legends of Hindustan* contains how many ballads?**
     a) 5
     b) 7
     c) 9
     d) 12
     <details>
     <summary>Answer</summary>
-    b) 7
+    c) 9
     </details>
 
 **57. The poem "Sita" is deeply personal, reflecting Dutt's own experiences of:**
-    a) Joy
+    a) Joy and celebration
     b) Loss and separation
-    c) Adventure
-    d) Triumph
+    c) Adventure and exploration
+    d) Political triumph
     <details>
     <summary>Answer</summary>
     b) Loss and separation
     </details>
 
-**58. Toru Dutt's literary style is characterized by its strong ________ quality.**
-    a) Narrative
-    b) Lyrical
-    c) Dramatic
-    d) Epic
+**58. Toru Dutt's literary style is often described as:**
+    a) Dry and academic
+    b) Lyrical and musical
+    c) Harsh and critical
+    d) Simple and direct
     <details>
     <summary>Answer</summary>
-    b) Lyrical
+    b) Lyrical and musical
     </details>
 
 **59. Her ability to translate French poems into English showcased her remarkable:**
@@ -662,14 +668,14 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     b) Original poetic voice on Indian themes
     </details>
 
-**67. The poem "The Lotus" is a subtle allegory for the beauty and unique qualities of:**
-    a) French culture
-    b) British culture
-    c) Indian culture
-    d) European art
+**67. The poem "The Lotus" is a subtle allegory for the conflict between:**
+    a) Good and evil
+    b) Different cultures
+    c) Different flowers for supremacy
+    d) Tradition and modernity
     <details>
     <summary>Answer</summary>
-    c) Indian culture
+    c) Different flowers for supremacy
     </details>
 
 **68. Toru Dutt's literary style is characterized by its strong:**
@@ -689,7 +695,7 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     d) Academic background
     <details>
     <summary>Answer</summary>
-    b) Literary style
+    c) Indian sensibility
     </details>
 
 **70. The theme of "Memory and Nostalgia" in her poetry is often linked to:**
@@ -772,7 +778,7 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     c) Different flowers for supremacy
     </details>
 
-**78. Toru Dutt's literary style is characterized by its ________ and evocative imagery.**
+**78. Toru Dutt's literary style is characterized by its strong ________ and evocative imagery.**
     a) Simple
     b) Complex
     c) Lyrical
@@ -922,14 +928,14 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     b) Nature
     </details>
 
-**93. *A Sheaf Gleaned in French Fields* was a collection of translations of poems by how many French poets?**
-    a) 50
-    b) 75
-    c) 100
-    d) 150
+**93. *A Sheaf Gleaned in French Fields* was praised by critics for Dutt's:**
+    a) Originality
+    b) Translation skills
+    c) Narrative ability
+    d) Philosophical depth
     <details>
     <summary>Answer</summary>
-    b) 75
+    b) Translation skills
     </details>
 
 **94. The novel *Bianca* is an example of Dutt's engagement with ________ literary forms and themes.**
@@ -979,7 +985,7 @@ This section contains 100 multiple-choice questions to test your knowledge of To
     d) Epic
     <details>
     <summary>Answer</summary>
-    c) Lyrical
+    b) Lyrical
     </details>
 
 **99. Her ability to infuse her English writings with a distinct Indian sensibility contributed to the development of:**

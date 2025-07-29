@@ -1,3 +1,8 @@
+---
+title: A Flight of Pigeons
+course: literature
+---
+
 # Analysis of *A Flight of Pigeons*
 
 ## Introduction

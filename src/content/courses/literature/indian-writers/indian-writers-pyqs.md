@@ -1,5 +1,6 @@
 ---
 title: Indian Writers PYQs
+course: literature
 tags:
   - 2nd-grade
   - indian-writers

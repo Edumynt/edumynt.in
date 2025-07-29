@@ -1,3 +1,8 @@
+---
+title: Latter-Day Psalms
+course: literature
+---
+
 # Analysis of *Latter-Day Psalms*
 
 ## Introduction

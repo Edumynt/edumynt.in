@@ -1,3 +1,8 @@
+---
+title: Home
+course: literature
+---
+
 # Analysis of *Home*
 
 ## Introduction

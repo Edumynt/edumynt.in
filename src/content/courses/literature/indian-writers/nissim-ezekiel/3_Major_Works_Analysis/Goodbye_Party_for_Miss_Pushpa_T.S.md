@@ -1,3 +1,8 @@
+---
+title: Goodbye Party for Miss Pushpa T.S.
+course: literature
+---
+
 # Analysis of "Goodbye Party for Miss Pushpa T.S."
 
 ## Introduction

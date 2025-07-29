@@ -1,3 +1,8 @@
+---
+title: The Old Playhouse and Other Poems
+course: literature
+---
+
 # Analysis of *The Old Playhouse and Other Poems*
 
 ## Introduction

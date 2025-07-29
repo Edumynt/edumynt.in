@@ -1,5 +1,6 @@
 ---
 title: The Renaissance Period c 1500-1660
+course: literature
 tags:
   - literary-periods
   - literature

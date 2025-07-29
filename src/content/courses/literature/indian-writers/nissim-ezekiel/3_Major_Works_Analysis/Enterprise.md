@@ -1,3 +1,8 @@
+---
+title: Enterprise
+course: literature
+---
+
 # Analysis of "Enterprise"
 
 ## Introduction

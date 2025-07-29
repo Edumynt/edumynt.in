@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Toru Dutt: A Mindmap
 
 - **Toru Dutt (1856-1877)**

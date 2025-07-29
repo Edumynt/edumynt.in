@@ -1,8 +1,14 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Anita Desai
 
 This section contains 100 multiple-choice questions to test your knowledge of Anita Desai. Click on "Answer" to reveal the correct choice.
 
-**1. Anita Desai is celebrated for her sensitive portrayal of the inner lives of her characters, particularly:**
+**1. Anita Desai is celebrated for her sensitive portrayal of the inner lives of:**
    a) Men in power
    b) Children
    c) Middle-class women
@@ -222,14 +228,14 @@ This section contains 100 multiple-choice questions to test your knowledge of An
     c) German
     </details>
 
-**23. The novel *Cry, the Peacock* is a powerful study of a fragile psyche grappling with existential fears and a:**
-    a) Happy marriage
-    b) Loveless marriage
-    c) Successful career
-    d) Spiritual journey
+**23. The novel *Cry, the Peacock* delves into Maya's anxieties, particularly a childhood prophecy from an astrologer about:**
+    a) Her marriage
+    b) Her career
+    c) Her husband's death
+    d) Her children's future
     <details>
     <summary>Answer</summary>
-    b) Loveless marriage
+    c) Her husband's death
     </details>
 
 **24. The intrusion of Ila Das in *Fire on the Mountain* forces Nanda Kaul to confront:**
@@ -452,24 +458,24 @@ This section contains 100 multiple-choice questions to test your knowledge of An
     c) Meeting his idol and preserving Urdu poetry
     </details>
 
-**46. In *Fasting, Feasting*, the "Feasting" section is set in:**
-    a) India
-    b) England
-    c) America
-    d) Canada
+**46. In *Fasting, Feasting*, Arun lives with the Patton family in:**
+    a) A bustling city
+    b) A remote village
+    c) American suburbia
+    d) A university dormitory
     <details>
     <summary>Answer</summary>
-    c) America
+    c) American suburbia
     </details>
 
-**47. Desai's novels often delve into the minds of her characters, revealing their anxieties, desires, and:**
-    a) Political affiliations
-    b) Financial status
-    c) Frustrations
-    d) Social connections
+**47. Desai's novels are characterized by their deep psychological insight and exploration of:**
+    a) Historical events
+    b) The emotional landscapes of her protagonists
+    c) Political movements
+    d) Economic theories
     <details>
     <summary>Answer</summary>
-    c) Frustrations
+    b) The emotional landscapes of her protagonists
     </details>
 
 **48. The theme of "Madness and Neurosis" is explored in some of Desai's novels as a result of characters' inability to cope with:**
@@ -542,14 +548,14 @@ This section contains 100 multiple-choice questions to test your knowledge of An
     b) In custody
     </details>
 
-**55. In *Fasting, Feasting*, the "Fasting" section is set in:**
-    a) America
-    b) England
-    c) A small, conservative Indian town
-    d) A bustling Indian city
+**55. In *Fasting, Feasting*, Uma's life is one of quiet resignation, marked by the demands of her:**
+    a) Friends
+    b) Parents
+    c) Teachers
+    d) Colleagues
     <details>
     <summary>Answer</summary>
-    c) A small, conservative Indian town
+    b) Parents
     </details>
 
 **56. Desai's novels are characterized by their focus on:**
@@ -692,14 +698,14 @@ This section contains 100 multiple-choice questions to test your knowledge of An
     c) *In Custody*
     </details>
 
-**70. The novel *The Village by the Sea* is a children's novel that won the:**
-    a) Sahitya Akademi Award
-    b) Booker Prize
-    c) Guardian Children's Fiction Prize
-    d) National Book Award
+**70. The novel *The Village by the Sea* won the Guardian Children's Fiction Prize in:**
+    a) 1978
+    b) 1982
+    c) 1983
+    d) 1999
     <details>
     <summary>Answer</summary>
-    c) Guardian Children's Fiction Prize
+    c) 1983
     </details>
 
 **71. Anita Desai graduated from which university?**
@@ -762,14 +768,14 @@ This section contains 100 multiple-choice questions to test your knowledge of An
     c) Metaphor
     </details>
 
-**77. Desai's novels are often characterized by their focus on:**
-    a) External events
-    b) The inner turmoil of her characters
-    c) Social movements
-    d) Historical narratives
+**77. Desai's novels are characterized by their focus on:**
+    a) External social realities
+    b) The inner lives of her characters
+    c) Historical events
+    d) Political movements
     <details>
     <summary>Answer</summary>
-    b) The inner turmoil of her characters
+    b) The inner lives of her characters
     </details>
 
 **78. The theme of "Tradition vs. Modernity" in Desai's work is subtly explored, particularly its impact on:**

@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Anita Desai: A Mindmap
 
 - **Anita Desai (1937 – Present)**

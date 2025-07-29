@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Manju Kapur
 
 This section contains 100 multiple-choice questions to test your knowledge of Manju Kapur. Click on "Answer" to reveal the correct choice.

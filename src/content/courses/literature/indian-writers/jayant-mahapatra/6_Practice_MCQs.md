@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Jayant Mahapatra
 
 This section contains 100 multiple-choice questions to test your knowledge of Jayant Mahapatra. Click on "Answer" to reveal the correct choice.
@@ -232,14 +238,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ja
     b) Decay and death
     </details>
 
-**24. The poem "Hunger" is a narrative of a father and his son who encounter a young girl, a prostitute, on a:**
-    a) Street
-    b) Beach
-    c) Temple
-    d) Market
+**24. The poem "Hunger" is a social commentary that exposes the harsh realities of poverty and the moral compromises it can entail, particularly for:**
+    a) Men
+    b) Women
+    c) Children
+    d) Families
     <details>
     <summary>Answer</summary>
-    b) Beach
+    b) Women
     </details>
 
 **25. *A Rain of Rites* is a collection of poems that often draw inspiration from the everyday life, rituals, and natural environment of:**
@@ -252,14 +258,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ja
     c) Odisha
     </details>
 
-**26. *Life Signs* is a collection of poems that are thematically interconnected, exploring themes of the human condition, suffering, and:**
-    a) Political power
-    b) Economic growth
-    c) Memory
-    d) Scientific progress
+**26. *Life Signs* is a collection of poems that are thematically interconnected, drawing on Mahapatra's observations of everyday life in:**
+    a) Rural India
+    b) Urban India
+    c) Odisha
+    d) Western countries
     <details>
     <summary>Answer</summary>
-    c) Memory
+    c) Odisha
     </details>
 
 **27. Mahapatra's poetic style is often described as:**
@@ -362,24 +368,24 @@ This section contains 100 multiple-choice questions to test your knowledge of Ja
     c) The larger forces of history and society
     </details>
 
-**37. Mahapatra's poetry is characterized by its subtle imagery and:**
-    a) Overt symbolism
-    b) Direct statements
-    c) Powerful metaphors
-    d) Understated descriptions
+**37. Mahapatra's poetic style is often described as:**
+    a) Fast-paced and dramatic
+    b) Meditative and contemplative
+    c) Humorous and satirical
+    d) Narrative and epic
     <details>
     <summary>Answer</summary>
-    d) Understated descriptions
+    b) Meditative and contemplative
     </details>
 
-**38. The poem *Relationship* suggests that all relationships are ultimately:**
-    a) Permanent
-    b) Elusive and constantly shifting
-    c) Easily understood
-    d) Unimportant
+**38. The poem *Relationship* explores the weight of history, both personal and collective, and the enduring human quest for:**
+    a) Wealth
+    b) Power
+    c) Meaning
+    d) Fame
     <details>
     <summary>Answer</summary>
-    b) Elusive and constantly shifting
+    c) Meaning
     </details>
 
 **39. In "Dawn at Puri," the image of the dead woman being carried to the burning ghats is juxtaposed with the:**
@@ -402,37 +408,37 @@ This section contains 100 multiple-choice questions to test your knowledge of Ja
     b) Moral compromises it can entail
     </details>
 
-**41. Jayant Mahapatra was born in which year?**
-    a) 1918
-    b) 1928
-    c) 1938
-    d) 1948
+**41. Jayant Mahapatra earned his Master's degree in Physics from:**
+    a) Utkal University
+    b) Patna University
+    c) Delhi University
+    d) Calcutta University
     <details>
     <summary>Answer</summary>
-    b) 1928
+    b) Patna University
     </details>
 
-**42. The poem *Relationship* explores the intricate connections between the individual, history, memory, and the ancient landscape of:**
-    a) Bengal
-    b) Kerala
-    c) Odisha
-    d) Punjab
+**42. The Konark Sun Temple is a central metaphor in which of Mahapatra's works?**
+    a) "Dawn at Puri"
+    b) "Hunger"
+    c) *Relationship*
+    d) *A Rain of Rites*
     <details>
     <summary>Answer</summary>
-    c) Odisha
+    c) *Relationship*
     </details>
 
-**43. In "Dawn at Puri," the "dark, endless, and deep" interior of the temple suggests a sense of:**
-    a) Clarity
-    b) Mystery
-    c) Openness
-    d) Transparency
+**43. The poem "Dawn at Puri" contrasts the spiritual significance of the place with the harsh realities of:**
+    a) Political unrest
+    b) Human suffering and decay
+    c) Economic prosperity
+    d) Social harmony
     <details>
     <summary>Answer</summary>
-    b) Mystery
+    b) Human suffering and decay
     </details>
 
-**44. The poem "Hunger" is a poignant and unsettling exploration of the desperate measures individuals, particularly women, are forced to take to survive in the face of:**
+**44. The poem "Hunger" is a poignant and unsettling exploration of the desperate measures individuals are forced to take to survive in the face of:**
     a) Political persecution
     b) Extreme hunger
     c) Religious conflict
@@ -442,7 +448,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Ja
     b) Extreme hunger
     </details>
 
-**45. *A Rain of Rites* is a collection of poems that explores themes of the sacred and the mundane, and the interplay between the external world and:**
+**45. *A Rain of Rites* explores the interplay between the external world and:**
     a) Political events
     b) Economic conditions
     c) Inner experience

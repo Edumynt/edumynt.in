@@ -1,3 +1,8 @@
+---
+title: Kala Ghoda Poems
+course: literature
+---
+
 # Analysis of *Kala Ghoda Poems*
 
 ## Introduction
@@ -36,7 +41,7 @@ Kolatkar, with his artist's eye, meticulously observes and records the details o
 *   **Colloquial and Conversational:** The language is direct, accessible, and often uses everyday speech patterns, reflecting the informal nature of street observations.
 *   **Wit and Humor:** Kolatkar's characteristic dry wit and gentle humor are pervasive, often arising from the absurdities of urban existence.
 *   **Visual Imagery:** Influenced by his background as a graphic artist, the poems are rich in vivid visual imagery, making the scenes come alive for the reader.
-*   **Minimalism and Economy:** He uses language sparingly, achieving maximum impact with carefully chosen words, reflecting a disciplined approach to his craft.
+*   **Minimalism and Economy:** He uses language sparingly, achieving maximum impact with carefully chosen words, demonstrating a remarkable precision in his language.
 
 ## Critical Reception and Legacy
 

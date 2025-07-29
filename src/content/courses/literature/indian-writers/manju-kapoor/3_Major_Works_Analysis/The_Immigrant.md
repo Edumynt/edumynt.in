@@ -1,3 +1,8 @@
+---
+title: The Immigrant
+course: literature
+---
+
 # Analysis of *The Immigrant*
 
 ## Introduction

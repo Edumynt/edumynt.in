@@ -1,5 +1,6 @@
 ---
 title: The Post-Modern Period c 1945-Present
+course: literature
 tags:
   - literary-periods
   - literature

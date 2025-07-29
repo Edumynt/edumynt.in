@@ -1,3 +1,8 @@
+---
+title: Background Casually
+course: literature
+---
+
 # Analysis of "Background, Casually"
 
 ## Introduction

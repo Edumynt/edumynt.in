@@ -1,5 +1,6 @@
 ---
 title: The Neo-Classical Period 1660-1798
+course: literature
 tags:
   - literary-periods
   - literature

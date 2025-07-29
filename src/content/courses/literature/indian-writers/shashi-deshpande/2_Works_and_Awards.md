@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Shashi Deshpande
 
 This section provides a comprehensive catalog of Shashi Deshpande's major works across various genres and the significant awards and honors she has received for her contributions to literature.

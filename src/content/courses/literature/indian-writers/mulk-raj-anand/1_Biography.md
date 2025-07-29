@@ -1,3 +1,8 @@
+---
+title: Mulk Raj Anand - Biography
+course: literature
+---
+
 # 1. Biography of Mulk Raj Anand
 
 [Next: Works and Awards](2_Works_and_Awards.md)

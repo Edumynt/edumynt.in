@@ -1,5 +1,6 @@
 ---
 title: The Realism Movement c 1850s-1900
+course: literature
 tags:
   - literary-movements
   - literature

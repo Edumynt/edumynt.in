@@ -1,3 +1,8 @@
+---
+title: Philosophy
+course: literature
+---
+
 # Analysis of "Philosophy"
 
 ## Introduction

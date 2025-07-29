@@ -1,3 +1,8 @@
+---
+title: Cry the Peacock
+course: literature
+---
+
 # Analysis of *Cry, the Peacock*
 
 ## Introduction

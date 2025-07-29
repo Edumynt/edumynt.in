@@ -1,3 +1,8 @@
+---
+title: The Ministry of Utmost Happiness
+course: literature
+---
+
 # Analysis of *The Ministry of Utmost Happiness*
 
 [Previous: The God of Small Things](The_God_of_Small_Things.md) | [Next: The Algebra of Infinite Justice](The_Algebra_of_Infinite_Justice.md)

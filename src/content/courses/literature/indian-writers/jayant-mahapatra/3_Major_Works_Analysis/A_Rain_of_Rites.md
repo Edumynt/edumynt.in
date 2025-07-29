@@ -1,3 +1,8 @@
+---
+title: A Rain of Rites
+course: literature
+---
+
 # Analysis of *A Rain of Rites*
 
 ## Introduction

@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Ruskin Bond: A Mindmap
 
 - **Ruskin Bond (1934 – Present)**

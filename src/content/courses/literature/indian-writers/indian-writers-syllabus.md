@@ -1,3 +1,8 @@
+---
+title: "Indian Writers Syllabus"
+course: "indian-writers"
+---
+
 An Acquaintance with Twentieth Century Indian Writers/Poets in English.
     a. Rabindra Nath Tagore
     b. Mulk Raj Anand

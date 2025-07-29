@@ -1,3 +1,8 @@
+---
+title: The God of Small Things
+course: literature
+---
+
 # Analysis of *The God of Small Things*
 
 [Previous: Works and Awards](../../2_Works_and_Awards.md) | [Next: The Ministry of Utmost Happiness](The_Ministry_of_Utmost_Happiness.md)

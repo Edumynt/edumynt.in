@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Shashi Deshpande: A Mindmap
 
 - **Shashi Deshpande (1938 – Present)**

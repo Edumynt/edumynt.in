@@ -1,3 +1,8 @@
+---
+title: In Custody
+course: literature
+---
+
 # Analysis of *In Custody*
 
 ## Introduction

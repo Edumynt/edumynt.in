@@ -1,3 +1,9 @@
+---
+title: Literary Style and Themes
+course: literature
+order: 4
+---
+
 # 4. Literary Style and Themes of Arundhati Roy
 
 [Previous: Works and Awards](2_Works_and_Awards.md) | [Next: Mindmap](5_Mindmap.md)

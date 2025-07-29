@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Ruskin Bond
 
 This section contains 100 multiple-choice questions to test your knowledge of Ruskin Bond. Click on "Answer" to reveal the correct choice.
@@ -262,15 +268,15 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     b) Conflict
     </details>
 
-**27. The story "Susanna's Seven Husbands" explores themes of love, betrayal, and:**
-    a) Political intrigue
-    b) The macabre and mysterious
-    c) Social reform
-    d) Economic hardship
-    <details>
-    <summary>Answer</summary>
-    b) The macabre and mysterious
-    </details>
+**27. The short story "Susanna's Seven Husbands" was adapted into which Bollywood film?**
+   a) *Lagaan*
+   b) *7 Khoon Maaf*
+   c) *Barfi*
+   d) *Gully Boy*
+   <details>
+   <summary>Answer</summary>
+   b) *7 Khoon Maaf*
+   </details>
 
 **28. Bond received the Padma Bhushan in which year?**
     a) 1992
@@ -382,11 +388,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     b) Unpretentious and straightforward manner
     </details>
 
-**39. The theme of "Childhood and Innocence" in Bond's work emphasizes the importance of:**
-    a) Strict discipline
+**39. The theme of "Childhood and Innocence" is prominent in Bond's work, emphasizing the importance of:**
+    a) Academic achievement
     b) Imagination and simple joys
-    c) Material possessions
-    d) Social status
+    c) Financial success
+    d) Political awareness
     <details>
     <summary>Answer</summary>
     b) Imagination and simple joys
@@ -652,24 +658,24 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     c) Pathan Muslim
     </details>
 
-**66. The story "Susanna's Seven Husbands" is a departure from Bond's usual style, delving into the:**
-    a) Humorous
-    b) Romantic
-    c) Macabre and mysterious
-    d) Historical
+**66. The story "Susanna's Seven Husbands" is a dark and intriguing short story by Ruskin Bond, exploring themes of love, betrayal, and the:**
+    a) Joys of marriage
+    b) Macabre and mysterious
+    c) Simple life
+    d) Political intrigue
     <details>
     <summary>Answer</summary>
-    c) Macabre and mysterious
+    b) Macabre and mysterious
     </details>
 
-**67. Bond's writing is often praised for its ability to evoke a strong sense of:**
-    a) Urban chaos
-    b) Political tension
-    c) Place and memory
-    d) Scientific progress
+**67. Bond's writing often features evocative descriptions of the flora and fauna of the:**
+    a) Deserts
+    b) Coastal areas
+    c) Himalayan foothills
+    d) Plains
     <details>
     <summary>Answer</summary>
-    c) Place and memory
+    c) Himalayan foothills
     </details>
 
 **68. The theme of "The Passage of Time" in Bond's work often emphasizes the importance of:**
@@ -682,7 +688,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     b) Cherishing memories
     </details>
 
-**69. Bond's contribution to literature includes his unique ability to capture the essence of life in the:**
+**69. Bond's contribution to literature includes his ability to capture the essence of life in the:**
     a) Deserts of Rajasthan
     b) Coastal areas of Goa
     c) Himalayan foothills
@@ -702,14 +708,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     a) Forest
     </details>
 
-**71. Ruskin Bond's childhood was marked by:**
-    a) Great prosperity
-    b) Parental separation and his father's early death
-    c) Extensive travel
-    d) A strict academic environment
+**71. Ruskin Bond's childhood was marked by the separation of his parents and the early death of his father, leading him to seek solace in:**
+    a) Sports
+    b) Reading and writing
+    c) Music
+    d) Travel
     <details>
     <summary>Answer</summary>
-    b) Parental separation and his father's early death
+    b) Reading and writing
     </details>
 
 **72. The novel *The Room on the Roof* is a classic example of a:**
@@ -742,14 +748,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     b) Personal reflections and observations
     </details>
 
-**75. *A Flight of Pigeons* explores the complex dynamics between the protected and the protector, and the moral dilemmas faced by those trying to maintain humanity in:**
-    a) Peaceful times
-    b) Inhumane times
-    c) Prosperous times
-    d) Harmonious times
+**75. *A Flight of Pigeons* offers a ________ perspective on the 1857 Indian Rebellion.**
+    a) Military
+    b) Political
+    c) Human-centered
+    d) Economic
     <details>
     <summary>Answer</summary>
-    b) Inhumane times
+    c) Human-centered
     </details>
 
 **76. The ambiguity in "Susanna's Seven Husbands" leaves the reader to ponder Susanna's true nature: is she a victim, a femme fatale, or a woman driven to desperate measures by:**
@@ -912,24 +918,24 @@ This section contains 100 multiple-choice questions to test your knowledge of Ru
     b) Reading and writing
     </details>
 
-**92. The novel *The Room on the Roof* is a semi-autobiographical story of an orphaned:**
-    a) Indian boy
-    b) British boy
-    c) Anglo-Indian boy
-    d) American boy
+**92. The novel *The Room on the Roof* is a classic example of a:**
+    a) Historical novel
+    b) Coming-of-age story
+    c) Detective novel
+    d) Science fiction novel
     <details>
     <summary>Answer</summary>
-    c) Anglo-Indian boy
+    b) Coming-of-age story
     </details>
 
-**93. In *The Blue Umbrella*, the umbrella becomes a symbol of Binya's:**
-    a) Poverty
-    b) Unique identity and joy
-    c) Discontent
-    d) Loneliness
+**93. In *The Blue Umbrella*, Binya's act of selfless generosity brings her:**
+    a) Regret
+    b) A deeper, more profound joy
+    c) Financial loss
+    d) Social isolation
     <details>
     <summary>Answer</summary>
-    b) Unique identity and joy
+    b) A deeper, more profound joy
     </details>
 
 **94. *Our Trees Still Grow in Dehra* is a collection of stories that are deeply:**

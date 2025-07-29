@@ -1,3 +1,8 @@
+---
+title: The Blue Umbrella
+course: literature
+---
+
 # Analysis of *The Blue Umbrella*
 
 ## Introduction

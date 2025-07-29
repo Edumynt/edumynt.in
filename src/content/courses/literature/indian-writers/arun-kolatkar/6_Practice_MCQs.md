@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Arun Kolatkar
 
 This section contains 100 multiple-choice questions to test your knowledge of Arun Kolatkar. Click on "Answer" to reveal the correct choice.
@@ -242,14 +248,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     c) Death
     </details>
 
-**25. *Kala Ghoda Poems* is a celebration of the mundane, the eccentric, and the vibrant ________ life of Mumbai.**
+**25. *Kala Ghoda Poems* is a celebration of the mundane, the eccentric, and the vibrant street life of:**
     a) Rural
     b) Suburban
-    c) Street
+    c) Mumbai
     d) Domestic
     <details>
     <summary>Answer</summary>
-    c) Street
+    c) Mumbai
     </details>
 
 **26. *Sarpa Satra* is a retelling and re-imagining of a myth from the:**
@@ -439,7 +445,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     d) Modern factories
     <details>
     <summary>Answer</summary>
-    b) Historic arts and cultural district of Mumbai
+    c) Mumbai
     </details>
 
 **45. *Sarpa Satra* is a retelling and re-imagining of an ancient Indian myth, exploring the motivations, rituals, and consequences of:**
@@ -472,14 +478,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     c) Introspective and philosophical meditations
     </details>
 
-**48. *The Boatride and Other Poems* offers a broader glimpse into Kolatkar's diverse poetic interests and his continued exploration of themes and styles beyond:**
-    a) His early works
-    b) *Jejuri* and *Kala Ghoda Poems*
-    c) Marathi poetry
-    d) English poetry
+**48. *The Boatride and Other Poems* showcases Kolatkar's characteristic blend of wit, irony, and profound insight into the:**
+    a) Political landscape
+    b) Economic systems
+    c) Human condition
+    d) Scientific theories
     <details>
     <summary>Answer</summary>
-    b) *Jejuri* and *Kala Ghoda Poems*
+    c) Human condition
     </details>
 
 **49. Kolatkar's poetry often approaches traditional beliefs and institutions with a healthy dose of:**
@@ -532,11 +538,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     b) Precise and witty observations
     </details>
 
-**54. *Kala Ghoda Poems* is a celebration of the mundane, the eccentric, and the vibrant street life of:**
-    a) Delhi
-    b) Kolkata
-    c) Mumbai
-    d) Chennai
+**54. *Kala Ghoda Poems* is a mosaic of individual poems, each a snapshot or vignette of the people, places, and everyday occurrences in the:**
+    a) Rural countryside
+    b) Historic arts and cultural district of Mumbai
+    c) Ancient temples
+    d) Modern factories
     <details>
     <summary>Answer</summary>
     c) Mumbai
@@ -639,7 +645,7 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     d) Modern factories
     <details>
     <summary>Answer</summary>
-    b) Historic arts and cultural district of Mumbai
+    c) Mumbai
     </details>
 
 **65. *Sarpa Satra* is a retelling and re-imagining of an ancient Indian myth, exploring the motivations, rituals, and consequences of:**
@@ -732,11 +738,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     b) Precise and witty observations
     </details>
 
-**74. *Kala Ghoda Poems* is a celebration of the mundane, the eccentric, and the vibrant street life of:**
-    a) Delhi
-    b) Kolkata
-    c) Mumbai
-    d) Chennai
+**74. *Kala Ghoda Poems* is a mosaic of individual poems, each a snapshot or vignette of the people, places, and everyday occurrences in the:**
+    a) Rural countryside
+    b) Historic arts and cultural district of Mumbai
+    c) Ancient temples
+    d) Modern factories
     <details>
     <summary>Answer</summary>
     c) Mumbai
@@ -752,11 +758,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     b) Cycle of violence
     </details>
 
-**76. Kolatkar's bilingualism allowed him to draw from diverse ________ and cultural traditions.**
-    a) Political
-    b) Economic
-    c) Linguistic
-    d) Scientific
+**76. Kolatkar's bilingualism allowed him to translate nuances between:**
+    a) Cultures
+    b) Languages
+    c) Religions
+    d) Political systems
     <details>
     <summary>Answer</summary>
     c) Linguistic
@@ -832,11 +838,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     b) Precise and witty observations
     </details>
 
-**84. *Kala Ghoda Poems* is a celebration of the mundane, the eccentric, and the vibrant street life of:**
-    a) Delhi
-    b) Kolkata
-    c) Mumbai
-    d) Chennai
+**84. *Kala Ghoda Poems* is a mosaic of individual poems, each a snapshot or vignette of the people, places, and everyday occurrences in the:**
+    a) Rural countryside
+    b) Historic arts and cultural district of Mumbai
+    c) Ancient temples
+    d) Modern factories
     <details>
     <summary>Answer</summary>
     c) Mumbai
@@ -932,11 +938,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     b) Precise and witty observations
     </details>
 
-**94. *Kala Ghoda Poems* is a celebration of the mundane, the eccentric, and the vibrant street life of:**
-    a) Delhi
-    b) Kolkata
-    c) Mumbai
-    d) Chennai
+**94. *Kala Ghoda Poems* is a mosaic of individual poems, each a snapshot or vignette of the people, places, and everyday occurrences in the:**
+    a) Rural countryside
+    b) Historic arts and cultural district of Mumbai
+    c) Ancient temples
+    d) Modern factories
     <details>
     <summary>Answer</summary>
     c) Mumbai
@@ -952,11 +958,11 @@ This section contains 100 multiple-choice questions to test your knowledge of Ar
     b) Cycle of violence
     </details>
 
-**96. Kolatkar's bilingualism allowed him to draw from diverse ________ and cultural traditions.**
-    a) Political
-    b) Economic
-    c) Linguistic
-    d) Scientific
+**96. Kolatkar's bilingualism allowed him to translate nuances between:**
+    a) Cultures
+    b) Languages
+    c) Religions
+    d) Political systems
     <details>
     <summary>Answer</summary>
     c) Linguistic

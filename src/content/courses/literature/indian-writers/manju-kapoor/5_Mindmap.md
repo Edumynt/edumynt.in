@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Manju Kapur: A Mindmap
 
 - **Manju Kapur (Born in Amritsar)**

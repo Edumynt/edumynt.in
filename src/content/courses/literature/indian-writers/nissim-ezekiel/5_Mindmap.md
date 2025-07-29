@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Nissim Ezekiel: A Mindmap
 
 - **Nissim Ezekiel (1924-2004)**

@@ -1,3 +1,8 @@
+---
+title: The Dark Holds No Terrors
+course: literature
+---
+
 # Analysis of *The Dark Holds No Terrors*
 
 ## Introduction

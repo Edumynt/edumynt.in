@@ -1,5 +1,6 @@
 ---
 title: Aestheticism and the Art for Arts Sake Movement c 1870-1900
+course: literature
 tags:
   - literary-movements
   - literature

@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Arun Kolatkar: A Mindmap
 
 - **Arun Kolatkar (1932-2004)**

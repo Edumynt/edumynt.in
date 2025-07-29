@@ -1,3 +1,8 @@
+---
+title: That Long Silence
+course: literature
+---
+
 # Analysis of *That Long Silence*
 
 ## Introduction

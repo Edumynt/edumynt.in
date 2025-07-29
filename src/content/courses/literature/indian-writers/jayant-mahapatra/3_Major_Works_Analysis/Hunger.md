@@ -1,3 +1,8 @@
+---
+title: Hunger
+course: literature
+---
+
 # Analysis of "Hunger"
 
 ## Introduction
@@ -10,7 +15,7 @@ The poem is a narrative of a father and his son who encounter a young girl, a pr
 
 The poem vividly describes the setting—a desolate beach, the smell of fish, the harsh light—which mirrors the bleakness of the human situation. The father's words are chillingly pragmatic, devoid of moral judgment, focused solely on the immediate need for survival. The girl, too, is portrayed not as a figure of vice, but as a victim of circumstances, her body a commodity for survival.
 
-The encounter is brief and transactional, devoid of any emotional connection. The poem ends with the son returning to his father, having fulfilled the grim bargain. The act is presented as a consequence of extreme poverty, highlighting the dehumanizing effects of hunger and the moral compromises it forces upon individuals.
+The encounter is brief and transactional, devoid of any emotional connection. The poem is presented as a consequence of extreme poverty, highlighting the dehumanizing effects of hunger and the moral compromises it forces upon individuals.
 
 ## Major Characters (or Poetic Elements)
 

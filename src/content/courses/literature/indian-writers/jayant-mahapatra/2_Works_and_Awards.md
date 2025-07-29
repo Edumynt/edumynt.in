@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Jayant Mahapatra
 
 This section provides a comprehensive catalog of Jayant Mahapatra's major works in both English and Oriya, and the significant awards and honors he received for his contributions to poetry.

@@ -1,3 +1,8 @@
+---
+title: The Circle of Reason
+course: literature
+---
+
 # Analysis of *The Circle of Reason*
 
 [Previous: Literary Style and Themes](../../4_Literary_Style_and_Themes.md) | [Next: The Shadow Lines](The_Shadow_Lines.md)

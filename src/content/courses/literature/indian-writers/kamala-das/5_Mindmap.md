@@ -1,3 +1,9 @@
+---
+title: Mindmap
+course: literature
+order: 5
+---
+
 # Kamala Das: A Mindmap
 
 - **Kamala Das (1934-2009)**

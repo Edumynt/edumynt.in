@@ -1,3 +1,8 @@
+---
+title: Dawn at Puri
+course: literature
+---
+
 # Analysis of "Dawn at Puri"
 
 ## Introduction
@@ -39,7 +44,7 @@ The poem concludes with the speaker reflecting on the enduring nature of faith a
 *   **Vivid and Stark Imagery:** Mahapatra uses powerful, often unsettling, imagery to create a realistic and memorable picture of Puri at dawn: "cancerous sores," "skeletal fish bones," "dark, endless, and deep."
 *   **Free Verse:** The poem is written in free verse, allowing for a natural flow and a conversational tone, which enhances the sense of direct observation.
 *   **Understated Emotion:** The poem conveys profound emotions without being overtly sentimental. The emotional impact comes from the starkness of the imagery and the quiet contemplation.
-*   **Juxtaposition:** The poem frequently uses juxtaposition to highlight contrasts, such as the spiritual aspirations of the temple versus the physical suffering of the lepers, or life versus death.
+*   **Juxtaposition:** The poem frequently uses juxtaposition to highlight contrasts, such as the spiritual and the physical, or beauty and decay.
 *   **Atmospheric:** The poem creates a strong, almost palpable, atmosphere of desolation, mystery, and enduring tradition.
 
 ## Critical Reception and Legacy

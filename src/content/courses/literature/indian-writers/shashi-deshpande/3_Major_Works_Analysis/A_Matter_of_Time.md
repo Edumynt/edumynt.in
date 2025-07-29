@@ -1,3 +1,8 @@
+---
+title: A Matter of Time
+course: literature
+---
+
 # Analysis of *A Matter of Time*
 
 ## Introduction

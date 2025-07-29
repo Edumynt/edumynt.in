@@ -1,3 +1,9 @@
+---
+title: Biography
+course: literature
+order: 1
+---
+
 # 1. Biography of Nissim Ezekiel
 
 **(16 December 1924 – 9 January 2004)**

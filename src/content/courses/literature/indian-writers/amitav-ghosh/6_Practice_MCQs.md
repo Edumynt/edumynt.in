@@ -1,3 +1,9 @@
+---
+title: Practice MCQs
+course: literature
+order: 6
+---
+
 # 6. Practice MCQs for Amitav Ghosh
 
 [Previous: Mindmap](5_Mindmap.md)
@@ -354,14 +360,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Am
     b) Indentured labor
     </details>
 
-**36. The character Fokir in *The Hungry Tide* is a local:**
-    a) Farmer
-    b) Fisherman
-    c) Teacher
-    d) Doctor
+**36. The protagonist of *The Hungry Tide*, an American cetologist, is named:**
+    a) Kusum
+    b) Piya Roy
+    c) Nirmal
+    d) Dolly
     <details>
     <summary>Answer</summary>
-    b) Fisherman
+    b) Piya Roy
     </details>
 
 **37. Ghosh's non-fiction work *Smoke and Ashes* explores the history of opium and its connection to:**
@@ -375,10 +381,10 @@ This section contains 100 multiple-choice questions to test your knowledge of Am
     </details>
 
 **38. The "Glass Palace" in the novel of the same name is a symbol of:**
-    a) Modernity
+    a) Modern architecture
     b) Lost glory and exile
-    c) Transparency
-    d) Fragility
+    c) Economic prosperity
+    d) Scientific progress
     <details>
     <summary>Answer</summary>
     b) Lost glory and exile
@@ -524,14 +530,14 @@ This section contains 100 multiple-choice questions to test your knowledge of Am
     b) Social commentary
     </details>
 
-**53. The narrator of *The Shadow Lines* is fascinated by his eccentric and enigmatic uncle:**
-    a) Tridib
-    b) Raja
-    c) Baba
-    d) Nirmal
+**53. The narrator of *The Shadow Lines* is an unnamed:**
+    a) Indian boy
+    b) British boy
+    c) Bengali boy
+    d) American boy
     <details>
     <summary>Answer</summary>
-    a) Tridib
+    c) Bengali boy
     </details>
 
 **54. In *The Calcutta Chromosome*, the novel suggests that Ross's discovery was part of a larger, secret, and mystical experiment conducted by a clandestine group led by:**
@@ -574,24 +580,24 @@ This section contains 100 multiple-choice questions to test your knowledge of Am
     b) Climate change
     </details>
 
-**58. The novel *The Glass Palace* is a sweeping historical novel that spans over a century and moves across multiple continents, including Burma, Malaya, and:**
-    a) China
-    b) India
-    c) Africa
-    d) Europe
+**58. The "Glass Palace" in the novel of the same name is a symbol of:**
+    a) Modern architecture
+    b) Lost glory and exile
+    c) Economic prosperity
+    d) Scientific progress
     <details>
     <summary>Answer</summary>
-    b) India
+    b) Lost glory and exile
     </details>
 
-**59. Ghosh's literary style is often described as:**
-    a) Simple and direct
-    b) Lyrical and evocative
-    c) Harsh and realistic
-    d) Humorous and lighthearted
+**59. Ghosh's literary style is often described as blending fact and fiction, creating a seamless and believable world that:**
+    a) Confuses the reader
+    b) Educates as it entertains
+    c) Distorts history
+    d) Simplifies complex issues
     <details>
     <summary>Answer</summary>
-    b) Lyrical and evocative
+    b) Educates as it entertains
     </details>
 
 **60. The theme of "Interconnectedness of Humanity" in Ghosh's narratives demonstrates how seemingly disparate lives and events are:**

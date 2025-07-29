@@ -1,3 +1,9 @@
+---
+title: Biography
+course: literature
+order: 1
+---
+
 # 1. Biography of Jayant Mahapatra
 
 **(October 22, 1928 – August 27, 2023)**
@@ -19,9 +25,9 @@ Mahapatra's poetry is deeply rooted in the landscape and culture of Odisha, part
 His poetic style is often described as:
 
 *   **Meditative and Contemplative:** His poems invite reflection and often explore complex philosophical questions.
-*   **Subtle Imagery:** He uses precise and often understated imagery to create vivid sensory experiences and evoke a strong sense of place.
+*   **Subtle Imagery:** He uses precise and often understated imagery to create evocative images and evoke a strong sense of place.
 *   **Free Verse:** He primarily wrote in free verse, allowing his lines to flow naturally, mirroring the rhythms of thought and speech.
-*   **Exploration of the Subconscious:** His poetry often delves into the subconscious mind, exploring dreams, memories, and the hidden currents of human emotion.
+*   **Exploration of the Subconscious:** His work often delves into the subconscious mind, exploring dreams, memories, and the hidden currents of human emotion.
 
 His first volume, **_Close the Sky, Ten by Ten_** (1971), marked his entry into the literary world. He went on to author 27 books of poems, with 20 in English and 7 in Oriya, demonstrating his mastery of both languages.
 

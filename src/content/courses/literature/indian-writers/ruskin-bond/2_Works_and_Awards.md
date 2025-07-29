@@ -1,3 +1,9 @@
+---
+title: Works and Awards
+course: literature
+order: 2
+---
+
 # 2. Works and Awards of Ruskin Bond
 
 This section provides a comprehensive catalog of Ruskin Bond's major works across various genres and the significant awards and honors he has received for his contributions to literature, especially for children.

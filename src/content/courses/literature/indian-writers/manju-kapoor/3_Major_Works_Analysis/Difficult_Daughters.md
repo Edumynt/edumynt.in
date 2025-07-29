@@ -1,3 +1,8 @@
+---
+title: Difficult Daughters
+course: literature
+---
+
 # Analysis of *Difficult Daughters*
 
 ## Introduction

@@ -1,3 +1,8 @@
+---
+title: My Grandmothers House
+course: literature
+---
+
 # Analysis of "My Grandmother's House"
 
 ## Introduction

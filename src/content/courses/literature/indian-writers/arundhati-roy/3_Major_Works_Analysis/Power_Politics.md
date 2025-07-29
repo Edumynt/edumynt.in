@@ -1,3 +1,8 @@
+---
+title: Power Politics
+course: literature
+---
+
 # Analysis of *Power Politics*
 
 [Previous: The Algebra of Infinite Justice](The_Algebra_of_Infinite_Justice.md) | [Next: Mindmap](../../5_Mindmap.md)
@@ -16,7 +21,7 @@ This book compiles several of Roy's essays and speeches, written between 1998 an
 
 *   **"The Ladies Have Feelings, So..." (1999):** This essay delves into the politics of nuclear weapons, particularly in the context of India and Pakistan's nuclear tests. Roy critiques the jingoistic rhetoric surrounding nuclearization and the dangerous implications for peace and human survival. She challenges the notion that nuclear weapons provide security, arguing instead that they represent a profound moral and existential threat.
 
-*   **"Power Politics: The New Global Order" (2001):** The title essay of the collection, this piece offers a broad critique of corporate globalization and the role of international financial institutions (like the World Bank and IMF) in shaping the economies and societies of developing countries. Roy argues that these policies often lead to increased inequality, privatization of public resources, and a loss of national sovereignty. She exposes the mechanisms through which global capital exerts its influence, often at the expense of the poor and marginalized.
+*   **"Power Politics: The New Global Order" (2001):** The title essay of the collection, this piece offers a broad critique of corporate globalization and the role of international financial institutions (like the World Bank and IMF) in shaping the economies and societies of developing countries. Roy argues that these policies often to increased inequality, privatization of public resources, and a loss of national sovereignty. She exposes the mechanisms through which global capital exerts its influence, often at the expense of the poor and marginalized.
 
 *   **"The Algebra of Infinite Justice" (2001):** (Also a standalone collection). This essay reflects on the nature of justice and injustice, particularly in the aftermath of the September 11 attacks. Roy critiques the simplistic narratives of good versus evil and the rhetoric of the "war on terror," arguing for a more nuanced understanding of global conflicts and the root causes of violence. She emphasizes the interconnectedness of various forms of injustice and the need for a more compassionate and equitable world order.
 

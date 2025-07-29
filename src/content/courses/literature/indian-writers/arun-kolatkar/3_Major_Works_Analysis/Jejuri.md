@@ -1,3 +1,8 @@
+---
+title: Jejuri
+course: literature
+---
+
 # Analysis of *Jejuri*
 
 ## Introduction

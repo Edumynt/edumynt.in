@@ -1,3 +1,8 @@
+---
+title: Custody
+course: literature
+---
+
 # Analysis of *Custody*
 
 ## Introduction

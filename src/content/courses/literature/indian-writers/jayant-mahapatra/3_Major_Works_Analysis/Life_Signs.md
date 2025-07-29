@@ -1,3 +1,8 @@
+---
+title: Life Signs
+course: literature
+---
+
 # Analysis of *Life Signs*
 
 ## Introduction

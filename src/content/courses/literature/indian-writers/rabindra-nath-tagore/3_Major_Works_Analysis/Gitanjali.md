@@ -1,3 +1,8 @@
+---
+title: Gitanjali - Analysis
+course: literature
+---
+
 # Analysis of *Gitanjali* (Song Offerings)
 
 ## Introduction

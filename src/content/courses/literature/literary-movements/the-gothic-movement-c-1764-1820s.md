@@ -1,5 +1,6 @@
 ---
 title: The Gothic Movement c 1764-1820s
+course: literature
 tags:
   - literary-movements
   - literature

@@ -1,3 +1,9 @@
+---
+title: Biography
+course: literature
+order: 1
+---
+
 # 1. Biography of Kamala Das
 
 **(March 31, 1934 – May 31, 2009)**
@@ -18,7 +24,7 @@ Kamala Das wrote extensively in both her mother tongue, Malayalam, and in Englis
 
 Her first and arguably best collection of poems in English is **_Summer in Calcutta_** (1965). This was followed by **_The Descendants_** (1967) and **_The Old Playhouse and Other Poems_** (1973). Her poems like "My Grandmother's House," "The Looking Glass," and "An Introduction" are highly autobiographical and explore themes of identity, longing, and the search for love.
 
-Beyond poetry, she also wrote her controversial autobiography, **_My Story_** (1976), which was originally published in Malayalam as *Ente Katha*. She also penned two novels, **_Alphabet of Lust_** (1976) and *A Doll for the Child Prostitute*.
+Beyond poetry, she also wrote her controversial autobiography, **_My Story_** (1976), which was originally published in Malayalam as *Ente Katha*.
 
 ## Awards and Recognition
 
