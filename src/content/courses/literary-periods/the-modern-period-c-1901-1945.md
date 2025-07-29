@@ -2,7 +2,6 @@
 title: "The Modern Period (c. 1901-1945)"
 description: "Modernist movement breaking with Victorian traditions, emphasizing experimentation and 'Make It New'"
 course: "Literary Periods"
-chapter: "periods"
 order: 8
 tags: ["modernism", "pound", "eliot", "joyce", "woolf", "experimental", "literary-periods"]
 ---

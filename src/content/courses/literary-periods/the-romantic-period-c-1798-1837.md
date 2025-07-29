@@ -2,7 +2,6 @@
 title: "The Romantic Period (c. 1798-1837)"
 description: "Exploration of Romanticism with its emphasis on emotion, imagination, and individual expression"
 course: "Literary Periods"
-chapter: "periods"
 order: 6
 tags: ["romanticism", "wordsworth", "coleridge", "byron", "shelley", "keats", "literary-periods"]
 ---

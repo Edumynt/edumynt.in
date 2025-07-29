@@ -2,7 +2,6 @@
 title: "The Neo-Classical Period (1660-1798)"
 description: "The Age of Reason emphasizing order, logic, and classical forms in literature"
 course: "Literary Periods"
-chapter: "periods"
 order: 5
 tags: ["neo-classical", "augustan", "pope", "dryden", "swift", "age-of-reason", "literary-periods"]
 ---

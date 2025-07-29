@@ -2,7 +2,6 @@
 title: "The Victorian Period - Comprehensive Study (c. 1837-1901)"
 description: "In-depth analysis of Victorian literature covering all major themes, authors, and social contexts"
 course: "Literary Periods"
-chapter: "periods"
 order: 10
 tags: ["victorian", "comprehensive", "dickens", "tennyson", "browning", "social-realism", "literary-periods"]
 ---

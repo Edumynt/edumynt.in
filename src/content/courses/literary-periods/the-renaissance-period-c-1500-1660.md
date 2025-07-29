@@ -2,7 +2,6 @@
 title: "The Renaissance Period (c. 1500-1660)"
 description: "Comprehensive study of the English Renaissance period including Humanism, Protestant Reformation, and major literary figures"
 course: "Literary Periods"
-chapter: "periods"
 order: 1
 tags: ["renaissance", "humanism", "shakespeare", "marlowe", "literary-periods"]
 ---

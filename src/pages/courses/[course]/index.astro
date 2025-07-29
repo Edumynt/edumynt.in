@@ -89,14 +89,18 @@ function renderHierarchy(hierarchy, depth = 0) {
     console.log(`[Depth ${depth}] Processing key: ${key}`);
     
     if (key === '_files' && value.length > 0) {
-      // Root level files
+      // Root level files - add each individually without folder grouping
       if (depth === 0) {
-        console.log(`[Depth ${depth}] Adding root level files: ${value.length}`);
-        sections.push({
-          name: 'Course Files',
-          isRoot: true,
-          lessons: value.sort((a, b) => (a.data.order || 0) - (b.data.order || 0)),
-          subsections: []
+        console.log(`[Depth ${depth}] Adding root level files individually: ${value.length}`);
+        const sortedFiles = value.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+        sortedFiles.forEach(lesson => {
+          sections.push({
+            name: lesson.data.title,
+            isRoot: true,
+            isIndividualFile: true,
+            lessons: [lesson],
+            subsections: []
+          });
         });
       }
     } else if (key !== '_files' && key !== '_folders' && key !== '_path' && key !== '_name') {
@@ -173,69 +177,78 @@ const firstLesson = lessons[0];
 
       <div class="chapters-list">
         {hierarchySections.map((section, index) => (
-          <section class="chapter">
-            <div class="chapter-header">
-              <h2 class="chapter-title" data-section={`section-${index}`}>
-                {section.isRoot 
-                  ? "Course Files" 
-                  : section.name
-                }
-                {(section.lessons.length > 0 || (section.subsections && section.subsections.length > 0)) && (
-                  <span class="toggle-icon" id={`toggle-section-${index}`}>▼</span>
+          section.isIndividualFile ? (
+            // Render individual files as direct links without section wrapper
+            <div class="lesson-direct">
+              <a href={generateLessonUrl(section.lessons[0], course)} class="lesson-direct-link">
+                <span class="lesson-number">{index + 1}</span>
+                <span class="lesson-title">{section.name}</span>
+                <span class="lesson-arrow">→</span>
+              </a>
+            </div>
+          ) : (
+            // Render folder sections
+            <section class="chapter">
+              <div class="chapter-header">
+                <h2 class="chapter-title" data-section={`section-${index}`}>
+                  {section.name}
+                  {(section.lessons.length > 0 || (section.subsections && section.subsections.length > 0)) && (
+                    <span class="toggle-icon" id={`toggle-section-${index}`}>▼</span>
+                  )}
+                </h2>
+              </div>
+              <div class="chapter-content" id={`section-${index}`}>
+                {section.lessons && section.lessons.length > 0 && (
+                  <ul class="lessons-list">
+                    {section.lessons.map((lesson, lessonIndex) => {
+                      const linkUrl = generateLessonUrl(lesson, course);
+                      
+                      return (
+                        <li class="lesson-item">
+                          <a href={linkUrl}>
+                            <span class="lesson-number">{lessonIndex + 1}</span>
+                            <span class="lesson-title">{lesson.data.title}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 )}
-              </h2>
-            </div>
-            <div class="chapter-content" id={`section-${index}`}>
-              {section.lessons && section.lessons.length > 0 && (
-                <ul class="lessons-list">
-                  {section.lessons.map((lesson, lessonIndex) => {
-                    const linkUrl = generateLessonUrl(lesson, course);
-                    
-                    return (
-                      <li class="lesson-item">
-                        <a href={linkUrl}>
-                          <span class="lesson-number">{lessonIndex + 1}</span>
-                          <span class="lesson-title">{lesson.data.title}</span>
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-              {section.subsections && section.subsections.length > 0 && (
-                <div class="subsections">
-                  {section.subsections.map((subsection, subIndex) => (
-                    <div class="subsection">
-                      <div class="subsection-header">
-                        <h3 class="subsection-title" data-section={`subsection-${index}-${subIndex}`}>
-                          {subsection.name}
-                          <span class="toggle-icon" id={`toggle-subsection-${index}-${subIndex}`}>▼</span>
-                        </h3>
+                {section.subsections && section.subsections.length > 0 && (
+                  <div class="subsections">
+                    {section.subsections.map((subsection, subIndex) => (
+                      <div class="subsection">
+                        <div class="subsection-header">
+                          <h3 class="subsection-title" data-section={`subsection-${index}-${subIndex}`}>
+                            {subsection.name}
+                            <span class="toggle-icon" id={`toggle-subsection-${index}-${subIndex}`}>▼</span>
+                          </h3>
+                        </div>
+                        <div class="subsection-content" id={`subsection-${index}-${subIndex}`}>
+                          {subsection.lessons && subsection.lessons.length > 0 && (
+                            <ul class="lessons-list">
+                              {subsection.lessons.map((lesson, lessonIndex) => {
+                                const linkUrl = generateLessonUrl(lesson, course);
+                                
+                                return (
+                                  <li class="lesson-item">
+                                    <a href={linkUrl}>
+                                      <span class="lesson-number">{lessonIndex + 1}</span>
+                                      <span class="lesson-title">{lesson.data.title}</span>
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </div>
                       </div>
-                      <div class="subsection-content" id={`subsection-${index}-${subIndex}`}>
-                        {subsection.lessons && subsection.lessons.length > 0 && (
-                          <ul class="lessons-list">
-                            {subsection.lessons.map((lesson, lessonIndex) => {
-                              const linkUrl = generateLessonUrl(lesson, course);
-                              
-                              return (
-                                <li class="lesson-item">
-                                  <a href={linkUrl}>
-                                    <span class="lesson-number">{lessonIndex + 1}</span>
-                                    <span class="lesson-title">{lesson.data.title}</span>
-                                  </a>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </section>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+          )
         ))}
       </div>
     </main>
@@ -455,6 +468,46 @@ const firstLesson = lessons[0];
       .lesson-title {
         flex: 1;
         font-weight: 500;
+      }
+
+      .lesson-direct {
+        margin-bottom: 1rem;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .lesson-direct:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .lesson-direct-link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: background 0.2s;
+      }
+
+      .lesson-direct-link:hover {
+        background: var(--hover-bg);
+      }
+
+      .lesson-arrow {
+        color: var(--accent-color);
+        font-weight: bold;
+        opacity: 0.7;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      .lesson-direct:hover .lesson-arrow {
+        opacity: 1;
+        transform: translateX(4px);
       }
 
       @media (max-width: 768px) {

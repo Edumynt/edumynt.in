@@ -2,7 +2,6 @@
 title: "The Victorian Period (c. 1837-1901)"
 description: "Literature of Queen Victoria's reign, covering Industrial Revolution and social transformation"
 course: "Literary Periods"
-chapter: "periods"
 order: 7
 tags: ["victorian", "dickens", "tennyson", "browning", "industrial-revolution", "literary-periods"]
 ---

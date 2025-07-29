@@ -2,7 +2,6 @@
 title: "The Jacobean Age (1603-1625)"
 description: "Study of literature during King James I's reign, marked by psychological complexity and darker themes"
 course: "Literary Periods"
-chapter: "periods"
 order: 2
 tags: ["jacobean", "james-i", "shakespeare", "ben-jonson", "literary-periods"]
 ---

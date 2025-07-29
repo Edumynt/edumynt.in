@@ -2,7 +2,6 @@
 title: "The Metaphysical Poets (c. 1600-1660)"
 description: "Study of 17th-century poets known for their intellectual wit, conceits, and philosophical themes"
 course: "Literary Periods"
-chapter: "periods"
 order: 4
 tags: ["metaphysical-poets", "donne", "herbert", "marvell", "conceits", "literary-periods"]
 ---

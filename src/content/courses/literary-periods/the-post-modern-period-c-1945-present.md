@@ -2,7 +2,6 @@
 title: "The Post-Modern Period (c. 1945-Present)"
 description: "Post-modernist literature reacting against modernism, embracing fragmentation and questioning meaning"
 course: "Literary Periods"
-chapter: "periods"
 order: 9
 tags: ["post-modernism", "fragmentation", "metafiction", "deconstruction", "contemporary", "literary-periods"]
 ---

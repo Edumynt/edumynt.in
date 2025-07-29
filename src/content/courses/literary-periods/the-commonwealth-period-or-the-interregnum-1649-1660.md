@@ -2,7 +2,6 @@
 title: "The Commonwealth Period/Interregnum (1649-1660)"
 description: "Literature during England's republican period under Puritan rule and Oliver Cromwell"
 course: "Literary Periods"
-chapter: "periods"
 order: 3
 tags: ["commonwealth", "interregnum", "puritanism", "cromwell", "milton", "literary-periods"]
 ---

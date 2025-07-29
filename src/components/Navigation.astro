@@ -23,17 +23,26 @@ const courseGroups = courses.reduce((acc, course) => {
 
 const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) => {
   const chapters = {};
+  const rootLessons = [];
+  
   lessons.forEach(lesson => {
-    const chapter = lesson.data.chapter || 'General';
-    if (!chapters[chapter]) {
-      chapters[chapter] = [];
+    if (lesson.data.chapter) {
+      // Lesson has a chapter - group it under that chapter
+      const chapter = lesson.data.chapter;
+      if (!chapters[chapter]) {
+        chapters[chapter] = [];
+      }
+      chapters[chapter].push(lesson);
+    } else {
+      // Lesson has no chapter - it's a root level lesson
+      rootLessons.push(lesson);
     }
-    chapters[chapter].push(lesson);
   });
   
   return {
     name: courseName,
     slug: courseName.toLowerCase().replace(/\s+/g, '-'),
+    rootLessons: rootLessons.sort((a, b) => (a.data.order || 0) - (b.data.order || 0)),
     chapters: Object.entries(chapters).map(([chapterName, chapterLessons]) => ({
       name: chapterName,
       lessons: chapterLessons.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
@@ -160,7 +169,23 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
             </div>
             
             <div class="course-chapters" id={`course-${course.slug}`}>
-              {course.chapters.map((chapter) => (
+              {/* Show root lessons directly under course name */}
+              {course.rootLessons && course.rootLessons.length > 0 && (
+                <div class="root-lessons">
+                  {course.rootLessons.map((lesson) => {
+                    const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
+                    const isActive = currentLesson && lesson.slug.includes(currentLesson);
+                    return (
+                      <a href={lessonUrl} class={`lesson-link root-lesson ${isActive ? 'active' : ''}`}>
+                        {lesson.data.title}
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+              
+              {/* Show chapters only if they exist */}
+              {course.chapters && course.chapters.length > 0 && course.chapters.map((chapter) => (
                 <div class="chapter-section">
                   <div class="chapter-header" data-chapter={`${course.slug}-${chapter.name}`}>
                     <span class="chapter-title">{chapter.name}</span>
@@ -656,6 +681,31 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
     background-color: var(--hover-bg);
     border-left-color: var(--accent-color);
     font-weight: 500;
+  }
+
+  /* Root lessons styling */
+  .root-lessons {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .lesson-link.root-lesson {
+    padding: 0.75rem 2rem;
+    margin-bottom: 0.25rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .lesson-link.root-lesson:hover {
+    background-color: var(--hover-bg);
+    color: var(--accent-color);
+  }
+
+  .lesson-link.root-lesson.active {
+    background-color: var(--hover-bg);
+    border-left-color: var(--accent-color);
+    font-weight: 600;
+    color: var(--accent-color);
   }
 
   /* Table of Contents */
