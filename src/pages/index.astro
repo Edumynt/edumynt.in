@@ -1,16 +1,700 @@
 ---
+import { getCollection } from 'astro:content';
 
+const courses = await getCollection('courses');
+
+// Group courses by course name
+const courseGroups = courses.reduce((acc, course) => {
+  const courseName = course.data.course;
+  if (!acc[courseName]) {
+    acc[courseName] = [];
+  }
+  acc[courseName].push(course);
+  return acc;
+}, {});
+
+// Get unique courses with their metadata
+const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) => {
+  const firstLesson = lessons[0];
+  const lessonCount = lessons.length;
+  const chapters = [...new Set(lessons.map(lesson => lesson.data.chapter).filter(Boolean))];
+  
+  return {
+    name: courseName,
+    slug: courseName.toLowerCase().replace(/\s+/g, '-'),
+    description: firstLesson.data.description || `Master ${courseName} with our comprehensive course`,
+    lessonCount,
+    chapterCount: chapters.length,
+  };
+});
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Edumynt - Master Literature & More</title>
+    <meta name="description" content="Interactive learning platform for literature, periods, movements, and writers. Start your journey today." />
+  </head>
+  <body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar Drawer -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3>Navigation</h3>
+        <button class="close-btn" id="closeSidebar">×</button>
+      </div>
+      <div class="sidebar-content">
+        <div class="nav-item">
+          <a href="/" class="nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12L5 10L12 3L19 10L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Home
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <div class="courses-nav">
+            <a href="/courses" class="nav-link courses-main">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6.5 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Courses
+            </a>
+            <button class="dropdown-toggle" id="coursesDropdown">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="courses-dropdown" id="coursesDropdownContent">
+            {uniqueCourses.map((course) => (
+              <a href={`/courses/${course.slug}`} class="course-dropdown-item">
+                <div class="course-dropdown-name">{course.name}</div>
+                <div class="course-dropdown-meta">{course.chapterCount} chapters, {course.lessonCount} lessons</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <button class="menu-button" id="menuButton">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <h1 class="logo">Edumynt</h1>
+        
+        <div class="nav-actions">
+          <button class="search-button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+              <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+          
+          <button class="theme-toggle" id="themeToggle">
+            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="m12 2-3 3m0 0-3-3m3 3v6m7.5-1.5L18 9m0 0 1.5-1.5M18 9h-6m4.5 7.5L15 15m0 0-1.5 1.5M15 15v6m-7.5-1.5L6 15m0 0 1.5 1.5M6 15h6m-4.5-7.5L9 9m0 0-1.5-1.5M9 9v6" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <section class="hero-section">
+        <h1 class="hero-title">Master Literature & More</h1>
+        <p class="hero-subtitle">Interactive learning platform for literature, periods, movements, and writers</p>
+      </section>
+      
+      <!-- Courses Grid -->
+      <section class="courses-section">
+        <h2 class="section-title">Available Courses</h2>
+        <div class="courses-grid">
+          {uniqueCourses.map((course) => (
+            <div class="course-card">
+              <div class="card-icon">📚</div>
+              <h3 class="card-title">{course.name}</h3>
+              <p class="card-description">{course.description}</p>
+              <div class="card-stats">
+                <span>{course.chapterCount} chapters</span>
+                <span>{course.lessonCount} lessons</span>
+              </div>
+              <a href={`/courses/${course.slug}`} class="card-button">Start Learning</a>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <!-- Minimal Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Edumynt. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg-color: #f8fafc;
+        --text-color: #1a1a1a;
+        --card-bg: white;
+        --border-color: #e5e7eb;
+        --accent-color: #667eea;
+        --hover-bg: #f3f4f6;
+        --sidebar-bg: white;
+        --nav-bg: white;
+      }
+
+      [data-theme="dark"] {
+        --bg-color: #0f172a;
+        --text-color: #f1f5f9;
+        --card-bg: #1e293b;
+        --border-color: #334155;
+        --accent-color: #818cf8;
+        --hover-bg: #334155;
+        --sidebar-bg: #1e293b;
+        --nav-bg: #1e293b;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background: var(--bg-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-overflow-scrolling: touch;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      /* Navigation */
+      .navbar {
+        background: var(--nav-bg);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .menu-button, .search-button, .theme-toggle {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      }
+
+      .menu-button:hover, .search-button:hover, .theme-toggle:hover {
+        background-color: var(--hover-bg);
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Sidebar */
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 998;
+      }
+
+      .sidebar-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 320px;
+        height: 100%;
+        background: var(--sidebar-bg);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .sidebar-header h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+      }
+
+      .close-btn:hover {
+        background-color: var(--hover-bg);
+      }
+
+      .sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem 0;
+      }
+
+      .nav-item {
+        margin-bottom: 0.5rem;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 2rem;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: background-color 0.2s ease;
+      }
+
+      .nav-link:hover {
+        background-color: var(--hover-bg);
+      }
+
+      .courses-nav {
+        display: flex;
+        align-items: center;
+      }
+
+      .courses-main {
+        flex: 1;
+      }
+
+      .dropdown-toggle {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0.75rem 1rem;
+        transition: background-color 0.2s ease, transform 0.3s ease;
+      }
+
+      .dropdown-toggle:hover {
+        background-color: var(--hover-bg);
+      }
+
+      .dropdown-toggle.expanded {
+        transform: rotate(180deg);
+      }
+
+      .courses-dropdown {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background-color: var(--hover-bg);
+      }
+
+      .courses-dropdown.show {
+        max-height: 400px;
+      }
+
+      .course-dropdown-item {
+        display: block;
+        padding: 0.75rem 3rem;
+        text-decoration: none;
+        color: var(--text-color);
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color 0.2s ease;
+      }
+
+      .course-dropdown-item:hover {
+        background-color: var(--card-bg);
+      }
+
+      .course-dropdown-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+
+      .course-dropdown-meta {
+        font-size: 0.8rem;
+        color: #888;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        text-align: center;
+        margin-bottom: 4rem;
+        padding: 2rem 0;
+      }
+
+      .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: var(--text-color);
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Courses Section */
+      .courses-section {
+        margin-bottom: 3rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--text-color);
+      }
+
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .course-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .course-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-color);
+      }
+
+      .card-description {
+        color: #666;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .card-stats {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        color: #888;
+        font-size: 0.9rem;
+      }
+
+      .card-button {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--accent-color) 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: transform 0.2s ease;
+      }
+
+      .card-button:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--card-bg);
+        border-top: 1px solid var(--border-color);
+        padding: 2rem 0;
+        margin-top: auto;
+      }
+
+      .footer-content {
+        text-align: center;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-container {
+          padding: 0.75rem 1rem;
+        }
+
+        .logo {
+          font-size: 1.5rem;
+        }
+
+        .menu-button, .search-button, .theme-toggle {
+          padding: 10px;
+          min-width: 40px;
+          min-height: 40px;
+        }
+
+        .sidebar {
+          width: 85%;
+          max-width: 300px;
+        }
+
+        .hero-title {
+          font-size: 2.2rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1rem;
+          padding: 0 1rem;
+        }
+
+        .main-content {
+          padding: 1rem;
+        }
+
+        .courses-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .course-card {
+          padding: 1.5rem;
+        }
+
+        .card-title {
+          font-size: 1.3rem;
+        }
+
+        .card-stats {
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-container {
+          padding: 0.5rem 0.75rem;
+        }
+
+        .logo {
+          font-size: 1.3rem;
+        }
+
+        .sidebar {
+          width: 90%;
+        }
+
+        .hero-title {
+          font-size: 1.8rem;
+        }
+
+        .hero-subtitle {
+          font-size: 0.9rem;
+        }
+
+        .main-content {
+          padding: 0.75rem 0.5rem;
+        }
+
+        .course-card {
+          padding: 1.25rem;
+        }
+
+        .card-icon {
+          font-size: 2rem;
+        }
+
+        .card-title {
+          font-size: 1.2rem;
+        }
+
+        .card-description {
+          font-size: 0.9rem;
+        }
+
+        .card-button {
+          padding: 0.7rem 1.2rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Theme management
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = themeToggle.querySelector('.sun-icon');
+        const moonIcon = themeToggle.querySelector('.moon-icon');
+        
+        // Load saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        function updateThemeIcon(theme) {
+          if (theme === 'dark') {
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+          } else {
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+          }
+        }
+        
+        themeToggle.addEventListener('click', function() {
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+          updateThemeIcon(newTheme);
+        });
+
+        // Sidebar functionality
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        function openSidebar() {
+          sidebar.classList.add('show');
+          sidebarOverlay.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebarFunc() {
+          sidebar.classList.remove('show');
+          sidebarOverlay.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+
+        menuButton.addEventListener('click', openSidebar);
+        closeSidebar.addEventListener('click', closeSidebarFunc);
+        sidebarOverlay.addEventListener('click', closeSidebarFunc);
+
+        // Courses dropdown in sidebar
+        const coursesDropdown = document.getElementById('coursesDropdown');
+        const coursesDropdownContent = document.getElementById('coursesDropdownContent');
+
+        coursesDropdown.addEventListener('click', function() {
+          const isExpanded = coursesDropdownContent.classList.contains('show');
+          
+          if (isExpanded) {
+            coursesDropdownContent.classList.remove('show');
+            coursesDropdown.classList.remove('expanded');
+          } else {
+            coursesDropdownContent.classList.add('show');
+            coursesDropdown.classList.add('expanded');
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -22,7 +22,7 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
   return {
     name: courseName,
     slug: courseName.toLowerCase().replace(/\s+/g, '-'),
-    title: firstLesson.data.title || courseName,
+    title: courseName, // Use course name instead of first lesson title
     description: firstLesson.data.description || `Learn ${courseName}`,
     lessonCount,
     chapterCount: chapters.length,

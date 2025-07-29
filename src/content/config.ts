@@ -5,14 +5,13 @@ const courses = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    date: z.date().optional(),
-    updated: z.date().optional(),
-    draft: z.boolean().default(false),
-    course: z.string(),
-    // Remove chapter field - we'll derive path from file structure
+    course: z.string(), // "Literary Periods", "Literary Movements", "Indian Writers"
+    chapter: z.string().optional(), // folder name like "renaissance", "tagore"
     order: z.number().optional(),
+    tags: z.array(z.string()).optional(),
     author: z.string().optional(),
+    date: z.date().optional(),
+    draft: z.boolean().default(false),
   }),
 });
 
