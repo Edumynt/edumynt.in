@@ -1,0 +1,48 @@
+# Nissim Ezekiel: A Mindmap
+
+- **Nissim Ezekiel (1924-2004)**
+  - **Titles & Epithets**
+    - Father of Post-Independence Indian English Verse
+  - **Biography**
+    - **Born:** Dec 16, 1924 (Bombay/Mumbai)
+    - **Community:** Bene Israel (Marathi-speaking Jewish)
+    - **Education:** Bombay University (M.A. English), Birkbeck College London (Philosophy)
+    - **Key Influences:** T.S. Eliot, Ezra Pound
+    - **Career:** Professor (Bombay, Leeds), Editor, Art Critic
+    - **Died:** Jan 9, 2004
+  - **Major Works**
+    - **Poetry Collections**
+      - *A Time to Change* (1952) - Debut
+      - *The Unfinished Man* (1960)
+      - *The Exact Name* (1965)
+      - *Hymns in Darkness* (1976)
+      - *Latter-Day Psalms* (1982) - Sahitya Akademi Award
+    - **Key Poems**
+      - "Night of the Scorpion"
+      - "Enterprise"
+      - "Goodbye Party for Miss Pushpa T.S."
+      - "Philosophy"
+      - "Background, Casually"
+    - **Plays**
+      - *Nalini*
+      - *Marriage Poem*
+      - *The Sleep-Walkers*
+  - **Literary Style & Themes**
+    - **Style**
+      - Urban Sensibility
+      - Irony & Satire
+      - Conversational & Colloquial Language
+      - Precision & Clarity
+      - Self-Exploration & Introspection
+      - Realistic Portrayal
+    - **Themes**
+      - Urban Alienation & Modern Life
+      - Search for Identity (Indian Jew)
+      - Social Critique & Hypocrisy
+      - Love, Sex, & Relationships
+      - The Role of the Poet
+      - Spiritual Quest & Skepticism
+  - **Awards & Honors**
+    - **Sahitya Akademi Award (1983)** for *Latter-Day Psalms*
+    - **Padma Shri (1988)**
+    - R.K. Lagu Prize

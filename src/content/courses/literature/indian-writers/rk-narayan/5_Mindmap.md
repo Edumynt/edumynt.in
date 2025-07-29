@@ -1,0 +1,48 @@
+# R.K. Narayan: A Mindmap
+
+- **R.K. Narayan (1906-2001)**
+  - **Full Name:** Rasipuram Krishnaswami Iyer Narayanaswami
+  - **Biography**
+    - **Born:** Oct 10, 1906 (Madras)
+    - **Education:** Maharaja College of Mysore
+    - **Mentor:** Graham Greene (helped with early publications)
+    - **Key Creation:** Fictional town of Malgudi
+    - **Died:** May 13, 2001 (Chennai)
+  - **Major Works**
+    - **Novels**
+      - *Swami and Friends* (1935) - First novel, introduces Malgudi
+      - *The Bachelor of Arts* (1937)
+      - *The Dark Room* (1938)
+      - *The English Teacher* (1945) - Semi-autobiographical
+      - *The Financial Expert* (1952) - Masterpiece on ambition/greed
+      - *The Guide* (1958) - Sahitya Akademi Award winner
+      - *The Vendor of Sweets* (1967) - Generational conflict
+      - *A Tiger for Malgudi* (1983)
+    - **Short Story Collections**
+      - *Malgudi Days*
+      - *An Astrologer's Day and Other Stories*
+    - **Non-Fiction**
+      - *My Days* (Autobiography)
+    - **Mythology Retellings**
+      - *The Ramayana*
+      - *The Mahabharata*
+  - **Literary Style & Themes**
+    - **Style**
+      - Simple, Lucid Prose
+      - Gentle Irony & Humor
+      - Realistic & Authentic Portrayal
+      - Detached Narration
+      - Creation of Malgudi (as a character/setting)
+    - **Themes**
+      - Ordinary & Everyday Life
+      - Tradition vs. Modernity
+      - Human Foibles & Eccentricities
+      - Search for Identity & Meaning
+      - Role of Fate & Destiny
+  - **Awards & Honors**
+    - **Sahitya Akademi Award (1960)** for *The Guide*
+    - **Padma Bhushan (1964)**
+    - **Filmfare Award (1980)** for *The Guide* (film adaptation)
+    - **Padma Vibhushan (2000)**
+    - Nominated for Nobel Prize in Literature (multiple times)
+    - Nominated to Rajya Sabha

@@ -1,0 +1,44 @@
+# Toru Dutt: A Mindmap
+
+- **Toru Dutt (1856-1877)**
+  - **Titles & Epithets**
+    - Founding figure of Indo-Anglian literature
+    - India's first woman novelist in English
+  - **Biography**
+    - **Born:** Mar 4, 1856 (Calcutta)
+    - **Family:** Bengali, Christian, intellectual family (father Govind Chandra Dutt)
+    - **Education:** Primarily at home, then France & England
+    - **Key Influences:** French Romanticism, English Romantics (Keats)
+    - **Died:** Aug 30, 1877 (age 21) from consumption (tuberculosis)
+    - **Personal Losses:** Siblings Aru and Abju also died young
+  - **Major Works**
+    - **Poetry Collections**
+      - *A Sheaf Gleaned in French Fields* (1875) - Translations of French poems
+      - *Ancient Ballads and Legends of Hindustan* (1882) - Original Indian themes
+    - **Novels**
+      - *Le Journal de Mademoiselle d'Arvers* (1879) - In French
+      - *Bianca, or The Young Spanish Maiden* (1878) - Incomplete, first English novel by Indian woman
+    - **Key Poems**
+      - "Our Casuarina Tree"
+      - "Sita"
+      - "The Lotus"
+      - "Baugmaree"
+  - **Literary Style & Themes**
+    - **Style**
+      - Lyrical & Evocative
+      - Fusion of Eastern & Western cultures
+      - Sensory Detail & Vivid Imagery
+      - Personal & Confessional Tone
+      - Narrative Skill
+    - **Themes**
+      - Memory & Nostalgia
+      - Loss & Grief
+      - Patriotism & Love for India
+      - Nature
+      - Spiritual Quest
+      - The Role of Women
+  - **Legacy**
+    - Pioneering Indo-Anglian Writer
+    - Cultural Bridge (East & West)
+    - Set a high standard for lyrical poetry
+    - Authentic Indian voice in English

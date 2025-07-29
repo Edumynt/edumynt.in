@@ -1,0 +1,37 @@
+# Arun Kolatkar: A Mindmap
+
+- **Arun Kolatkar (1932-2004)**
+  - **Titles & Epithets**
+    - Influential Bilingual Poet (Marathi & English)
+  - **Biography**
+    - **Born:** Nov 1, 1932 (Kolhapur, Maharashtra)
+    - **Background:** Father in education department
+    - **Education:** Sir J.J. School of Art, Mumbai (Graphic Artist)
+    - **Died:** Sep 25, 2004
+  - **Major Works**
+    - **English Poetry Collections**
+      - *Jejuri* (1976) - Commonwealth Poetry Prize
+      - *Kala Ghoda Poems* (2004) - Posthumous, urban focus
+      - *Sarpa Satra* (2004) - Posthumous, reinterpretation of myth
+      - *The Boatride and Other Poems* (2008) - Posthumous, uncollected
+    - **Marathi Poetry Collections**
+      - *Bhijki Vahi* (The Wet Notebook) (2003) - Sahitya Akademi Award
+  - **Literary Style & Themes**
+    - **Style**
+      - Bilingual Mastery
+      - Colloquial & Conversational Tone
+      - Keen Observational Detail (influenced by art background)
+      - Irony & Humor (subtle, understated)
+      - Skepticism & Questioning
+      - Conciseness & Precision
+    - **Themes**
+      - The Sacred and the Profane
+      - Faith, Doubt, & Superstition
+      - Urban and Rural Landscapes
+      - The Human Condition
+      - Time and Decay
+      - Reinterpretation of Myth (e.g., *Sarpa Satra*)
+  - **Awards & Honors**
+    - **Commonwealth Poetry Prize (1977)** for *Jejuri*
+    - **Sahitya Akademi Award (2004)** for *Bhijki Vahi*
+    - Featured in World Classics (New York Review of Books)

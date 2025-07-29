@@ -1,0 +1,156 @@
+---
+import { getCollection } from 'astro:content';
+
+const courses = await getCollection('courses');
+
+// Group courses by course name
+const courseGroups = courses.reduce((acc, course) => {
+  const courseName = course.data.course;
+  if (!acc[courseName]) {
+    acc[courseName] = [];
+  }
+  acc[courseName].push(course);
+  return acc;
+}, {});
+
+// Get unique courses with their metadata
+const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) => {
+  const firstLesson = lessons[0];
+  const lessonCount = lessons.length;
+  const chapters = [...new Set(lessons.map(lesson => lesson.data.chapter))];
+  
+  return {
+    name: courseName,
+    slug: courseName.toLowerCase().replace(/\s+/g, '-'),
+    title: firstLesson.data.title || courseName,
+    description: firstLesson.data.description || `Learn ${courseName}`,
+    lessonCount,
+    chapterCount: chapters.length,
+    lastUpdated: Math.max(...lessons.map(l => l.data.updated?.getTime() || l.data.date?.getTime() || 0))
+  };
+});
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Courses - Learn with Edumynt</title>
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Available Courses</h1>
+        <p>Choose a course to start your learning journey</p>
+      </header>
+
+      <div class="courses-grid">
+        {uniqueCourses.map((course) => (
+          <article class="course-card">
+            <h2>
+              <a href={`/courses/${course.slug}`}>
+                {course.title}
+              </a>
+            </h2>
+            <p class="description">{course.description}</p>
+            <div class="course-meta">
+              <span class="chapters">{course.chapterCount} chapters</span>
+              <span class="lessons">{course.lessonCount} lessons</span>
+            </div>
+            <a href={`/courses/${course.slug}`} class="course-link">
+              Start Course →
+            </a>
+          </article>
+        ))}
+      </div>
+    </main>
+
+    <style>
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+
+      header p {
+        font-size: 1.2rem;
+        color: #666;
+      }
+
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .course-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .course-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .course-card h2 {
+        margin: 0 0 1rem 0;
+        font-size: 1.5rem;
+      }
+
+      .course-card h2 a {
+        text-decoration: none;
+        color: #2563eb;
+      }
+
+      .course-card h2 a:hover {
+        text-decoration: underline;
+      }
+
+      .description {
+        color: #666;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .course-meta {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #888;
+      }
+
+      .course-link {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+
+      .course-link:hover {
+        background: #1d4ed8;
+      }
+    </style>
+  </body>
+</html>

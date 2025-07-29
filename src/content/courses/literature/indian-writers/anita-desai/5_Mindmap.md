@@ -1,0 +1,45 @@
+# Anita Desai: A Mindmap
+
+- **Anita Desai (1937 – Present)**
+  - **Titles & Epithets**
+    - Master of Psychological Fiction
+  - **Biography**
+    - **Born:** June 24, 1937 (Mussoorie, Uttarakhand)
+    - **Heritage:** German mother (Toni Nime), Bengali father (D.N. Mazumdar)
+    - **Education:** Miranda House, University of Delhi (B.A. English Literature)
+    - **Family:** Daughter Kiran Desai is also a Booker-winning novelist
+  - **Major Works**
+    - **Novels**
+      - *Cry, the Peacock* (1963) - Debut, psychological depth
+      - *Voices in the City* (1965)
+      - *Bye-Bye Blackbird* (1971)
+      - *Fire on the Mountain* (1977) - Sahitya Akademi Award
+      - *Clear Light of Day* (1980) - Booker Prize Shortlist
+      - *The Village by the Sea* (1982) - Children's, Guardian Prize
+      - *In Custody* (1984) - Booker Prize Shortlist
+      - *Baumgartner's Bombay* (1988)
+      - *Fasting, Feasting* (1999) - Booker Prize Shortlist
+      - *The Zigzag Way* (2004)
+    - **Short Story Collections**
+      - *Games at Twilight and Other Stories* (1978)
+      - *Diamond Dust and Other Stories* (2000)
+  - **Literary Style & Themes**
+    - **Style**
+      - Psychological Realism
+      - Lyrical & Evocative Prose
+      - Symbolism & Metaphor
+      - Introspective & Meditative Tone
+      - Focus on Sensory Details
+    - **Themes**
+      - Alienation & Isolation
+      - Inner World vs. Outer Reality
+      - Search for Identity & Self-Fulfillment
+      - Family Relationships (complexities)
+      - Tradition vs. Modernity
+      - Madness & Neurosis
+  - **Awards & Honors**
+    - **Sahitya Akademi Award (1978)** for *Fire on the Mountain*
+    - **Guardian Children's Fiction Prize (1983)** for *The Village by the Sea*
+    - **Booker Prize Shortlist (3 times)**
+    - **Literary Lion Award (1993)**
+    - **Padma Bhushan (2014)**

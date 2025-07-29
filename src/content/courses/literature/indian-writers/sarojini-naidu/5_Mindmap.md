@@ -1,0 +1,43 @@
+# Sarojini Naidu: A Mindmap
+
+- **Sarojini Naidu (1879-1949)**
+  - **Titles & Epithets**
+    - The Nightingale of India (Bharat Kokila) - by Mahatma Gandhi
+    - Indian Keats / Indian Yeats
+  - **Biography**
+    - **Born:** Feb 13, 1879 (Hyderabad)
+    - **Family:** Bengali Hindu, intellectual parents
+    - **Education:** Madras, King's College London, Girton College Cambridge
+    - **Key Influences:** Arthur Symons, Edmund Gosse (advised Indian themes)
+    - **Died:** Mar 2, 1949 (Lucknow)
+  - **Major Works (Poetry Collections)**
+    - *The Golden Threshold* (1905) - Debut, vivid Indian life
+    - *The Bird of Time: Songs of Life, Death & the Spring* (1912) - More philosophical
+    - *The Broken Wing* (1917) - More somber, patriotic
+    - *The Sceptred Flute: Songs of India* (1943) - Posthumous compilation
+    - *The Feather of the Dawn* (1961) - Posthumous, uncollected poems
+  - **Key Poems**
+    - "Palanquin Bearers"
+    - "Indian Weavers"
+    - "Wandering Singers"
+    - "The Gift of India"
+    - "The Lotus" (dedicated to Mahatma Gandhi)
+  - **Literary Style & Themes**
+    - **Style**
+      - Lyrical & Musical
+      - Rich Sensory Imagery
+      - Romanticism
+      - Simplicity & Accessibility
+      - Indian Themes in English
+    - **Themes**
+      - Indian Life & Culture
+      - Nature
+      - Patriotism & Nationalism
+      - Love & Romance
+      - Feminine Sensibility & Women's Issues
+      - Life, Death, & Spirituality
+  - **Political Career**
+    - President of Indian National Congress (1925) - First Indian Woman
+    - Governor of United Provinces (1947) - First Woman Governor in India
+    - Active in Civil Rights, Women's Emancipation, Anti-imperialism
+    - Worked closely with Mahatma Gandhi

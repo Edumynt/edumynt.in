@@ -1,0 +1,52 @@
+# Ruskin Bond: A Mindmap
+
+- **Ruskin Bond (1934 – Present)**
+  - **Titles & Epithets**
+    - Beloved Indian Author
+    - Icon among Indian writers and children's authors
+  - **Biography**
+    - **Born:** May 19, 1934 (Kasauli, Himachal Pradesh)
+    - **Descent:** British
+    - **Early Life:** Parents' separation, father's early death (age 10)
+    - **Education:** Bishop Cotton School, Shimla
+    - **Residence:** Mussoorie, Uttarakhand (lived for over 40 years)
+  - **Major Works**
+    - **Novels**
+      - *The Room on the Roof* (1956) - Debut, semi-autobiographical (Rusty)
+      - *Vagrants in the Valley* (Sequel to *The Room on the Roof*)
+      - *The Blue Umbrella* (1974) - Children's novella, adapted into film
+      - *A Flight of Pigeons* (1978) - Historical novella, adapted into film (*Junoon*)
+      - *Delhi Is Not Far* (1994)
+      - *The Hidden Pool* (1966) - First novel for children
+    - **Short Story Collections**
+      - *Our Trees Still Grow in Dehra* (1992) - Sahitya Akademi Award
+      - *The Night Train at Deoli and Other Stories*
+      - *Time Stops at Shamli and Other Stories*
+      - *A Season of Ghosts*
+      - *The India I Love*
+      - "Susanna's Seven Husbands" (adapted into *7 Khoon Maaf*)
+    - **Memoirs/Essays**
+      - *Roads to Mussoorie*
+      - *Rain in the Mountains*
+      - *A Book of Simple Living*
+      - *My Boyhood Days* (part of memoir series)
+  - **Literary Style & Themes**
+    - **Style**
+      - Simple & Lucid Prose
+      - Gentle Humor & Wit
+      - Evocative Descriptions of Nature
+      - Autobiographical Elements (e.g., Rusty)
+      - Nostalgia & Melancholy
+      - Focus on the Ordinary
+    - **Themes**
+      - Nature & Environment
+      - Childhood & Innocence
+      - Friendship & Human Connection
+      - Loneliness & Belonging
+      - The Simple Life
+      - The Passage of Time
+  - **Awards & Honors**
+    - **Sahitya Akademi Award (1992)** for *Our Trees Still Grow in Dehra*
+    - **Padma Shri (1999)**
+    - **Padma Bhushan (2014)**
+    - National Film Award for Best Children's Film (*The Blue Umbrella* adaptation)

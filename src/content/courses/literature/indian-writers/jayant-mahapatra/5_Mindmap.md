@@ -1,0 +1,48 @@
+# Jayant Mahapatra: A Mindmap
+
+- **Jayant Mahapatra (1928 – 2023)**
+  - **Titles & Epithets**
+    - First Indian Poet to win Sahitya Akademi Award for English poetry
+  - **Biography**
+    - **Born:** Oct 22, 1928 (Cuttack, Odisha)
+    - **Family:** Prominent Odia Christian family
+    - **Education:** M.Sc. Physics from Patna University
+    - **Profession:** Professor of Physics
+    - **Late Bloomer:** Began writing poetry at age 40
+    - **Died:** Aug 27, 2023
+  - **Major Works**
+    - **English Poetry Collections**
+      - *Close the Sky, Ten by Ten* (1971) - Debut
+      - *A Rain of Rites* (1976) - Includes "Dawn at Puri"
+      - *Relationship* (1980) - Sahitya Akademi Award winner
+      - *Life Signs* (1983)
+      - *A Whiteness of Bones* (1992)
+    - **Key Poems**
+      - "Dawn at Puri"
+      - "Hunger"
+      - "Indian Summer"
+      - "Listening to a Prayer"
+    - **Oriya Poetry Collections:** 7 books
+    - **Short Stories:** *The Green Gardener*
+    - **Essays/Memoirs:** *Door of Paper*
+  - **Literary Style & Themes**
+    - **Style**
+      - Meditative & Contemplative
+      - Subtle Imagery & Symbolism
+      - Free Verse
+      - Lyrical & Poignant
+      - Exploration of the Subconscious
+      - Precise Observation
+    - **Themes**
+      - Landscape & Place (Odisha)
+      - History & Memory
+      - Faith, Doubt, & Spirituality
+      - Suffering & Human Condition
+      - Time & Transience
+      - Social Conscience (subtle)
+  - **Awards & Honors**
+    - **Sahitya Akademi Award (1981)** for *Relationship*
+    - **Padma Shri (2009)** - Returned in 2015
+    - Jacob Glatstein Memorial Award
+    - Allen Tate Poetry Prize (2009)
+    - SAARC Literary Award (2009)

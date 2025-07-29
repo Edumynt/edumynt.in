@@ -1,0 +1,37 @@
+# Manju Kapur: A Mindmap
+
+- **Manju Kapur (Born in Amritsar)**
+  - **Titles & Epithets:** Distinguished Indian Novelist
+  - **Biography**
+    - **Born:** Amritsar, Punjab
+    - **Education:** Miranda House, Delhi; Dalhousie University, Canada (M.A.); Delhi University (M.Phil)
+    - **Profession:** Professor in Delhi University
+  - **Major Works**
+    - **Novels**
+      - *Difficult Daughters* (1998) - Debut, Commonwealth Writers' Prize
+      - *A Married Woman* (2003) - Inner turmoil, adapted into web series
+      - *Home* (2006) - Joint family dynamics
+      - *The Immigrant* (2008) - Arranged marriage, cultural adaptation, adapted into TV series
+      - *Custody* (2011) - Divorce, child custody, adapted into TV series
+      - *Brothers* (2016)
+    - **Non-Fiction**
+      - *Shaping the World: Women Writers on Themselves* (2014)
+  - **Literary Style & Themes**
+    - **Style**
+      - Realistic Portrayal
+      - Nuanced Characterization
+      - Focus on Domestic & Social Spheres
+      - Clear & Accessible Prose
+      - Subtle Humor & Irony
+      - Intergenerational Perspectives
+    - **Themes**
+      - Family & Tradition (Joint Family System)
+      - Marriage & its Complexities
+      - Women's Identity & Agency
+      - Tradition vs. Modernity
+      - Motherhood & Daughterhood
+      - Education & Empowerment
+      - Migration & Diaspora
+      - Divorce & Child Custody
+  - **Awards & Honors**
+    - **Commonwealth Writers' Prize for Best First Book (Eurasia region) (1999)** for *Difficult Daughters*

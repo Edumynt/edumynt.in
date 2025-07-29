@@ -1,0 +1,403 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const courses = await getCollection('courses');
+  
+  return courses.map((lesson) => {
+    const courseSlug = lesson.data.course.toLowerCase().replace(/\s+/g, '-');
+    const pathParts = lesson.slug.split('/').slice(1); // Remove course name
+    
+    return {
+      params: { 
+        course: courseSlug,
+        slug: pathParts.join('/') 
+      },
+      props: { lesson }
+    };
+  });
+}
+
+const { course, slug } = Astro.params;
+const { lesson } = Astro.props;
+
+// Get all lessons in this course
+const allCourses = await getCollection('courses');
+const courseLessons = allCourses.filter(l => l.data.course === lesson.data.course);
+
+// Helper function to generate lesson URL
+function generateLessonUrl(lesson) {
+  const courseSlug = lesson.data.course.toLowerCase().replace(/\s+/g, '-');
+  const pathParts = lesson.slug.split('/').slice(1);
+  return `/courses/${courseSlug}/${pathParts.join('/')}`;
+}
+
+// Group lessons by their folder structure
+const lessonsByFolder = {};
+courseLessons.forEach(l => {
+  const pathParts = l.slug.split('/').slice(1); // Remove course name
+  const folderPath = pathParts.slice(0, -1).join('/') || 'root';
+  
+  if (!lessonsByFolder[folderPath]) {
+    lessonsByFolder[folderPath] = [];
+  }
+  lessonsByFolder[folderPath].push(l);
+});
+
+// Sort lessons within each folder
+Object.keys(lessonsByFolder).forEach(folder => {
+  lessonsByFolder[folder].sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+});
+
+// Build breadcrumbs
+const pathParts = lesson.slug.split('/').slice(1); // Remove course name
+const folders = pathParts.slice(0, -1); // Remove filename
+
+const breadcrumbs = [
+  { name: 'All Courses', url: '/courses' },
+  { name: lesson.data.course, url: `/courses/${course}` }
+];
+
+folders.forEach(folder => {
+  breadcrumbs.push({
+    name: folder.charAt(0).toUpperCase() + folder.slice(1).replace(/-/g, ' '),
+    url: null
+  });
+});
+
+// Find previous and next lessons
+const allLessonsFlat = courseLessons.sort((a, b) => a.slug.localeCompare(b.slug));
+const currentIndex = allLessonsFlat.findIndex(l => l.slug === lesson.slug);
+const prevLesson = currentIndex > 0 ? allLessonsFlat[currentIndex - 1] : null;
+const nextLesson = currentIndex < allLessonsFlat.length - 1 ? allLessonsFlat[currentIndex + 1] : null;
+
+const { Content } = await lesson.render();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{lesson.data.title} - {lesson.data.course}</title>
+    <meta name="description" content={lesson.data.description} />
+  </head>
+  <body>
+    <nav class="breadcrumb">
+      {breadcrumbs.map((crumb, index) => (
+        <>
+          {crumb.url ? (
+            <a href={crumb.url}>{crumb.name}</a>
+          ) : (
+            <span>{crumb.name}</span>
+          )}
+          {index < breadcrumbs.length - 1 && <span class="separator">/</span>}
+        </>
+      ))}
+    </nav>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h3>Course Navigation</h3>
+        <div class="folders-nav">
+          {Object.entries(lessonsByFolder)
+            .sort(([a], [b]) => {
+              if (a === 'root') return -1;
+              if (b === 'root') return 1;
+              return a.localeCompare(b);
+            })
+            .map(([folderPath, lessons]) => (
+              <div class="folder-section">
+                <h4>
+                  {folderPath === 'root' 
+                    ? 'Course Files' 
+                    : folderPath.split('/').map(part => 
+                        part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ')
+                      ).join(' / ')
+                  }
+                </h4>
+                <ul>
+                  {lessons.map(l => (
+                    <li class={l.slug === lesson.slug ? 'current-lesson' : ''}>
+                      <a href={generateLessonUrl(l)}>
+                        {l.data.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+        </div>
+      </aside>
+
+      <main class="content">
+        <article class="lesson">
+          <header class="lesson-header">
+            <h1>{lesson.data.title}</h1>
+            {lesson.data.tags && (
+              <div class="tags">
+                {lesson.data.tags.map(tag => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+            {lesson.data.date && (
+              <time class="date">
+                {new Date(lesson.data.date).toLocaleDateString()}
+              </time>
+            )}
+          </header>
+
+          <div class="lesson-content">
+            <Content />
+          </div>
+
+          <nav class="lesson-nav">
+            {prevLesson && (
+              <a href={generateLessonUrl(prevLesson)} class="nav-link prev">
+                ← Previous: {prevLesson.data.title}
+              </a>
+            )}
+            {nextLesson && (
+              <a href={generateLessonUrl(nextLesson)} class="nav-link next">
+                Next: {nextLesson.data.title} →
+              </a>
+            )}
+          </nav>
+        </article>
+      </main>
+    </div>
+
+    <style>
+      .breadcrumb {
+        padding: 1rem 2rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 0.9rem;
+      }
+
+      .breadcrumb a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      .breadcrumb span {
+        color: #6b7280;
+      }
+
+      .separator {
+        margin: 0 0.5rem;
+        color: #9ca3af;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        min-height: calc(100vh - 60px);
+      }
+
+      .sidebar {
+        background: #f9fafb;
+        padding: 2rem;
+        border-right: 1px solid #e5e7eb;
+        overflow-y: auto;
+      }
+
+      .sidebar h3 {
+        margin: 0 0 1.5rem 0;
+        color: #374151;
+        font-size: 1.1rem;
+      }
+
+      .folder-section {
+        margin-bottom: 1.5rem;
+      }
+
+      .folder-section h4 {
+        margin: 0 0 0.5rem 0;
+        color: #6b7280;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .folder-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .folder-section li {
+        margin-bottom: 0.25rem;
+      }
+
+      .folder-section a {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        color: #6b7280;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+
+      .folder-section a:hover {
+        background: #e5e7eb;
+        color: #374151;
+      }
+
+      .current-lesson a {
+        background: #2563eb;
+        color: white;
+      }
+
+      .current-lesson a:hover {
+        background: #1d4ed8;
+      }
+
+      .content {
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .lesson-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e5e7eb;
+      }
+
+      .lesson-header h1 {
+        margin: 0 0 1rem 0;
+        font-size: 2.5rem;
+        color: #1f2937;
+      }
+
+      .tags {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .date {
+        color: #6b7280;
+        font-size: 0.9rem;
+      }
+
+      .lesson-content {
+        line-height: 1.7;
+        color: #374151;
+      }
+
+      .lesson-content :global(h2) {
+        margin: 2rem 0 1rem 0;
+        color: #1f2937;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+      }
+
+      .lesson-content :global(h3) {
+        margin: 1.5rem 0 0.75rem 0;
+        color: #374151;
+      }
+
+      .lesson-content :global(p) {
+        margin-bottom: 1rem;
+      }
+
+      .lesson-content :global(code) {
+        background: #f3f4f6;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.9rem;
+      }
+
+      .lesson-content :global(pre) {
+        background: #1f2937;
+        color: #f9fafb;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      .lesson-content :global(blockquote) {
+        border-left: 4px solid #2563eb;
+        padding-left: 1rem;
+        margin: 1rem 0;
+        background: #f8fafc;
+        padding: 1rem;
+        border-radius: 0 4px 4px 0;
+      }
+
+      .lesson-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e5e7eb;
+        gap: 1rem;
+      }
+
+      .nav-link {
+        display: block;
+        padding: 1rem;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #374151;
+        transition: all 0.2s;
+        flex: 1;
+        max-width: 300px;
+      }
+
+      .nav-link:hover {
+        background: #e5e7eb;
+        transform: translateY(-1px);
+      }
+
+      .nav-link.prev {
+        text-align: left;
+      }
+
+      .nav-link.next {
+        text-align: right;
+        margin-left: auto;
+      }
+
+      @media (max-width: 768px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          display: none;
+        }
+
+        .lesson-nav {
+          flex-direction: column;
+        }
+
+        .nav-link.next {
+          margin-left: 0;
+          text-align: left;
+        }
+      }
+    </style>
+  </body>
+</html>

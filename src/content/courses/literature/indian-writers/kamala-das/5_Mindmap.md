@@ -1,0 +1,49 @@
+# Kamala Das: A Mindmap
+
+- **Kamala Das (1934-2009)**
+  - **Pen Names:** Madhavi Kutty (Malayalam), Kamala Suraiyya (after conversion)
+  - **Titles & Epithets:** The Mother of Modern Indian English Poetry
+  - **Biography**
+    - **Born:** Mar 31, 1934 (Punnayurkulam, Kerala)
+    - **Family:** Distinguished literary family (mother Nalapat Balamani Amma, poet)
+    - **Childhood:** Spent in Kolkata
+    - **Marriage:** Arranged, unsatisfying, early motherhood
+    - **Conversion:** Converted to Islam in 1999
+    - **Died:** May 31, 2009
+  - **Major Works**
+    - **English Poetry Collections**
+      - *Summer in Calcutta* (1965) - Debut, confessional
+      - *The Descendants* (1967)
+      - *The Old Playhouse and Other Poems* (1973)
+      - *Collected Poems* (1984) - Sahitya Akademi Award
+    - **Key Poems**
+      - "An Introduction"
+      - "The Dance of the Eunuchs"
+      - "The Looking Glass"
+      - "My Grandmother's House"
+      - "My Mother at Sixty-Six"
+    - **Autobiography**
+      - *My Story* (1976) - Controversial, originally *Ente Katha* (Malayalam)
+    - **Novels**
+      - *Alphabet of Lust* (1976)
+      - *A Doll for the Child Prostitute* (1977)
+  - **Literary Style & Themes**
+    - **Style**
+      - Confessional Poetry (pioneer in India)
+      - Direct & Unflinching Language
+      - Open Exploration of Female Sexuality
+      - Colloquial & Conversational Tone
+      - Feminine Sensibility
+    - **Themes**
+      - Search for Identity & Self-Assertion
+      - Female Sexuality & Desire
+      - Love, Betrayal, & Disillusionment
+      - Constraints of Marriage & Society
+      - Loneliness & Alienation
+      - The Body and the Self
+      - Rebellion Against Societal Norms
+  - **Awards & Honors**
+    - **Sahitya Akademi Award (1985)** for *Collected Poems*
+    - **Kerala State Sahitya Akademi Award (1969)**
+    - Asian World Prize for Literature (1985)
+    - Nominated for Nobel Prize in Literature (1984)
