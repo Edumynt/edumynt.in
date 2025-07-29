@@ -1,4 +1,6 @@
 ---
+title: "The Romanticism Movement c 1798-1837"
+course: "literature"
 title: The Romanticism Movement c 1798-1837
 tags:
   - literary-movements

@@ -1,4 +1,6 @@
 ---
+title: "The Post-Modernism Movement c 1945-Present"
+course: "literature"
 title: The Post-Modernism Movement c 1945-Present
 tags:
   - literary-movements

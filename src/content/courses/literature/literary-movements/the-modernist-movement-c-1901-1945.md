@@ -1,4 +1,6 @@
 ---
+title: "The Modernist Movement c 1901-1945"
+course: "literature"
 title: The Modernist Movement c 1901-1945
 tags:
   - literary-movements

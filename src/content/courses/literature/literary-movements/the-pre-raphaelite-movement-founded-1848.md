@@ -1,4 +1,6 @@
 ---
+title: "The Pre-Raphaelite Movement founded 1848"
+course: "literature"
 title: The Pre-Raphaelite Movement founded 1848
 tags:
   - literary-movements

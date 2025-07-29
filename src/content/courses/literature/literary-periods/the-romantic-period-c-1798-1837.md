@@ -1,4 +1,6 @@
 ---
+title: "The Romantic Period c 1798-1837"
+course: "literature"
 title: The Romantic Period c 1798-1837
 tags:
   - literary-periods

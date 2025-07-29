@@ -1,4 +1,6 @@
 ---
+title: "The Jacobean Age 1603-1625"
+course: "literature"
 title: The Jacobean Age 1603-1625
 tags:
   - literary-periods

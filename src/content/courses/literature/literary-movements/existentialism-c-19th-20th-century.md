@@ -1,4 +1,6 @@
 ---
+title: "Existentialism c 19th-20th Century"
+course: "literature"
 title: Existentialism c 19th-20th Century
 tags:
   - literary-movements

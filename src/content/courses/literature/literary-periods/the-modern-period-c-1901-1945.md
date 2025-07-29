@@ -1,4 +1,6 @@
 ---
+title: "The Modern Period c 1901-1945"
+course: "literature"
 title: The Modern Period c 1901-1945
 tags:
   - literary-periods

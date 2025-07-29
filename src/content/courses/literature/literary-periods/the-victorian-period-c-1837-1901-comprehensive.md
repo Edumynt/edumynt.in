@@ -1,4 +1,6 @@
 ---
+title: "The Victorian Period c 1837-1901 Comprehensive Overview"
+course: "literature"
 title: The Victorian Period c 1837-1901 Comprehensive Overview
 tags:
   - literary-periods
