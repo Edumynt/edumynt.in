@@ -46,6 +46,7 @@ export default {
       },
       fontFamily: {
         sans: [
+          'Inter',
           '-apple-system',
           'BlinkMacSystemFont',
           '"Segoe UI"',
@@ -53,6 +54,18 @@ export default {
           'Oxygen',
           'Ubuntu',
           'Cantarell',
+          'sans-serif',
+        ],
+        serif: [
+          '"Source Serif 4"',
+          'Georgia',
+          'serif',
+        ],
+        display: [
+          'Inter',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
           'sans-serif',
         ],
       },
