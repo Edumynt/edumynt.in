@@ -118,7 +118,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
     {pageType === 'home' && (
       <div class="space-y-1">
         <div class="flex items-center justify-between px-3 py-2">
-          <a href="/courses" class="flex items-center gap-3 flex-1 hover:text-primary transition-colors">
+          <a href="/courses" class={`flex items-center gap-3 flex-1 transition-colors ${pageType === 'courses' ? 'text-primary' : 'hover:text-primary'}`}>
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
@@ -134,7 +134,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
         <div class="overflow-hidden transition-all duration-300 max-h-0" id="coursesDropdownContent">
           <div class="bg-muted/50 rounded-lg p-2 space-y-1">
             {uniqueCourses.map((course) => (
-              <a href={`/courses/${course.slug}`} class="block px-3 py-2 rounded-md hover:bg-background/80 transition-colors">
+              <a href={`/courses/${course.slug}`} class={`block px-3 py-2 rounded-md transition-colors ${currentCourse === course.slug ? 'bg-primary/10 text-primary' : 'hover:bg-background/80'}`}>
                 <div class="font-medium text-sm">{course.name}</div>
                 <div class="text-xs text-muted-foreground">{course.chapters.length} chapters</div>
               </a>
@@ -151,7 +151,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
           <div class="space-y-1">
             <!-- Course Header -->
             <div class="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-lg">
-              <a href={`/courses/${course.slug}`} class="flex items-center gap-3 flex-1 hover:text-primary transition-colors">
+              <a href={`/courses/${course.slug}`} class={`flex items-center gap-3 flex-1 transition-colors ${currentCourse === course.slug ? 'text-primary' : 'hover:text-primary'}`}>
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
@@ -314,7 +314,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
 <nav class="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t">
   <div class="flex items-center justify-around px-4 py-2 max-w-7xl mx-auto">
     <!-- Home Button (always visible) -->
-    <a href="/" class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
+    <a href="/" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
       <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
       </svg>
@@ -323,14 +323,14 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
     
     <!-- Courses Button / Current Course Button -->
     {pageType === 'lesson' && currentCourse ? (
-      <a href={`/courses/${currentCourse}`} class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
+      <a href={`/courses/${currentCourse}`} class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
         <span class="text-xs truncate max-w-16">Course</span>
       </a>
     ) : (
-      <a href="/courses" class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
+      <a href="/courses" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
