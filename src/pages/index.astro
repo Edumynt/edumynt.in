@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Navigation from '../components/Navigation.astro';
+import Head from '../components/Head.astro';
 import Button from '../components/ui/Button.astro';
 import Card from '../components/ui/Card.astro';
 import '../styles/global.css';
@@ -34,14 +35,10 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Edumynt - Literature Courses</title>
-    <meta name="description" content="Access our comprehensive literature courses - start learning today." />
-  </head>
+  <Head 
+    title="Edumynt - Literature Courses"
+    description="Access our comprehensive literature courses - start learning today."
+  />
   <body class="min-h-screen flex flex-col">
     <Navigation pageType="home" />
 
@@ -100,5 +97,10 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
         </div>
       </div>
     </main>
+    
+    <script>
+      // Import and register PWA
+      import('/src/lib/pwa.ts');
+    </script>
   </body>
 </html>

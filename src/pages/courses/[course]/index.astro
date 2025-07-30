@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Navigation from '../../../components/Navigation.astro';
+import Head from '../../../components/Head.astro';
 import Button from '../../../components/ui/Button.astro';
 import Card from '../../../components/ui/Card.astro';
 import '../../../styles/global.css';
@@ -157,14 +158,10 @@ const firstLesson = lessons[0];
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{courseName} - Edumynt</title>
-    <meta name="description" content={`Learn ${courseName} - ${chapterSections.length} sections, ${lessons.length} lessons.`} />
-  </head>
+  <Head 
+    title={`${courseName} - Edumynt`}
+    description={`Learn ${courseName} - ${chapterSections.length} sections, ${lessons.length} lessons.`}
+  />
   <body class="min-h-screen bg-background text-foreground">
     <Navigation pageType="course" currentCourse={course} />
 

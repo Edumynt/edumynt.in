@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Navigation from '../../components/Navigation.astro';
+import Head from '../../components/Head.astro';
 import Card from '../../components/ui/Card.astro';
 import Button from '../../components/ui/Button.astro';
 import '../../styles/global.css';
@@ -41,14 +42,10 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Courses - Edumynt</title>
-    <meta name="description" content="Browse all available courses on Edumynt." />
-  </head>
+  <Head 
+    title="Courses - Edumynt"
+    description="Browse all available courses on Edumynt."
+  />
   <body class="min-h-screen bg-background text-foreground">
     <Navigation pageType="courses" />
 
