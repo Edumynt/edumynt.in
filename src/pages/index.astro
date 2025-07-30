@@ -39,185 +39,66 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="generator" content={Astro.generator} />
-    <title>Edumynt - Master Literature & More</title>
-    <meta name="description" content="Interactive learning platform for literature, periods, movements, and writers. Start your journey today." />
+    <title>Edumynt - Literature Courses</title>
+    <meta name="description" content="Access our comprehensive literature courses - start learning today." />
   </head>
   <body class="min-h-screen flex flex-col">
     <Navigation pageType="home" />
 
     <!-- Main Content -->
-    <main class="flex-1">
-      <!-- Hero Section -->
-      <section class="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-        <div class="absolute inset-0 bg-grid-white/[0.02] bg-grid-16"></div>
-        <div class="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
-          <div class="mx-auto max-w-2xl text-center">
-            <div class="mb-8 animate-in fade-in slide-up duration-700">
-              <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
-                <svg class="h-8 w-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h1 class="text-5xl font-bold tracking-tight text-foreground sm:text-7xl lg:text-8xl">
-                Master Literature & 
-                <span class="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">More</span>
-              </h1>
-            </div>
-            <p class="mt-6 text-xl font-medium leading-8 text-muted-foreground animate-in fade-in slide-up duration-700 delay-200 max-w-3xl mx-auto">
-              Interactive learning platform for literature, periods, movements, and writers. Start your journey today.
-            </p>
-            <div class="mt-10 flex items-center justify-center gap-x-6 animate-in fade-in slide-up duration-700 delay-400">
-              <Button href="/courses" class="text-base font-semibold px-8 py-3">
-                Get Started
-                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </Button>
-              <Button variant="outline" class="text-base font-semibold px-8 py-3">
-                Learn More
-              </Button>
-            </div>
-          </div>
+    <main class="flex-1 p-6 pb-20">
+      <div class="mx-auto max-w-7xl">
+        <!-- Simple Header -->
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-foreground mb-2">Courses</h1>
+          <p class="text-muted-foreground">Choose a course to start learning</p>
         </div>
-      </section>
-      
-      <!-- Courses Section -->
-      <section class="py-24 sm:py-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="mx-auto max-w-2xl text-center mb-16">
-            <h2 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-              Available Courses
-            </h2>
-            <p class="mt-4 text-xl font-medium text-muted-foreground">
-              Explore our comprehensive collection of literature courses
-            </p>
-          </div>
-          
-          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {uniqueCourses.map((course, index) => (
-              <Card 
-                variant="interactive" 
-                class={`group animate-in fade-in slide-up duration-700`}
-                style={`animation-delay: ${index * 100}ms`}
-              >
-                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 group-hover:bg-primary/20 transition-colors">
-                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        
+        <!-- Compact Courses Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {uniqueCourses.map((course) => (
+            <a 
+              href={`/courses/${course.slug}`}
+              class="group block p-4 bg-card border border-border rounded-xl hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+            >
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
                 
-                <h3 class="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
-                  {course.name}
-                </h3>
-                
-                <p class="text-muted-foreground font-medium mb-6 leading-relaxed">
-                  {course.description}
-                </p>
-                
-                <div class="flex items-center gap-6 mb-6 text-sm font-semibold text-muted-foreground">
-                  <div class="flex items-center gap-2">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <span>{course.chapterCount} chapters</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span>{course.lessonCount} lessons</span>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-sm leading-tight">
+                    {course.name}
+                  </h3>
+                  
+                  <div class="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                    <span class="flex items-center gap-1">
+                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                      {course.chapterCount}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      {course.lessonCount}
+                    </span>
                   </div>
                 </div>
-                
-                <Button 
-                  href={`/courses/${course.slug}`} 
-                  class="w-full font-semibold group-hover:shadow-md transition-shadow"
-                >
-                  Start Learning
-                  <svg class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </Button>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <!-- Features Section -->
-      <section class="py-24 sm:py-32 bg-muted/30">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="mx-auto max-w-2xl text-center mb-16">
-            <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Why Choose Edumynt?
-            </h2>
-            <p class="mt-4 text-lg text-muted-foreground">
-              Experience learning like never before with our innovative approach
-            </p>
-          </div>
-          
-          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <div class="animate-in fade-in slide-up duration-700 delay-100">
-              <Card class="text-center h-full">
-                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 mx-auto">
-                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-foreground mb-3">
-                  Interactive Learning
-                </h3>
-                <p class="text-muted-foreground leading-relaxed">
-                  Engage with content through interactive exercises, quizzes, and multimedia resources.
-                </p>
-              </Card>
-            </div>
-            
-            <div class="animate-in fade-in slide-up duration-700 delay-200">
-              <Card class="text-center h-full">
-                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 mx-auto">
-                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-foreground mb-3">
-                  Comprehensive Content
-                </h3>
-                <p class="text-muted-foreground leading-relaxed">
-                  Dive deep into literature with our extensive collection of periods, movements, and writers.
-                </p>
-              </Card>
-            </div>
-            
-            <div class="animate-in fade-in slide-up duration-700 delay-300">
-              <Card class="text-center h-full">
-                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 mx-auto">
-                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-foreground mb-3">
-                  Learn at Your Pace
-                </h3>
-                <p class="text-muted-foreground leading-relaxed">
-                  Study whenever and wherever you want with our flexible, self-paced learning approach.
-                </p>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t bg-card">
-      <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div class="flex items-center justify-center">
-          <p class="text-sm text-muted-foreground">
-            &copy; 2024 Edumynt. All rights reserved.
-          </p>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
-    </footer>
+    </main>
   </body>
 </html>

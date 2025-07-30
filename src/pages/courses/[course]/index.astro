@@ -162,161 +162,144 @@ const firstLesson = lessons[0];
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="generator" content={Astro.generator} />
-    <title>{courseName} - Course Overview</title>
-    <meta name="description" content={`Learn ${courseName} with our comprehensive course featuring ${chapterSections.length} sections and ${lessons.length} lessons.`} />
+    <title>{courseName} - Edumynt</title>
+    <meta name="description" content={`Learn ${courseName} - ${chapterSections.length} sections, ${lessons.length} lessons.`} />
   </head>
   <body class="min-h-screen bg-background text-foreground">
     <Navigation pageType="course" currentCourse={course} />
 
-    <!-- Breadcrumb -->
-    <nav class="border-b bg-muted/30">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="flex items-center py-4">
-          <Button variant="ghost" href="/courses" class="text-sm font-medium hover:text-primary transition-colors">
-            <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            All Courses
-          </Button>
-        </div>
-      </div>
-    </nav>
+    <main class="flex-1 p-6 pb-20">
+      <div class="mx-auto max-w-4xl">
+        <!-- Breadcrumb -->
+        <nav class="mb-4">
+          <a href="/courses" class="text-sm text-muted-foreground hover:text-primary transition-colors">
+            ← All Courses
+          </a>
+        </nav>
 
-    <main class="flex-1">
-      <!-- Course Header -->
-      <section class="py-20 border-b">
-        <div class="mx-auto max-w-4xl px-6 lg:px-8">
-          <div class="text-center">
-            <h1 class="text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl mb-6">
-              {courseName}
-            </h1>
-            <p class="text-xl font-medium text-muted-foreground mb-8 leading-8 max-w-3xl mx-auto">
-              {firstLesson?.data.description || `Complete course on ${courseName}`}
-            </p>
-            <div class="flex items-center justify-center gap-8 text-sm font-semibold text-muted-foreground">
-              <div class="flex items-center gap-2">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-                <span>{chapterSections.length} sections</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span>{lessons.length} lessons</span>
-              </div>
-            </div>
+        <!-- Course Header -->
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-foreground mb-2">{courseName}</h1>
+          <div class="flex items-center gap-6 text-sm text-muted-foreground">
+            <span class="flex items-center gap-1">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              {chapterSections.length} sections
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              {lessons.length} lessons
+            </span>
           </div>
         </div>
-      </section>
-
-      <!-- Course Content -->
-      <section class="py-20 pb-24">
-        <div class="mx-auto max-w-4xl px-6 lg:px-8">
-          <div class="space-y-6">
-            {hierarchySections.map((section, index) => (
-              section.isIndividualFile ? (
-                <!-- Direct lesson link -->
-                <Card variant="interactive" class="group">
-                  <a href={generateLessonUrl(section.lessons[0], course)} class="flex items-center justify-between p-6 text-left">
-                    <div class="flex items-center gap-4">
-                      <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg text-primary font-bold text-lg group-hover:bg-primary/20 transition-colors">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                          {section.name}
-                        </h3>
-                      </div>
-                    </div>
-                    <svg class="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        
+        <!-- Course Content -->
+        <div class="space-y-3">
+          {hierarchySections.map((section, index) => (
+            section.isIndividualFile ? (
+              <!-- Direct lesson link -->
+              <a 
+                href={generateLessonUrl(section.lessons[0], course)} 
+                class="group block p-4 bg-card border border-border rounded-lg hover:border-primary/30 hover:shadow-md transition-all duration-200 hover:scale-[1.01]"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-semibold text-sm group-hover:bg-primary/20 transition-colors">
+                    {index + 1}
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-sm">
+                      {section.name}
+                    </h3>
+                  </div>
+                  <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
-                  </a>
-                </Card>
-              ) : (
-                <!-- Section with lessons -->
-                <Card class="overflow-hidden">
-                  <div class="border-b bg-muted/30">
-                    <button 
-                      class="w-full text-left p-6 flex items-center justify-between hover:bg-muted/50 transition-colors chapter-toggle"
-                      data-target={`section-${index}`}
-                    >
-                      <h2 class="text-xl font-bold text-foreground">
-                        {section.name}
-                      </h2>
-                      <svg class="h-5 w-5 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
                   </div>
-                  
-                  <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`section-${index}`}>
-                    {section.lessons && section.lessons.length > 0 && (
-                      <div class="divide-y">
-                        {section.lessons.map((lesson, lessonIndex) => {
-                          const linkUrl = generateLessonUrl(lesson, course);
-                          return (
-                            <a href={linkUrl} class="flex items-center gap-4 p-4 hover:bg-muted/30 transition-colors group">
-                              <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-bold text-primary group-hover:bg-primary/20 transition-colors">
-                                {lessonIndex + 1}
-                              </div>
-                              <span class="text-foreground font-medium group-hover:text-primary transition-colors">
-                                {lesson.data.title}
-                              </span>
-                            </a>
-                          );
-                        })}
-                      </div>
-                    )}
-                    
-                    {section.subsections && section.subsections.length > 0 && (
-                      <div class="border-t">
-                        {section.subsections.map((subsection, subIndex) => (
-                          <div class="border-b last:border-b-0">
-                            <button 
-                              class="w-full text-left p-4 pl-8 flex items-center justify-between hover:bg-muted/50 transition-colors bg-muted/20 chapter-toggle"
-                              data-target={`subsection-${index}-${subIndex}`}
-                            >
-                              <h3 class="text-lg font-semibold text-foreground">
-                                {subsection.name}
-                              </h3>
-                              <svg class="h-4 w-4 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                              </svg>
-                            </button>
-                            
-                            <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`subsection-${index}-${subIndex}`}>
-                              {subsection.lessons && subsection.lessons.length > 0 && (
-                                <div class="divide-y bg-muted/10">
-                                  {subsection.lessons.map((lesson, lessonIndex) => {
-                                    const linkUrl = generateLessonUrl(lesson, course);
-                                    return (
-                                      <a href={linkUrl} class="flex items-center gap-4 p-4 pl-12 hover:bg-muted/30 transition-colors group">
-                                        <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-bold text-primary group-hover:bg-primary/20 transition-colors">
-                                          {lessonIndex + 1}
-                                        </div>
-                                        <span class="text-foreground font-medium group-hover:text-primary transition-colors">
-                                          {lesson.data.title}
-                                        </span>
-                                      </a>
-                                    );
-                                  })}
-                                </div>
-                              )}
-                            </div>
+                </div>
+              </a>
+            ) : (
+              <!-- Section with lessons -->
+              <div class="bg-card border border-border rounded-lg overflow-hidden">
+                <button 
+                  class="w-full text-left p-4 flex items-center justify-between hover:bg-muted/30 transition-colors chapter-toggle"
+                  data-target={`section-${index}`}
+                >
+                  <h2 class="text-sm font-semibold text-foreground">
+                    {section.name}
+                  </h2>
+                  <svg class="h-4 w-4 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`section-${index}`}>
+                  {section.lessons && section.lessons.length > 0 && (
+                    <div class="border-t">
+                      {section.lessons.map((lesson, lessonIndex) => (
+                        <a 
+                          href={generateLessonUrl(lesson, course)} 
+                          class="flex items-center gap-3 p-3 hover:bg-muted/20 transition-colors group border-b last:border-b-0"
+                        >
+                          <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary/20 transition-colors flex items-center justify-center">
+                            {lessonIndex + 1}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </Card>
-              )
-            ))}
-          </div>
+                          <span class="text-sm text-foreground font-medium group-hover:text-primary transition-colors">
+                            {lesson.data.title}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {section.subsections && section.subsections.length > 0 && (
+                    <div class="border-t">
+                      {section.subsections.map((subsection, subIndex) => (
+                        <div>
+                          <button 
+                            class="w-full text-left p-3 pl-6 flex items-center justify-between hover:bg-muted/40 transition-colors bg-muted/10 border-b chapter-toggle"
+                            data-target={`subsection-${index}-${subIndex}`}
+                          >
+                            <h3 class="text-sm font-medium text-foreground">
+                              {subsection.name}
+                            </h3>
+                            <svg class="h-3 w-3 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          
+                          <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`subsection-${index}-${subIndex}`}>
+                            {subsection.lessons && subsection.lessons.length > 0 && (
+                              <div class="bg-muted/5">
+                                {subsection.lessons.map((lesson, lessonIndex) => (
+                                  <a 
+                                    href={generateLessonUrl(lesson, course)} 
+                                    class="flex items-center gap-3 p-3 pl-9 hover:bg-muted/20 transition-colors group border-b last:border-b-0"
+                                  >
+                                    <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary/20 transition-colors flex items-center justify-center">
+                                      {lessonIndex + 1}
+                                    </div>
+                                    <span class="text-sm text-foreground font-medium group-hover:text-primary transition-colors">
+                                      {lesson.data.title}
+                                    </span>
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          ))}
         </div>
-      </section>
+      </div>
     </main>
 
     <script>

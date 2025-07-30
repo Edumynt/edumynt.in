@@ -41,80 +41,65 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="generator" content={Astro.generator} />
-    <title>Courses - Learn with Edumynt</title>
-    <meta name="description" content="Browse all available courses on Edumynt - interactive learning platform for literature, periods, movements, and writers." />
+    <title>Courses - Edumynt</title>
+    <meta name="description" content="Browse all available courses on Edumynt." />
   </head>
   <body class="min-h-screen bg-background text-foreground">
     <Navigation pageType="courses" />
 
-    <main class="flex-1">
-      <!-- Header Section -->
-      <section class="py-16 border-b bg-muted/30">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="mx-auto max-w-2xl text-center">
-            <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-              Available Courses
-            </h1>
-            <p class="mt-4 text-lg text-muted-foreground">
-              Choose a course to start your learning journey
-            </p>
-          </div>
+    <main class="flex-1 p-6 pb-20">
+      <div class="mx-auto max-w-7xl">
+        <!-- Simple Header -->
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-foreground mb-1">All Courses</h1>
+          <p class="text-sm text-muted-foreground">Choose a course to start learning</p>
         </div>
-      </section>
-
-      <!-- Courses Grid Section -->
-      <section class="py-16">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {uniqueCourses.map((course, index) => (
-              <Card 
-                variant="interactive" 
-                class={`group animate-in fade-in slide-up duration-700`}
-                style={`animation-delay: ${index * 100}ms`}
-              >
-                <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-6 group-hover:bg-primary/20 transition-colors">
-                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        
+        <!-- Compact Courses Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {uniqueCourses.map((course) => (
+            <a 
+              href={`/courses/${course.slug}`}
+              class="group block p-4 bg-card border border-border rounded-xl hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+            >
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
                 
-                <h2 class="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                  {course.title}
-                </h2>
-                
-                <p class="text-muted-foreground mb-6 leading-relaxed">
-                  {course.description}
-                </p>
-                
-                <div class="flex items-center gap-6 mb-6 text-sm text-muted-foreground">
-                  <div class="flex items-center gap-2">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <span>{course.chapterCount} chapters</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span>{course.lessonCount} lessons</span>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-sm leading-tight mb-2">
+                    {course.name}
+                  </h3>
+                  
+                  <div class="flex items-center gap-4 text-xs text-muted-foreground">
+                    <span class="flex items-center gap-1">
+                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                      </svg>
+                      {course.chapterCount}
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      {course.lessonCount}
+                    </span>
                   </div>
                 </div>
-                
-                <Button 
-                  href={`/courses/${course.slug}`} 
-                  class="w-full group-hover:shadow-md transition-shadow"
-                >
-                  Start Course
-                  <svg class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </Button>
-              </Card>
-            ))}
-          </div>
+                </div>
+              </div>
+            </a>
+          ))}
         </div>
-      </section>
+      </div>
     </main>
   </body>
 </html>
