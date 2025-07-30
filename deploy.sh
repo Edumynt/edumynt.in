@@ -3,8 +3,8 @@
 # Deployment script for Edumynt to Oracle VM
 # Replace the variables below with your actual server details
 
-SERVER_IP="your.server.ip.address"
-SERVER_USER="ubuntu"  # or your server username
+SERVER_IP="localhost"  # Since we're deploying on the same VM
+SERVER_USER="ubuntu"
 DEPLOY_PATH="/var/www/edumynt"
 
 echo "🚀 Starting deployment to Oracle VM..."
