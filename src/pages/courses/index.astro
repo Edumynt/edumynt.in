@@ -23,11 +23,16 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
   const lessonCount = lessons.length;
   const chapters = [...new Set(lessons.map(lesson => lesson.data.chapter).filter(Boolean))];
   
+  // Find a lesson with an image, prefer syllabus or main course file
+  const courseImage = lessons.find(lesson => lesson.data.image)?.data.image || 
+                     `/images/courses/${courseName.toLowerCase().replace(/\s+/g, '-')}.jpg`;
+  
   return {
     name: courseName,
     slug: courseName.toLowerCase().replace(/\s+/g, '-'),
     title: courseName,
     description: firstLesson.data.description || `Learn ${courseName}`,
+    image: courseImage,
     lessonCount,
     chapterCount: chapters.length,
     lastUpdated: Math.max(...lessons.map(l => l.data.updated?.getTime() || l.data.date?.getTime() || 0))
@@ -55,42 +60,52 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
           <p class="text-sm text-muted-foreground">Choose a course to start learning</p>
         </div>
         
-        <!-- Compact Courses Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Course Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {uniqueCourses.map((course) => (
             <a 
               href={`/courses/${course.slug}`}
-              class="group block p-4 bg-card border border-border rounded-xl hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+              class="group block bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
             >
-              <div class="flex items-start gap-3">
-                <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
+              <!-- 16:9 Image Container -->
+              <div class="relative w-full aspect-video bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
+                <img 
+                  src={course.image} 
+                  alt={course.name}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgdmlld0JveD0iMCAwIDQwMCAyMjUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjI1IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgOTBIMjI1VjEzNUgxNzVWOTBaIiBmaWxsPSIjREREREREIi8+CjxwYXRoIGQ9Ik0xOTUgMTA1SDE4NVYxMTVIMTk1VjEwNVoiIGZpbGw9IiNBQUFBQUEiLz4KPHBhdGggZD0iTTE5MiAxMDhMMjA4IDEyNEgxNzZMMTkyIDEwOFoiIGZpbGw9IiNBQUFBQUEiLz4KPC9zdmc+'"
+                />
+                <!-- Overlay gradient for better text readability -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+              
+              <!-- Card Content -->
+              <div class="p-4">
+                <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-lg leading-tight mb-2">
+                  {course.name}
+                </h3>
+                
+                <p class="text-sm text-muted-foreground mb-3 line-clamp-2">
+                  {course.description}
+                </p>
+                
+                <div class="flex items-center gap-4 text-xs text-muted-foreground">
+                  <span class="flex items-center gap-1">
+                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    {course.chapterCount} chapters
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {course.lessonCount} lessons
+                  </span>
                 </div>
                 
-                <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-sm leading-tight mb-2">
-                    {course.name}
-                  </h3>
-                  
-                  <div class="flex items-center gap-4 text-xs text-muted-foreground">
-                    <span class="flex items-center gap-1">
-                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                      </svg>
-                      {course.chapterCount}
-                    </span>
-                    <span class="flex items-center gap-1">
-                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      {course.lessonCount}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                <!-- Action indicator -->
+                <div class="flex justify-end mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
                   <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>

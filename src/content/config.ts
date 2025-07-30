@@ -12,6 +12,7 @@ const courses = defineCollection({
     author: z.string().optional(),
     date: z.date().optional(),
     draft: z.boolean().default(false),
+    image: z.string().optional(), // Course image URL
   }),
 });
 
