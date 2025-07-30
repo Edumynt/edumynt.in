@@ -262,7 +262,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
 )}
 
 <!-- Main Navigation Bar -->
-<header class="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+<header class="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300" id="mainHeader">
   <div class="flex h-16 items-center justify-between px-4 max-w-7xl mx-auto">
     <!-- Menu Button -->
     <Button variant="ghost" size="icon" id="menuButton" class="lg:hidden">
@@ -493,5 +493,43 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
         currentCourseBtn.classList.add('rotate-180');
       }
     }
+
+    // Header scroll behavior
+    let lastScrollY = window.scrollY;
+    let isScrollingUp = false;
+    let scrollTimeout;
+    const header = document.getElementById('mainHeader');
+    
+    function handleScroll() {
+      const currentScrollY = window.scrollY;
+      
+      // Don't hide header when at the very top
+      if (currentScrollY <= 10) {
+        header?.classList.remove('-translate-y-full');
+        lastScrollY = currentScrollY;
+        return;
+      }
+      
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY) {
+        // Scrolling down - hide header
+        header?.classList.add('-translate-y-full');
+        isScrollingUp = false;
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show header
+        header?.classList.remove('-translate-y-full');
+        isScrollingUp = true;
+      }
+      
+      lastScrollY = currentScrollY;
+    }
+    
+    // Throttled scroll handler
+    function throttledScroll() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(handleScroll, 10);
+    }
+    
+    window.addEventListener('scroll', throttledScroll, { passive: true });
   });
 </script>
