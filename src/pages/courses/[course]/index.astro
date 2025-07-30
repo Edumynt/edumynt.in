@@ -172,7 +172,7 @@ const firstLesson = lessons[0];
     <nav class="border-b bg-muted/30">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="flex items-center py-4">
-          <Button variant="ghost" href="/courses" class="text-sm">
+          <Button variant="ghost" href="/courses" class="text-sm font-medium hover:text-primary transition-colors">
             <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -184,16 +184,16 @@ const firstLesson = lessons[0];
 
     <main class="flex-1">
       <!-- Course Header -->
-      <section class="py-16 border-b">
+      <section class="py-20 border-b">
         <div class="mx-auto max-w-4xl px-6 lg:px-8">
           <div class="text-center">
-            <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl mb-4">
+            <h1 class="text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl mb-6">
               {courseName}
             </h1>
-            <p class="text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto">
+            <p class="text-xl font-medium text-muted-foreground mb-8 leading-8 max-w-3xl mx-auto">
               {firstLesson?.data.description || `Complete course on ${courseName}`}
             </p>
-            <div class="flex items-center justify-center gap-8 text-sm text-muted-foreground">
+            <div class="flex items-center justify-center gap-8 text-sm font-semibold text-muted-foreground">
               <div class="flex items-center gap-2">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -212,7 +212,7 @@ const firstLesson = lessons[0];
       </section>
 
       <!-- Course Content -->
-      <section class="py-16">
+      <section class="py-20 pb-24">
         <div class="mx-auto max-w-4xl px-6 lg:px-8">
           <div class="space-y-6">
             {hierarchySections.map((section, index) => (
@@ -221,11 +221,11 @@ const firstLesson = lessons[0];
                 <Card variant="interactive" class="group">
                   <a href={generateLessonUrl(section.lessons[0], course)} class="flex items-center justify-between p-6 text-left">
                     <div class="flex items-center gap-4">
-                      <div class="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg text-primary font-semibold group-hover:bg-primary/20 transition-colors">
+                      <div class="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg text-primary font-bold text-lg group-hover:bg-primary/20 transition-colors">
                         {index + 1}
                       </div>
                       <div>
-                        <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                        <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                           {section.name}
                         </h3>
                       </div>
@@ -243,7 +243,7 @@ const firstLesson = lessons[0];
                       class="w-full text-left p-6 flex items-center justify-between hover:bg-muted/50 transition-colors chapter-toggle"
                       data-target={`section-${index}`}
                     >
-                      <h2 class="text-xl font-semibold text-foreground">
+                      <h2 class="text-xl font-bold text-foreground">
                         {section.name}
                       </h2>
                       <svg class="h-5 w-5 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,10 +259,10 @@ const firstLesson = lessons[0];
                           const linkUrl = generateLessonUrl(lesson, course);
                           return (
                             <a href={linkUrl} class="flex items-center gap-4 p-4 hover:bg-muted/30 transition-colors group">
-                              <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-medium text-primary group-hover:bg-primary/20 transition-colors">
+                              <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-bold text-primary group-hover:bg-primary/20 transition-colors">
                                 {lessonIndex + 1}
                               </div>
-                              <span class="text-foreground group-hover:text-primary transition-colors">
+                              <span class="text-foreground font-medium group-hover:text-primary transition-colors">
                                 {lesson.data.title}
                               </span>
                             </a>
@@ -279,7 +279,7 @@ const firstLesson = lessons[0];
                               class="w-full text-left p-4 pl-8 flex items-center justify-between hover:bg-muted/50 transition-colors bg-muted/20 chapter-toggle"
                               data-target={`subsection-${index}-${subIndex}`}
                             >
-                              <h3 class="text-lg font-medium text-foreground">
+                              <h3 class="text-lg font-semibold text-foreground">
                                 {subsection.name}
                               </h3>
                               <svg class="h-4 w-4 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,10 +294,10 @@ const firstLesson = lessons[0];
                                     const linkUrl = generateLessonUrl(lesson, course);
                                     return (
                                       <a href={linkUrl} class="flex items-center gap-4 p-4 pl-12 hover:bg-muted/30 transition-colors group">
-                                        <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-medium text-primary group-hover:bg-primary/20 transition-colors">
+                                        <div class="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg text-sm font-bold text-primary group-hover:bg-primary/20 transition-colors">
                                           {lessonIndex + 1}
                                         </div>
-                                        <span class="text-foreground group-hover:text-primary transition-colors">
+                                        <span class="text-foreground font-medium group-hover:text-primary transition-colors">
                                           {lesson.data.title}
                                         </span>
                                       </a>

@@ -100,15 +100,15 @@ const lessonContent = lesson.body;
     <!-- Breadcrumb -->
     <nav class="border-b bg-muted/30">
       <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="flex items-center py-4 text-sm">
+        <div class="flex items-center py-4 text-sm font-medium">
           {breadcrumbs.map((crumb, index) => (
             <div class="flex items-center">
               {crumb.url ? (
-                <Button variant="ghost" href={crumb.url} class="text-sm p-0 h-auto font-normal">
+                <Button variant="ghost" href={crumb.url} class="text-sm p-0 h-auto font-medium hover:text-primary transition-colors">
                   {crumb.name}
                 </Button>
               ) : (
-                <span class="text-muted-foreground">{crumb.name}</span>
+                <span class="text-muted-foreground font-medium">{crumb.name}</span>
               )}
               {index < breadcrumbs.length - 1 && (
                 <svg class="mx-2 h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +125,7 @@ const lessonContent = lesson.body;
       <!-- Desktop Sidebar -->
       <aside class="hidden lg:flex w-80 bg-card border-r flex-col">
         <div class="p-6 border-b">
-          <h3 class="text-lg font-semibold text-foreground">Course Navigation</h3>
+          <h3 class="text-lg font-bold text-foreground">Course Navigation</h3>
         </div>
         <div class="flex-1 overflow-y-auto p-4">
           <div class="space-y-6">
@@ -137,7 +137,7 @@ const lessonContent = lesson.body;
               })
               .map(([folderPath, lessons]) => (
                 <div class="space-y-2">
-                  <h4 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  <h4 class="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                     {folderPath === 'root' 
                       ? 'Course Files' 
                       : folderPath.split('/').map(part => 
@@ -149,9 +149,9 @@ const lessonContent = lesson.body;
                     {lessons.map(l => (
                       <a 
                         href={generateLessonUrl(l)} 
-                        class={`block px-3 py-2 text-sm rounded-md transition-colors ${
+                        class={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                           l.slug === lesson.slug 
-                            ? 'bg-primary text-primary-foreground font-medium' 
+                            ? 'bg-primary text-primary-foreground font-semibold' 
                             : 'text-foreground hover:bg-accent hover:text-accent-foreground'
                         }`}
                       >
@@ -167,26 +167,32 @@ const lessonContent = lesson.body;
 
       <!-- Main Content -->
       <main class="flex-1 overflow-hidden">
-        <div class="mx-auto max-w-4xl px-6 lg:px-8 py-8">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8 py-8 pb-24">
           <article class="space-y-8">
             <!-- Lesson Header -->
-            <header class="space-y-4 pb-8 border-b">
-              <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            <header class="space-y-6 pb-8 border-b">
+              <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                 {lesson.data.title}
               </h1>
+              
+              {lesson.data.description && (
+                <p class="text-xl text-muted-foreground leading-8 max-w-3xl">
+                  {lesson.data.description}
+                </p>
+              )}
               
               <div class="flex flex-wrap items-center gap-4">
                 {lesson.data.tags && (
                   <div class="flex flex-wrap gap-2">
                     {lesson.data.tags.map(tag => (
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
                         {tag}
                       </span>
                     ))}
                   </div>
                 )}
                 {lesson.data.date && (
-                  <time class="text-sm text-muted-foreground">
+                  <time class="text-sm font-medium text-muted-foreground">
                     {new Date(lesson.data.date).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -198,7 +204,7 @@ const lessonContent = lesson.body;
             </header>
 
             <!-- Lesson Content -->
-            <div class="prose prose-slate max-w-none dark:prose-invert prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-normal lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-slate-500 dark:prose-lead:text-slate-400 prose-a:font-semibold dark:prose-a:text-slate-300 prose-a:no-underline prose-a:shadow-[inset_0_-2px_0_0_var(--tw-prose-background,#fff),inset_0_calc(-1*(var(--tw-prose-underline-size,4px)+2px))_0_0_var(--tw-prose-underline,theme(colors.slate.300))] hover:prose-a:[--tw-prose-underline-size:6px] dark:[--tw-prose-background:theme(colors.slate.900)] dark:prose-a:shadow-[inset_0_calc(-1*var(--tw-prose-underline-size,2px))_0_0_var(--tw-prose-underline,theme(colors.slate.600))] dark:hover:prose-a:[--tw-prose-underline-size:6px] prose-pre:rounded-xl prose-pre:bg-slate-900 prose-pre:shadow-lg dark:prose-pre:bg-slate-800/60 dark:prose-pre:shadow-none dark:prose-pre:ring-1 dark:prose-pre:ring-slate-300/10 prose-th:border-slate-200 prose-td:border-slate-200 dark:prose-th:border-slate-700 dark:prose-td:border-slate-700">
+            <div class="prose prose-lg prose-slate max-w-none dark:prose-invert prose-headings:scroll-mt-28 prose-headings:font-bold prose-headings:tracking-tight lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-muted-foreground prose-lead:text-xl prose-lead:leading-8 prose-p:text-foreground prose-p:leading-8 prose-a:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:font-bold prose-strong:text-foreground prose-code:bg-muted prose-code:text-foreground prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-mono prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg prose-blockquote:border-l-4 prose-blockquote:border-primary/30 prose-blockquote:pl-6 prose-blockquote:text-muted-foreground prose-blockquote:italic prose-th:font-bold prose-th:text-foreground prose-td:text-foreground">
               <Content />
             </div>
 
@@ -208,14 +214,14 @@ const lessonContent = lesson.body;
                 <Button 
                   variant="outline" 
                   href={generateLessonUrl(prevLesson)} 
-                  class="flex items-center gap-2 flex-1 max-w-sm"
+                  class="flex items-center gap-3 flex-1 max-w-sm font-medium"
                 >
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                   </svg>
                   <div class="text-left">
-                    <div class="text-xs text-muted-foreground">Previous</div>
-                    <div class="font-medium truncate">{prevLesson.data.title}</div>
+                    <div class="text-xs font-medium text-muted-foreground">Previous</div>
+                    <div class="font-semibold truncate">{prevLesson.data.title}</div>
                   </div>
                 </Button>
               ) : (
@@ -225,11 +231,11 @@ const lessonContent = lesson.body;
               {nextLesson ? (
                 <Button 
                   href={generateLessonUrl(nextLesson)} 
-                  class="flex items-center gap-2 flex-1 max-w-sm ml-auto"
+                  class="flex items-center gap-3 flex-1 max-w-sm ml-auto font-medium"
                 >
                   <div class="text-right">
-                    <div class="text-xs text-primary-foreground/80">Next</div>
-                    <div class="font-medium truncate">{nextLesson.data.title}</div>
+                    <div class="text-xs font-medium text-primary-foreground/80">Next</div>
+                    <div class="font-semibold truncate">{nextLesson.data.title}</div>
                   </div>
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m-7-7h18" />

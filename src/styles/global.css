@@ -95,24 +95,85 @@
   @apply text-foreground font-bold tracking-tight;
 }
 
+.prose h1 {
+  @apply text-3xl sm:text-4xl lg:text-5xl;
+}
+
+.prose h2 {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.prose h3 {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.prose h4 {
+  @apply text-lg sm:text-xl lg:text-2xl;
+}
+
+.prose h5 {
+  @apply text-base sm:text-lg lg:text-xl;
+}
+
+.prose h6 {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
 .prose p {
-  @apply text-muted-foreground leading-7;
+  @apply text-foreground leading-8 font-medium;
+}
+
+.prose .lead {
+  @apply text-xl text-muted-foreground leading-8 font-medium;
 }
 
 .prose a {
-  @apply text-primary font-medium no-underline hover:underline;
+  @apply text-primary font-semibold no-underline hover:underline;
+}
+
+.prose strong {
+  @apply font-bold text-foreground;
+}
+
+.prose em {
+  @apply italic;
 }
 
 .prose code {
-  @apply bg-muted text-foreground px-1.5 py-0.5 rounded-md text-sm font-mono;
+  @apply bg-muted text-foreground px-2 py-1 rounded-md text-sm font-mono font-semibold;
 }
 
 .prose pre {
   @apply bg-muted border rounded-lg p-4 overflow-x-auto;
 }
 
+.prose pre code {
+  @apply bg-transparent p-0 text-sm font-mono;
+}
+
 .prose blockquote {
-  @apply border-l-4 border-primary/30 pl-4 text-muted-foreground italic;
+  @apply border-l-4 border-primary/30 pl-6 text-muted-foreground italic font-medium;
+}
+
+.prose ul,
+.prose ol {
+  @apply text-foreground;
+}
+
+.prose li {
+  @apply leading-7 font-medium;
+}
+
+.prose table {
+  @apply w-full border-collapse;
+}
+
+.prose th {
+  @apply font-bold text-foreground bg-muted/50 px-4 py-2 text-left;
+}
+
+.prose td {
+  @apply text-foreground px-4 py-2 border-b border-border;
 }
 
 /* Animation utilities */

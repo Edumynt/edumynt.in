@@ -122,7 +122,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
-            <span>Courses</span>
+            <span class="font-medium">Courses</span>
           </a>
           <Button variant="ghost" size="icon" id="coursesDropdown" class="h-8 w-8 transition-transform duration-200">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,8 +135,8 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
           <div class="bg-muted/50 rounded-lg p-2 space-y-1">
             {uniqueCourses.map((course) => (
               <a href={`/courses/${course.slug}`} class={`block px-3 py-2 rounded-md transition-colors ${currentCourse === course.slug ? 'bg-primary/10 text-primary' : 'hover:bg-background/80'}`}>
-                <div class="font-medium text-sm">{course.name}</div>
-                <div class="text-xs text-muted-foreground">{course.chapters.length} chapters</div>
+                <div class="font-semibold text-sm">{course.name}</div>
+                <div class="text-xs text-muted-foreground font-normal">{course.chapters.length} chapters</div>
               </a>
             ))}
           </div>
@@ -155,7 +155,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <span class="font-medium text-sm">{course.name}</span>
+                <span class="font-semibold text-sm">{course.name}</span>
               </a>
               <Button variant="ghost" size="icon" class="h-6 w-6 course-expand-btn transition-transform duration-200" data-target={`course-${course.slug}`}>
                 <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,7 +173,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
                     const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
                     const isActive = currentLesson && lesson.slug.includes(currentLesson);
                     return (
-                      <a href={lessonUrl} class={`block px-3 py-2 text-sm rounded-md border-l-2 transition-colors ${isActive ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20'}`}>
+                      <a href={lessonUrl} class={`block px-3 py-2 text-sm font-medium rounded-md border-l-2 transition-colors ${isActive ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20'}`}>
                         {lesson.data.title}
                       </a>
                     );
@@ -185,7 +185,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
               {course.chapters && course.chapters.length > 0 && course.chapters.map((chapter) => (
                 <div class="space-y-1 py-1">
                   <div class="flex items-center justify-between px-3 py-1">
-                    <span class="text-sm font-medium text-muted-foreground">{chapter.name}</span>
+                    <span class="text-sm font-semibold text-muted-foreground">{chapter.name}</span>
                     <Button variant="ghost" size="icon" class="h-5 w-5 chapter-expand-btn transition-transform duration-200" data-target={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
                       <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -199,7 +199,7 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
                         const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
                         const isActive = currentLesson && lesson.slug.includes(currentLesson);
                         return (
-                          <a href={lessonUrl} class={`block px-3 py-2 text-sm rounded-md border-l-2 transition-colors ${isActive ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20'}`}>
+                          <a href={lessonUrl} class={`block px-3 py-2 text-sm font-medium rounded-md border-l-2 transition-colors ${isActive ? 'border-primary bg-primary/10 text-primary font-semibold' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20'}`}>
                             {lesson.data.title}
                           </a>
                         );
@@ -234,13 +234,13 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
       <div class="space-y-1">
         {tocHeadings.map((heading) => (
           <div class="space-y-1">
-            <a href={`#${heading.id}`} class={`block px-3 py-2 text-sm rounded-md border-l-2 border-transparent hover:bg-accent hover:border-accent-foreground/20 transition-colors toc-link font-medium`} data-level={heading.level} data-id={heading.id}>
+            <a href={`#${heading.id}`} class={`block px-3 py-2 text-sm font-medium rounded-md border-l-2 border-transparent hover:bg-accent hover:border-accent-foreground/20 transition-colors toc-link`} data-level={heading.level} data-id={heading.id}>
               {heading.text}
             </a>
             {heading.children.length > 0 && (
               <div class="ml-4 space-y-1">
                 {heading.children.map((child) => (
-                  <a href={`#${child.id}`} class="block px-3 py-1.5 text-xs rounded-md border-l-2 border-transparent hover:bg-accent hover:border-accent-foreground/20 transition-colors text-muted-foreground toc-link" data-level={child.level} data-id={child.id}>
+                  <a href={`#${child.id}`} class="block px-3 py-1.5 text-xs font-medium rounded-md border-l-2 border-transparent hover:bg-accent hover:border-accent-foreground/20 transition-colors text-muted-foreground toc-link" data-level={child.level} data-id={child.id}>
                     {child.text}
                   </a>
                 ))}
@@ -312,13 +312,13 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
 
 <!-- Bottom Navigation Bar -->
 <nav class="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t">
-  <div class="flex items-center justify-around px-4 py-2 max-w-7xl mx-auto">
+  <div class="flex items-center justify-around px-4 py-3 max-w-7xl mx-auto">
     <!-- Home Button (always visible) -->
     <a href="/" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
       <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
       </svg>
-      <span class="text-xs">Home</span>
+      <span class="text-xs font-medium">Home</span>
     </a>
     
     <!-- Courses Button / Current Course Button -->
@@ -327,14 +327,14 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        <span class="text-xs truncate max-w-16">Course</span>
+        <span class="text-xs font-medium truncate max-w-16">Course</span>
       </a>
     ) : (
       <a href="/courses" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        <span class="text-xs">Courses</span>
+        <span class="text-xs font-medium">Courses</span>
       </a>
     )}
     
@@ -344,14 +344,14 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
         </svg>
-        <span class="text-xs">Outline</span>
+        <span class="text-xs font-medium">Outline</span>
       </button>
     ) : (
       <button class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors opacity-50 cursor-not-allowed">
         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <span class="text-xs">Tests</span>
+        <span class="text-xs font-medium">Tests</span>
       </button>
     )}
   </div>

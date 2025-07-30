@@ -58,22 +58,22 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+              <h1 class="text-5xl font-bold tracking-tight text-foreground sm:text-7xl lg:text-8xl">
                 Master Literature & 
                 <span class="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">More</span>
               </h1>
             </div>
-            <p class="mt-6 text-lg leading-8 text-muted-foreground animate-in fade-in slide-up duration-700 delay-200">
+            <p class="mt-6 text-xl font-medium leading-8 text-muted-foreground animate-in fade-in slide-up duration-700 delay-200 max-w-3xl mx-auto">
               Interactive learning platform for literature, periods, movements, and writers. Start your journey today.
             </p>
             <div class="mt-10 flex items-center justify-center gap-x-6 animate-in fade-in slide-up duration-700 delay-400">
-              <Button href="/courses" class="text-base px-8 py-3">
+              <Button href="/courses" class="text-base font-semibold px-8 py-3">
                 Get Started
                 <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Button>
-              <Button variant="outline" class="text-base px-8 py-3">
+              <Button variant="outline" class="text-base font-semibold px-8 py-3">
                 Learn More
               </Button>
             </div>
@@ -85,10 +85,10 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
       <section class="py-24 sm:py-32">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
           <div class="mx-auto max-w-2xl text-center mb-16">
-            <h2 class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               Available Courses
             </h2>
-            <p class="mt-4 text-lg text-muted-foreground">
+            <p class="mt-4 text-xl font-medium text-muted-foreground">
               Explore our comprehensive collection of literature courses
             </p>
           </div>
@@ -106,15 +106,15 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
                   </svg>
                 </div>
                 
-                <h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                <h3 class="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                   {course.name}
                 </h3>
                 
-                <p class="text-muted-foreground mb-6 leading-relaxed">
+                <p class="text-muted-foreground font-medium mb-6 leading-relaxed">
                   {course.description}
                 </p>
                 
-                <div class="flex items-center gap-6 mb-6 text-sm text-muted-foreground">
+                <div class="flex items-center gap-6 mb-6 text-sm font-semibold text-muted-foreground">
                   <div class="flex items-center gap-2">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -131,7 +131,7 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
                 
                 <Button 
                   href={`/courses/${course.slug}`} 
-                  class="w-full group-hover:shadow-md transition-shadow"
+                  class="w-full font-semibold group-hover:shadow-md transition-shadow"
                 >
                   Start Learning
                   <svg class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
