@@ -5,7 +5,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://edumynt.in', // Your custom domain
+  site: 'https://edumynt.in', // Your domain
   integrations: [
     mdx(),
     tailwind({
