@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import Navigation from '../../../components/Navigation.astro';
 import Head from '../../../components/Head.astro';
 import Button from '../../../components/ui/Button.astro';
 import Card from '../../../components/ui/Card.astro';
@@ -32,6 +31,26 @@ export async function getStaticPaths() {
 
 const { course } = Astro.params;
 const { courseName, lessons } = Astro.props;
+
+// Create introduction section from introduction.mdx if it exists
+function createIntroductionSection(lessons) {
+  const introLesson = lessons.find(lesson => 
+    lesson.slug.endsWith('/introduction') || lesson.slug.includes('/introduction')
+  );
+  
+  if (introLesson) {
+    return {
+      name: "Introduction",
+      isIntroduction: true,
+      isRoot: false,
+      depth: 0,
+      lessons: [introLesson],
+      subsections: [],
+      metadata: introLesson.data.courseMetadata || {}
+    };
+  }
+  return null;
+}
 
 // Group lessons by path structure for unlimited nesting
 function buildPathHierarchy(lessons) {
@@ -151,8 +170,13 @@ function generateLessonUrl(lesson, courseSlug) {
 
 const hierarchySections = renderHierarchy(courseHierarchy);
 
+// Add introduction section at the beginning
+const introductionSection = createIntroductionSection(lessons);
+const allSections = introductionSection ? [introductionSection, ...hierarchySections] : hierarchySections;
+
 // Count only actual chapters (non-individual files) as sections
-const chapterSections = hierarchySections.filter(section => !section.isIndividualFile);
+const chapterSections = allSections.filter(section => !section.isIndividualFile && !section.isIntroduction);
+const totalSections = chapterSections.length + (introductionSection ? 1 : 0);
 
 const firstLesson = lessons[0];
 ---
@@ -160,93 +184,183 @@ const firstLesson = lessons[0];
 <html lang="en">
   <Head 
     title={`${courseName} - Edumynt`}
-    description={`Learn ${courseName} - ${chapterSections.length} sections, ${lessons.length} lessons.`}
+    description={`Learn ${courseName} - ${totalSections} sections, ${lessons.length} lessons.`}
   />
   <body class="min-h-screen bg-background text-foreground">
-    <Navigation pageType="course" currentCourse={course} />
-
-    <main class="flex-1 p-6 pb-20">
-      <div class="mx-auto max-w-4xl">
-        <!-- Breadcrumb -->
-        <nav class="mb-4">
-          <a href="/courses" class="text-sm text-muted-foreground hover:text-primary transition-colors">
-            ← All Courses
-          </a>
-        </nav>
-
-        <!-- Course Header -->
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold text-foreground mb-2">{courseName}</h1>
-          <div class="flex items-center gap-6 text-sm text-muted-foreground">
-            <span class="flex items-center gap-1">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    <!-- App Bar -->
+    <header id="app-bar" class="sticky top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+      <div class="flex items-center justify-between px-4 py-3">
+        <div class="flex items-center gap-3 flex-1 min-w-0">
+          <button 
+            onclick="window.history.back()" 
+            class="flex items-center justify-center w-9 h-9 rounded-full hover:bg-muted/80 transition-colors flex-shrink-0"
+          >
+            <svg class="w-4 h-4 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-3 min-w-0 flex-1">
+            <div class="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
-              {chapterSections.length} sections
-            </span>
-            <span class="flex items-center gap-1">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              {lessons.length} lessons
-            </span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h1 class="font-semibold text-foreground text-sm md:text-base truncate">
+                {courseName}
+              </h1>
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>{totalSections} chapters</span>
+                <span>•</span>
+                <span>{lessons.length} lessons</span>
+              </div>
+            </div>
           </div>
         </div>
-        
+      </div>
+    </header>
+
+    <main class="flex-1 pt-[73px] pb-20">
+      <div class="px-6">
         <!-- Course Content -->
-        <div class="space-y-3">
-          {hierarchySections.map((section, index) => (
-            section.isIndividualFile ? (
-              <!-- Direct lesson link -->
+        <div class="space-y-6">
+          {allSections.map((section, index) => (
+            section.isIndividualFile || section.isIntroduction ? (
+              <!-- Individual lesson card -->
               <a 
                 href={generateLessonUrl(section.lessons[0], course)} 
-                class="group block p-4 bg-card border border-border rounded-lg hover:border-primary/30 hover:shadow-md transition-all duration-200 hover:scale-[1.01]"
+                class="group block p-6 bg-card border border-border rounded-xl hover:border-primary/40 hover:shadow-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
               >
-                <div class="flex items-center gap-3">
-                  <div class="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-semibold text-sm group-hover:bg-primary/20 transition-colors">
-                    {index + 1}
+                <div class="flex items-center gap-4">
+                  <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-muted to-muted/60 rounded-xl flex items-center justify-center font-bold text-lg border-2 border-border group-hover:from-primary group-hover:to-primary/80 group-hover:text-primary-foreground group-hover:border-primary transition-all duration-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                   </div>
                   <div class="flex-1">
-                    <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-sm">
+                    <h3 class="font-bold text-foreground group-hover:text-primary transition-colors text-lg mb-1">
                       {section.name}
                     </h3>
+                    <p class="text-sm text-muted-foreground">
+                      Individual lesson • Ready to start
+                    </p>
                   </div>
                   <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   </div>
                 </div>
               </a>
             ) : (
-              <!-- Section with lessons -->
-              <div class="bg-card border border-border rounded-lg overflow-hidden">
+              <!-- Chapter with lessons -->
+              <div class="bg-card border-2 border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
                 <button 
-                  class="w-full text-left p-4 flex items-center justify-between hover:bg-muted/30 transition-colors chapter-toggle"
+                  class={`w-full text-left p-6 flex items-center justify-between hover:bg-muted/20 transition-colors chapter-toggle group ${
+                    section.isIntroduction ? 'bg-primary/5 border-b-2 border-primary/20' : 'border-b border-border'
+                  }`}
                   data-target={`section-${index}`}
+                  data-is-introduction={section.isIntroduction ? 'true' : 'false'}
                 >
-                  <h2 class="text-sm font-semibold text-foreground">
-                    {section.name}
-                  </h2>
-                  <svg class="h-4 w-4 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="flex items-center gap-4">
+                    <div class={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-bold text-base transition-all duration-200 ${
+                      section.isIntroduction 
+                        ? 'bg-primary/20 text-primary border-2 border-primary/30' 
+                        : 'bg-muted text-muted-foreground border-2 border-border group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary'
+                    }`}>
+                      {section.isIntroduction ? (
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <span class="text-lg">{section.isIntroduction ? '' : index}</span>
+                      )}
+                    </div>
+                    <div class="flex-1">
+                      <h2 class={`font-bold transition-colors text-lg mb-1 ${
+                        section.isIntroduction 
+                          ? 'text-primary' 
+                          : 'text-foreground group-hover:text-primary'
+                      }`}>
+                        {section.isIntroduction ? '📚 ' : ''}{section.name}
+                      </h2>
+                      <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                        <span class="flex items-center gap-1">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          {section.lessons?.length || 0} lessons
+                        </span>
+                        {section.subsections?.length > 0 && (
+                          <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            {section.subsections.length} sections
+                          </span>
+                        )}
+                        {section.isIntroduction && (
+                          <span class="flex items-center gap-1 text-primary">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Start here
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <svg class="h-6 w-6 text-muted-foreground transition-transform duration-300 toggle-icon group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 
                 <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`section-${index}`}>
                   {section.lessons && section.lessons.length > 0 && (
-                    <div class="border-t">
+                    <div class={`border-t-2 ${
+                      section.isIntroduction ? 'bg-primary/5 border-primary/20' : 'bg-muted/5 border-border'
+                    }`}>
                       {section.lessons.map((lesson, lessonIndex) => (
                         <a 
                           href={generateLessonUrl(lesson, course)} 
-                          class="flex items-center gap-3 p-3 hover:bg-muted/20 transition-colors group border-b last:border-b-0"
+                          class="flex items-center gap-4 p-5 hover:bg-primary/10 transition-all duration-200 group border-b border-border/50 last:border-b-0 hover:border-primary/30"
                         >
-                          <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary/20 transition-colors flex items-center justify-center">
-                            {lessonIndex + 1}
+                          <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg text-sm font-bold text-primary group-hover:from-primary group-hover:to-primary/80 group-hover:text-primary-foreground transition-all duration-200 flex items-center justify-center border border-primary/20 group-hover:border-primary">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                           </div>
-                          <span class="text-sm text-foreground font-medium group-hover:text-primary transition-colors">
-                            {lesson.data.title}
-                          </span>
+                          <div class="flex-1">
+                            <span class="text-base text-foreground font-semibold group-hover:text-primary transition-colors block mb-1">
+                              {lesson.data.title}
+                            </span>
+                            {lesson.data.description && (
+                              <span class="text-sm text-muted-foreground block leading-relaxed">
+                                {lesson.data.description}
+                              </span>
+                            )}
+                            {section.isIntroduction && section.metadata.duration && (
+                              <div class="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                                <span class="flex items-center gap-1">
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  {section.metadata.duration}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                  </svg>
+                                  {section.metadata.level}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </div>
                         </a>
                       ))}
                     </div>
@@ -257,31 +371,53 @@ const firstLesson = lessons[0];
                       {section.subsections.map((subsection, subIndex) => (
                         <div>
                           <button 
-                            class="w-full text-left p-3 pl-6 flex items-center justify-between hover:bg-muted/40 transition-colors bg-muted/10 border-b chapter-toggle"
+                            class="w-full text-left p-4 pl-8 flex items-center justify-between hover:bg-muted/30 transition-colors bg-muted/10 border-b chapter-toggle group"
                             data-target={`subsection-${index}-${subIndex}`}
                           >
-                            <h3 class="text-sm font-medium text-foreground">
-                              {subsection.name}
-                            </h3>
-                            <svg class="h-3 w-3 text-muted-foreground transition-transform duration-300 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-3">
+                              <div class="w-6 h-6 bg-primary/5 rounded text-xs font-medium text-primary/70 flex items-center justify-center">
+                                {subIndex + 1}
+                              </div>
+                              <div>
+                                <h3 class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                                  {subsection.name}
+                                </h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">
+                                  {subsection.lessons?.length || 0} lessons
+                                </p>
+                              </div>
+                            </div>
+                            <svg class="h-4 w-4 text-muted-foreground transition-transform duration-300 toggle-icon group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                           </button>
                           
                           <div class="section-content overflow-hidden transition-all duration-300 max-h-0" id={`subsection-${index}-${subIndex}`}>
                             {subsection.lessons && subsection.lessons.length > 0 && (
-                              <div class="bg-muted/5">
+                              <div class="bg-muted/8">
                                 {subsection.lessons.map((lesson, lessonIndex) => (
                                   <a 
                                     href={generateLessonUrl(lesson, course)} 
-                                    class="flex items-center gap-3 p-3 pl-9 hover:bg-muted/20 transition-colors group border-b last:border-b-0"
+                                    class="flex items-center gap-4 p-4 pl-12 hover:bg-primary/5 transition-all duration-200 group border-b last:border-b-0 hover:border-primary/20"
                                   >
-                                    <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary/20 transition-colors flex items-center justify-center">
+                                    <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-200 flex items-center justify-center">
                                       {lessonIndex + 1}
                                     </div>
-                                    <span class="text-sm text-foreground font-medium group-hover:text-primary transition-colors">
-                                      {lesson.data.title}
-                                    </span>
+                                    <div class="flex-1">
+                                      <span class="text-sm text-foreground font-medium group-hover:text-primary transition-colors block">
+                                        {lesson.data.title}
+                                      </span>
+                                      {lesson.data.description && (
+                                        <span class="text-xs text-muted-foreground mt-1 block">
+                                          {lesson.data.description}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                      <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                      </svg>
+                                    </div>
                                   </a>
                                 ))}
                               </div>
@@ -487,9 +623,66 @@ const firstLesson = lessons[0];
           });
         });
         
+        // Smart expansion logic
+        function initializeExpansion() {
+          const currentCourse = window.location.pathname.split('/')[2];
+          const tracker = new CourseProgressTracker();
+          const lastVisited = tracker.getLastVisitedCourse();
+          
+          // Check if user has visited this course before
+          const hasVisitedCourse = lastVisited && lastVisited.courseSlug === currentCourse;
+          
+          if (hasVisitedCourse) {
+            // Expand last visited section and scroll to it
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldContinue = urlParams.get('continue') === 'true';
+            
+            if (shouldContinue) {
+              handleAutoScroll();
+            } else {
+              // Find and expand the section containing the last visited lesson
+              const targetLessonUrl = `/courses/${lastVisited.courseSlug}/${lastVisited.lessonSlug}`;
+              const lessonLinks = document.querySelectorAll('a[href]');
+              
+              lessonLinks.forEach(link => {
+                if (link.getAttribute('href') === targetLessonUrl) {
+                  const sectionContainer = link.closest('.section-content');
+                  if (sectionContainer) {
+                    const toggleButton = document.querySelector(`[data-target="${sectionContainer.id}"]`);
+                    if (toggleButton) {
+                      const icon = toggleButton.querySelector('.toggle-icon');
+                      sectionContainer.style.maxHeight = sectionContainer.scrollHeight + 'px';
+                      if (icon) icon.style.transform = 'rotate(180deg)';
+                      
+                      // Scroll to the section
+                      setTimeout(() => {
+                        sectionContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 300);
+                    }
+                  }
+                }
+              });
+            }
+          } else {
+            // First time visiting - expand Introduction section
+            const introButton = document.querySelector('[data-is-introduction="true"]');
+            if (introButton) {
+              const targetId = introButton.getAttribute('data-target');
+              const content = document.getElementById(targetId);
+              const icon = introButton.querySelector('.toggle-icon');
+              
+              if (content && icon) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+              }
+            }
+          }
+        }
+        
         // Initialize features
         handleAutoScroll();
         addProgressIndicators();
+        initializeExpansion();
       });
     </script>
   </body>
