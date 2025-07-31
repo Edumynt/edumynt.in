@@ -32,21 +32,21 @@ export async function getStaticPaths() {
 const { course } = Astro.params;
 const { courseName, lessons } = Astro.props;
 
-// Create introduction section from introduction.mdx if it exists
+// Create introduction section from introduction folder if it exists
 function createIntroductionSection(lessons) {
-  const introLesson = lessons.find(lesson => 
-    lesson.slug.endsWith('/introduction') || lesson.slug.includes('/introduction')
+  const introLessons = lessons.filter(lesson => 
+    lesson.slug.includes('/introduction/')
   );
   
-  if (introLesson) {
+  if (introLessons.length > 0) {
     return {
       name: "Introduction",
       isIntroduction: true,
       isRoot: false,
       depth: 0,
-      lessons: [introLesson],
+      lessons: introLessons.sort((a, b) => (a.data.order || 0) - (b.data.order || 0)),
       subsections: [],
-      metadata: introLesson.data.courseMetadata || {}
+      metadata: introLessons[0]?.data.courseMetadata || {}
     };
   }
   return null;
@@ -222,6 +222,60 @@ const firstLesson = lessons[0];
 
     <main class="flex-1 pt-[73px] pb-20">
       <div class="px-6">
+        <!-- Course Header with Image -->
+        <div class="mb-8 bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+          <div class="relative h-48 md:h-64">
+            <img 
+              src="/images/course_placeholder.jpg" 
+              alt={`${courseName} course cover`}
+              class="w-full h-full object-cover"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+            />
+            <!-- Fallback gradient background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 flex items-center justify-center" style="display: none;">
+              <div class="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center">
+                <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+            </div>
+            <!-- Overlay with course info -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+              <!-- Course chip - Top Left -->
+              <div class="absolute top-4 left-4">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white border border-white/30 backdrop-blur-sm">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  Course
+                </span>
+              </div>
+              
+              <!-- Title and Stats - Bottom Left -->
+              <div class="absolute bottom-4 left-4">
+                <!-- Course Title -->
+                <h1 class="text-2xl md:text-3xl font-bold text-white mb-3">{courseName}</h1>
+                
+                <!-- Stats -->
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white border border-white/30 backdrop-blur-sm">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    {totalSections} chapters
+                  </span>
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white border border-white/30 backdrop-blur-sm">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {lessons.length} lessons
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Course Content -->
         <div class="space-y-6">
           {allSections.map((section, index) => (
@@ -273,7 +327,7 @@ const firstLesson = lessons[0];
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       ) : (
-                        <span class="text-lg">{section.isIntroduction ? '' : index}</span>
+                        <span class="text-lg">{index}</span>
                       )}
                     </div>
                     <div class="flex-1">
@@ -325,20 +379,16 @@ const firstLesson = lessons[0];
                           href={generateLessonUrl(lesson, course)} 
                           class="flex items-center gap-4 p-5 hover:bg-primary/10 transition-all duration-200 group border-b border-border/50 last:border-b-0 hover:border-primary/30"
                         >
-                          <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg text-sm font-bold text-primary group-hover:from-primary group-hover:to-primary/80 group-hover:text-primary-foreground transition-all duration-200 flex items-center justify-center border border-primary/20 group-hover:border-primary">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg text-sm font-bold text-primary transition-all duration-200 flex items-center justify-center border border-primary/20 lesson-indicator" data-lesson-slug={generateLessonUrl(lesson, course).split('/').slice(3).join('/')}>
+                            <span class="lesson-number">{lessonIndex + 1}</span>
+                            <svg class="lesson-checkmark w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                           </div>
                           <div class="flex-1">
                             <span class="text-base text-foreground font-semibold group-hover:text-primary transition-colors block mb-1">
                               {lesson.data.title}
                             </span>
-                            {lesson.data.description && (
-                              <span class="text-sm text-muted-foreground block leading-relaxed">
-                                {lesson.data.description}
-                              </span>
-                            )}
                             {section.isIntroduction && section.metadata.duration && (
                               <div class="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                                 <span class="flex items-center gap-1">
@@ -407,11 +457,6 @@ const firstLesson = lessons[0];
                                       <span class="text-sm text-foreground font-medium group-hover:text-primary transition-colors block">
                                         {lesson.data.title}
                                       </span>
-                                      {lesson.data.description && (
-                                        <span class="text-xs text-muted-foreground mt-1 block">
-                                          {lesson.data.description}
-                                        </span>
-                                      )}
                                     </div>
                                     <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                                       <svg class="h-4 w-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -580,22 +625,19 @@ const firstLesson = lessons[0];
           
           const visitedSlugs = courseProgress.visitedLessons.map(lesson => lesson.slug);
           
-          // Add visited indicators to lesson links
-          const lessonLinks = document.querySelectorAll('a[href^="/courses/"]');
-          lessonLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            const lessonSlug = href.split('/').slice(3).join('/'); // Remove /courses/[course]/
+          // Update lesson indicators
+          const lessonIndicators = document.querySelectorAll('.lesson-indicator');
+          lessonIndicators.forEach(indicator => {
+            const lessonSlug = indicator.getAttribute('data-lesson-slug');
+            const numberElement = indicator.querySelector('.lesson-number');
+            const checkmarkElement = indicator.querySelector('.lesson-checkmark');
             
             if (visitedSlugs.includes(lessonSlug)) {
-              // Add visited indicator
-              const indicator = document.createElement('div');
-              indicator.className = 'w-2 h-2 bg-primary rounded-full ml-auto';
-              indicator.title = 'Visited';
-              
-              const container = link.querySelector('.flex');
-              if (container) {
-                container.appendChild(indicator);
-              }
+              // Show checkmark, hide number
+              numberElement.classList.add('hidden');
+              checkmarkElement.classList.remove('hidden');
+              indicator.classList.add('bg-primary', 'text-primary-foreground', 'border-primary');
+              indicator.classList.remove('bg-gradient-to-br', 'from-primary/20', 'to-primary/10', 'text-primary', 'border-primary/20');
             }
           });
         }
