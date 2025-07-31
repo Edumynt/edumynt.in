@@ -91,33 +91,8 @@ const lessonContent = lesson.body;
       pageType="lesson" 
       currentCourse={course} 
       currentLesson={slug} 
-      lessonContent={lessonContent}
     />
     
-    <!-- Breadcrumb -->
-    <nav class="border-b bg-muted/30">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="flex items-center py-4 text-sm font-medium">
-          {breadcrumbs.map((crumb, index) => (
-            <div class="flex items-center">
-              {crumb.url ? (
-                <Button variant="ghost" href={crumb.url} class="text-sm p-0 h-auto font-medium hover:text-primary transition-colors">
-                  {crumb.name}
-                </Button>
-              ) : (
-                <span class="text-muted-foreground font-medium">{crumb.name}</span>
-              )}
-              {index < breadcrumbs.length - 1 && (
-                <svg class="mx-2 h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </nav>
-
     <div class="flex min-h-screen">
       <!-- Desktop Sidebar -->
       <aside class="hidden lg:flex w-80 bg-card border-r flex-col">

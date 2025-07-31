@@ -6,10 +6,9 @@ export interface Props {
   pageType: 'home' | 'courses' | 'course' | 'lesson';
   currentCourse?: string;
   currentLesson?: string;
-  lessonContent?: string;
 }
 
-const { pageType, currentCourse, currentLesson, lessonContent } = Astro.props;
+const { pageType, currentCourse, currentLesson } = Astro.props;
 
 // Get all courses for navigation
 const courses = await getCollection('courses');
@@ -48,257 +47,153 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
     }))
   };
 });
-
-// Extract headings from lesson content for TOC
-function extractHeadings(content) {
-  if (!content) return [];
-  
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-  const headings = [];
-  let match;
-  
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-    
-    headings.push({
-      level,
-      text,
-      id,
-      children: []
-    });
-  }
-  
-  // Build hierarchy
-  const hierarchicalHeadings = [];
-  const stack = [];
-  
-  headings.forEach(heading => {
-    while (stack.length > 0 && stack[stack.length - 1].level >= heading.level) {
-      stack.pop();
-    }
-    
-    if (stack.length === 0) {
-      hierarchicalHeadings.push(heading);
-    } else {
-      stack[stack.length - 1].children.push(heading);
-    }
-    
-    stack.push(heading);
-  });
-  
-  return hierarchicalHeadings;
-}
-
-const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
 ---
 
-<!-- Sidebar Overlay -->
-<div class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm opacity-0 invisible transition-all duration-300" id="sidebarOverlay"></div>
-
-<!-- TOC Overlay -->
-<div class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm opacity-0 invisible transition-all duration-300" id="tocOverlay"></div>
-
-<!-- Main Sidebar (left) -->
-<aside class="fixed top-0 left-0 z-50 h-full w-80 max-w-[85vw] bg-card/95 backdrop-blur-xl border-r border-border/50 shadow-2xl transform -translate-x-full transition-all duration-300 ease-in-out flex flex-col rounded-r-2xl" id="sidebar">
-  <!-- Sidebar Header -->
-  <div class="flex items-center justify-between p-6 border-b border-border/50 rounded-tr-2xl bg-gradient-to-r from-background/50 to-muted/30">
-    <h3 class="text-lg font-display font-semibold">Navigation</h3>
-    <Button variant="ghost" size="icon" id="closeSidebar" class="h-8 w-8">
+<!-- Settings Drawer (right) -->
+<div class="fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm opacity-0 invisible transition-all duration-300" id="settingsOverlay"></div>
+<aside class="fixed top-0 right-0 z-[80] h-full w-80 max-w-[85vw] bg-card/95 backdrop-blur-xl border-l border-border/50 shadow-2xl transform translate-x-full transition-all duration-300 ease-in-out flex flex-col rounded-l-2xl" id="settingsDrawer">
+  <!-- Settings Header -->
+  <div class="flex items-center justify-between p-6 border-b border-border/50 rounded-tl-2xl bg-gradient-to-l from-background/50 to-muted/30">
+    <h3 class="text-lg font-display font-semibold">Settings & Navigation</h3>
+    <Button variant="ghost" size="icon" id="closeSettings" class="h-8 w-8">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </Button>
   </div>
 
-  <!-- Sidebar Content -->
-  <nav class="flex-1 overflow-y-auto p-4 space-y-2 rounded-br-2xl">
-    <!-- Courses Navigation -->
-    {pageType === 'home' && (
-      <div class="space-y-1">
-        <div class="flex items-center justify-between px-3 py-2">
-          <a href="/courses" class={`flex items-center gap-3 flex-1 transition-colors ${pageType === 'courses' ? 'text-primary' : 'hover:text-primary'}`}>
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            <span class="font-medium">Courses</span>
-          </a>
-          <Button variant="ghost" size="icon" id="coursesDropdown" class="h-8 w-8 transition-transform duration-200">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </Button>
+  <!-- Settings Content -->
+  <div class="flex-1 overflow-y-auto p-4 space-y-6 rounded-bl-2xl">
+    <!-- Theme Toggle Section -->
+    <div class="p-4 bg-muted/30 rounded-xl border border-border/30">
+      <div class="flex items-center justify-between">
+        <div>
+          <h4 class="font-semibold text-foreground">Dark Mode</h4>
+          <p class="text-sm text-muted-foreground">Toggle between light and dark themes</p>
         </div>
-        
-        <div class="overflow-hidden transition-all duration-300 max-h-0" id="coursesDropdownContent">
-          <div class="bg-muted/30 rounded-xl p-3 space-y-2 border border-border/30">
-            {uniqueCourses.map((course) => (
-              <a href={`/courses/${course.slug}`} class={`block px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.02] ${currentCourse === course.slug ? 'bg-primary/15 text-primary shadow-sm border border-primary/20' : 'hover:bg-background/90 hover:shadow-sm'}`}>
-                <div class="font-semibold text-sm">{course.name}</div>
-                <div class="text-xs text-muted-foreground font-normal">{course.chapters.length} chapters</div>
-              </a>
-            ))}
-          </div>
-        </div>
+        <Button variant="ghost" size="icon" id="themeToggle" class="h-10 w-10">
+          <svg class="h-5 w-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg class="h-5 w-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </Button>
       </div>
-    )}
-    
-    <!-- Hierarchical Course Navigation -->
-    {(pageType === 'courses' || pageType === 'course' || pageType === 'lesson') && (
-      <div class="space-y-2">
-        {uniqueCourses.map((course) => (
-          <div class="space-y-1">
-            <!-- Course Header -->
-            <div class="flex items-center justify-between px-3 py-2 bg-muted/20 rounded-xl border border-border/20 backdrop-blur-sm">
-              <a href={`/courses/${course.slug}`} class={`flex items-center gap-3 flex-1 transition-colors ${currentCourse === course.slug ? 'text-primary' : 'hover:text-primary'}`}>
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                <span class="font-semibold text-sm">{course.name}</span>
-              </a>
-              <Button variant="ghost" size="icon" class="h-6 w-6 course-expand-btn transition-transform duration-200" data-target={`course-${course.slug}`}>
-                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </Button>
-            </div>
-            
-            <!-- Course Content -->
-            <div class="overflow-hidden transition-all duration-300 max-h-0 ml-4" id={`course-${course.slug}`}>
-              <!-- Root Lessons -->
-              {course.rootLessons && course.rootLessons.length > 0 && (
-                <div class="space-y-1 py-2">
-                  {course.rootLessons.map((lesson) => {
-                    const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
-                    const isActive = currentLesson && lesson.slug.includes(currentLesson);
-                    return (
-                      <a href={lessonUrl} class={`block px-3 py-2 text-sm font-medium rounded-lg border-l-2 transition-all duration-200 hover:scale-[1.01] ${isActive ? 'border-primary bg-primary/15 text-primary font-semibold shadow-sm' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20 hover:shadow-sm'}`}>
-                        {lesson.data.title}
-                      </a>
-                    );
-                  })}
-                </div>
-              )}
-              
-              <!-- Chapters -->
-              {course.chapters && course.chapters.length > 0 && course.chapters.map((chapter) => (
-                <div class="space-y-1 py-1">
-                  <div class="flex items-center justify-between px-3 py-1">
-                    <span class="text-sm font-semibold text-muted-foreground">{chapter.name}</span>
-                    <Button variant="ghost" size="icon" class="h-5 w-5 chapter-expand-btn transition-transform duration-200" data-target={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
-                      <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </Button>
-                  </div>
-                  
-                  <div class="overflow-hidden transition-all duration-300 max-h-0 ml-3" id={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
-                    <div class="space-y-1 py-1">
-                      {chapter.lessons.map((lesson) => {
-                        const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
-                        const isActive = currentLesson && lesson.slug.includes(currentLesson);
-                        return (
-                          <a href={lessonUrl} class={`block px-3 py-2 text-sm font-medium rounded-lg border-l-2 transition-all duration-200 hover:scale-[1.01] ${isActive ? 'border-primary bg-primary/15 text-primary font-semibold shadow-sm' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20 hover:shadow-sm'}`}>
-                            {lesson.data.title}
-                          </a>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
+    </div>
+
+    <!-- Navigation Section -->
+    <div class="space-y-2">
+      <h4 class="text-sm font-bold text-muted-foreground uppercase tracking-wider px-2">Navigation</h4>
+      
+      <!-- Courses Navigation -->
+      {pageType === 'home' && (
+        <div class="space-y-1">
+          <div class="flex items-center justify-between px-3 py-2">
+            <a href="/courses" class={`flex items-center gap-3 flex-1 transition-colors ${pageType === 'courses' ? 'text-primary' : 'hover:text-primary'}`}>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span class="font-medium">Courses</span>
+            </a>
+            <Button variant="ghost" size="icon" id="coursesDropdown" class="h-8 w-8 transition-transform duration-200">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </Button>
+          </div>
+          
+          <div class="overflow-hidden transition-all duration-300 max-h-0" id="coursesDropdownContent">
+            <div class="bg-muted/30 rounded-xl p-3 space-y-2 border border-border/30">
+              {uniqueCourses.map((course) => (
+                <a href={`/courses/${course.slug}`} class={`block px-4 py-3 rounded-lg transition-all duration-200 hover:scale-[1.02] ${currentCourse === course.slug ? 'bg-primary/15 text-primary shadow-sm border border-primary/20' : 'hover:bg-background/90 hover:shadow-sm'}`}>
+                  <div class="font-semibold text-sm">{course.name}</div>
+                  <div class="text-xs text-muted-foreground font-normal">{course.chapters.length} chapters</div>
+                </a>
               ))}
             </div>
           </div>
-        ))}
-      </div>
-    )}
-  </nav>
-</aside>
-
-<!-- TOC Drawer (right) -->
-{pageType === 'lesson' && tocHeadings.length > 0 && (
-  <aside class="fixed top-0 right-0 z-[60] h-full w-80 max-w-[85vw] bg-card/95 backdrop-blur-xl border-l border-border/50 shadow-2xl transform translate-x-full transition-all duration-300 ease-in-out flex flex-col rounded-l-2xl" id="tocDrawer">
-    <!-- TOC Header -->
-    <div class="flex items-center justify-between p-6 border-b border-border/50 rounded-tl-2xl bg-gradient-to-l from-background/50 to-muted/30">
-      <h3 class="text-lg font-display font-semibold">Table of Contents</h3>
-      <Button variant="ghost" size="icon" id="closeTocDrawer" class="h-8 w-8">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </Button>
-    </div>
-
-    <!-- TOC Content -->
-    <nav class="flex-1 overflow-y-auto p-4 rounded-bl-2xl">
-      <div class="space-y-1">
-        {tocHeadings.map((heading) => (
-          <div class="space-y-1">
-            <a href={`#${heading.id}`} class={`block px-3 py-2 text-sm font-medium rounded-lg border-l-2 border-transparent hover:bg-accent hover:border-accent-foreground/20 transition-all duration-200 hover:scale-[1.01] hover:shadow-sm toc-link`} data-level={heading.level} data-id={heading.id}>
-              {heading.text}
-            </a>
-            {heading.children.length > 0 && (
-              <div class="ml-4 space-y-1">
-                {heading.children.map((child) => (
-                  <a href={`#${child.id}`} class="block px-3 py-1.5 text-xs font-medium rounded-lg border-l-2 border-transparent hover:bg-accent hover:border-accent-foreground/20 transition-all duration-200 hover:scale-[1.01] text-muted-foreground hover:shadow-sm toc-link" data-level={child.level} data-id={child.id}>
-                    {child.text}
-                  </a>
+        </div>
+      )}
+      
+      <!-- Hierarchical Course Navigation -->
+      {(pageType === 'courses' || pageType === 'course' || pageType === 'lesson') && (
+        <div class="space-y-2">
+          {uniqueCourses.map((course) => (
+            <div class="space-y-1">
+              <!-- Course Header -->
+              <div class="flex items-center justify-between px-3 py-2 bg-muted/20 rounded-xl border border-border/20 backdrop-blur-sm">
+                <a href={`/courses/${course.slug}`} class={`flex items-center gap-3 flex-1 transition-colors ${currentCourse === course.slug ? 'text-primary' : 'hover:text-primary'}`}>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span class="font-semibold text-sm">{course.name}</span>
+                </a>
+                <Button variant="ghost" size="icon" class="h-6 w-6 course-expand-btn transition-transform duration-200" data-target={`course-${course.slug}`}>
+                  <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </Button>
+              </div>
+              
+              <!-- Course Content -->
+              <div class="overflow-hidden transition-all duration-300 max-h-0 ml-4" id={`course-${course.slug}`}>
+                <!-- Root Lessons -->
+                {course.rootLessons && course.rootLessons.length > 0 && (
+                  <div class="space-y-1 py-2">
+                    {course.rootLessons.map((lesson) => {
+                      const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
+                      const isActive = currentLesson && lesson.slug.includes(currentLesson);
+                      return (
+                        <a href={lessonUrl} class={`block px-3 py-2 text-sm font-medium rounded-lg border-l-2 transition-all duration-200 hover:scale-[1.01] ${isActive ? 'border-primary bg-primary/15 text-primary font-semibold shadow-sm' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20 hover:shadow-sm'}`}>
+                          {lesson.data.title}
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+                
+                <!-- Chapters -->
+                {course.chapters && course.chapters.length > 0 && course.chapters.map((chapter) => (
+                  <div class="space-y-1 py-1">
+                    <div class="flex items-center justify-between px-3 py-1">
+                      <span class="text-sm font-semibold text-muted-foreground">{chapter.name}</span>
+                      <Button variant="ghost" size="icon" class="h-5 w-5 chapter-expand-btn transition-transform duration-200" data-target={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
+                        <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </Button>
+                    </div>
+                    
+                    <div class="overflow-hidden transition-all duration-300 max-h-0 ml-3" id={`chapter-${course.slug}-${chapter.name.replace(/\s+/g, '-')}`}>
+                      <div class="space-y-1 py-1">
+                        {chapter.lessons.map((lesson) => {
+                          const lessonUrl = `/courses/${course.slug}/${lesson.slug.split('/').slice(1).join('/')}`;
+                          const isActive = currentLesson && lesson.slug.includes(currentLesson);
+                          return (
+                            <a href={lessonUrl} class={`block px-3 py-2 text-sm font-medium rounded-lg border-l-2 transition-all duration-200 hover:scale-[1.01] ${isActive ? 'border-primary bg-primary/15 text-primary font-semibold shadow-sm' : 'border-transparent hover:bg-accent hover:border-accent-foreground/20 hover:shadow-sm'}`}>
+                              {lesson.data.title}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </nav>
-  </aside>
-)}
-
-<!-- Main Navigation Bar -->
-<header class="sticky top-0 z-30 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300" id="mainHeader">
-  <div class="flex h-16 items-center justify-between px-4 max-w-7xl mx-auto">
-    <!-- Menu Button -->
-    <Button variant="ghost" size="icon" id="menuButton" class="lg:hidden">
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </Button>
-    
-    <!-- Logo -->
-    <div class="flex items-center space-x-2">
-      <a href="/" class="flex items-center space-x-2">
-        <span class="text-xl font-display font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Edumynt</span>
-      </a>
-    </div>
-    
-    <!-- Actions -->
-    <div class="flex items-center space-x-2">
-      <!-- Theme Toggle -->
-      <Button variant="ghost" size="icon" id="themeToggle">
-        <svg class="h-5 w-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="5"/>
-          <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-        </svg>
-        <svg class="h-5 w-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2"/>
-        </svg>
-      </Button>
-      
-      <!-- TOC Toggle (lesson pages only) -->
-      {pageType === 'lesson' && tocHeadings.length > 0 && (
-        <Button variant="ghost" size="icon" id="tocToggle" class="hidden">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-          </svg>
-        </Button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   </div>
-</header>
+</aside>
 
 <!-- Bottom Navigation Bar -->
 <nav class="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t">
-  <div class="flex items-center justify-around px-4 py-3 max-w-7xl mx-auto">
-    <!-- Home Button (always visible) -->
+  <div class="flex items-center justify-around px-2 py-3 max-w-7xl mx-auto">
+    <!-- Home Button -->
     <a href="/" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
       <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -306,39 +201,30 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
       <span class="text-xs font-medium">Home</span>
     </a>
     
-    <!-- Courses Button / Current Course Button -->
-    {pageType === 'lesson' && currentCourse ? (
-      <a href={`/courses/${currentCourse}`} class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-        <span class="text-xs font-medium truncate max-w-16">Course</span>
-      </a>
-    ) : (
-      <a href="/courses" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-        <span class="text-xs font-medium">Courses</span>
-      </a>
-    )}
+    <!-- Courses Button -->
+    <a href="/courses" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      <span class="text-xs font-medium">Courses</span>
+    </a>
     
-    <!-- Test Button (non-lesson pages) / Outline Button (lesson pages only) -->
-    {pageType === 'lesson' && tocHeadings.length > 0 ? (
-      <button id="bottomTocToggle" class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-        </svg>
-        <span class="text-xs font-medium">Outline</span>
-      </button>
-    ) : (
-      <button class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors opacity-50 cursor-not-allowed">
-        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <span class="text-xs font-medium">Tests</span>
-      </button>
-    )}
+    <!-- Tests Button -->
+    <button class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <span class="text-xs font-medium">Tests</span>
+    </button>
+    
+    <!-- Settings Button -->
+    <button id="settingsButton" class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <span class="text-xs font-medium">Settings</span>
+    </button>
   </div>
 </nav>
 
@@ -349,17 +235,11 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
     const sunIcon = themeToggle?.querySelector('.sun-icon');
     const moonIcon = themeToggle?.querySelector('.moon-icon');
     
-    // Sidebar elements
-    const menuButton = document.getElementById('menuButton');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const closeSidebar = document.getElementById('closeSidebar');
-    
-    // TOC drawer elements
-    const tocDrawer = document.getElementById('tocDrawer');
-    const tocOverlay = document.getElementById('tocOverlay');
-    const tocToggle = document.getElementById('tocToggle');
-    const closeTocDrawer = document.getElementById('closeTocDrawer');
+    // Settings drawer elements
+    const settingsButton = document.getElementById('settingsButton');
+    const settingsDrawer = document.getElementById('settingsDrawer');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const closeSettings = document.getElementById('closeSettings');
     
     // Load saved theme or default to light
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -444,43 +324,22 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
       updateThemeIcon(newTheme);
     });
 
-    // Sidebar functionality
-    function openSidebar() {
-      sidebar?.classList.remove('-translate-x-full');
-      sidebarOverlay?.classList.remove('opacity-0', 'invisible');
+    // Settings drawer functionality
+    function openSettings() {
+      settingsDrawer?.classList.remove('translate-x-full');
+      settingsOverlay?.classList.remove('opacity-0', 'invisible');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeSidebarFunc() {
-      sidebar?.classList.add('-translate-x-full');
-      sidebarOverlay?.classList.add('opacity-0', 'invisible');
+    function closeSettingsFunc() {
+      settingsDrawer?.classList.add('translate-x-full');
+      settingsOverlay?.classList.add('opacity-0', 'invisible');
       document.body.style.overflow = '';
     }
 
-    menuButton?.addEventListener('click', openSidebar);
-    closeSidebar?.addEventListener('click', closeSidebarFunc);
-    sidebarOverlay?.addEventListener('click', closeSidebarFunc);
-
-    // TOC drawer functionality
-    function openTocDrawer() {
-      tocDrawer?.classList.remove('translate-x-full');
-      tocOverlay?.classList.remove('opacity-0', 'invisible');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeTocDrawerFunc() {
-      tocDrawer?.classList.add('translate-x-full');
-      tocOverlay?.classList.add('opacity-0', 'invisible');
-      document.body.style.overflow = '';
-    }
-
-    tocToggle?.addEventListener('click', openTocDrawer);
-    closeTocDrawer?.addEventListener('click', closeTocDrawerFunc);
-    tocOverlay?.addEventListener('click', closeTocDrawerFunc);
-
-    // Bottom TOC toggle functionality
-    const bottomTocToggle = document.getElementById('bottomTocToggle');
-    bottomTocToggle?.addEventListener('click', openTocDrawer);
+    settingsButton?.addEventListener('click', openSettings);
+    closeSettings?.addEventListener('click', closeSettingsFunc);
+    settingsOverlay?.addEventListener('click', closeSettingsFunc);
 
     // Dropdown functionality
     const coursesDropdown = document.getElementById('coursesDropdown');
@@ -516,54 +375,6 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
       });
     });
 
-    // TOC highlighting
-    function highlightActiveHeading() {
-      if (!tocDrawer) return;
-
-      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      const tocLinks = tocDrawer.querySelectorAll('.toc-link');
-      
-      if (headings.length === 0 || tocLinks.length === 0) return;
-
-      const scrollPosition = window.scrollY + 100;
-      let activeHeading = null;
-      
-      headings.forEach(heading => {
-        const headingTop = heading.offsetTop;
-        if (scrollPosition >= headingTop) {
-          activeHeading = heading;
-        }
-      });
-
-      tocLinks.forEach(link => {
-        link.classList.remove('border-primary', 'bg-primary/15', 'text-primary', 'shadow-sm');
-        link.classList.add('border-transparent');
-      });
-
-      if (activeHeading) {
-        const headingId = activeHeading.id || activeHeading.textContent.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-        const activeTocLink = tocDrawer.querySelector(`[data-id="${headingId}"]`);
-        if (activeTocLink) {
-          activeTocLink.classList.remove('border-transparent');
-          activeTocLink.classList.add('border-primary', 'bg-primary/15', 'text-primary', 'shadow-sm');
-        }
-      }
-    }
-
-    if (tocDrawer) {
-      // Ensure headings have IDs
-      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      headings.forEach(heading => {
-        if (!heading.id) {
-          const id = heading.textContent.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-          heading.id = id;
-        }
-      });
-
-      window.addEventListener('scroll', highlightActiveHeading);
-      setTimeout(highlightActiveHeading, 100);
-    }
-
     // Auto-expand current course/chapter
     const currentUrl = window.location.pathname;
     if (currentUrl.includes('/courses/')) {
@@ -578,43 +389,5 @@ const tocHeadings = pageType === 'lesson' ? extractHeadings(lessonContent) : [];
         currentCourseBtn.classList.add('rotate-180');
       }
     }
-
-    // Header scroll behavior
-    let lastScrollY = window.scrollY;
-    let isScrollingUp = false;
-    let scrollTimeout;
-    const header = document.getElementById('mainHeader');
-    
-    function handleScroll() {
-      const currentScrollY = window.scrollY;
-      
-      // Don't hide header when at the very top
-      if (currentScrollY <= 10) {
-        header?.classList.remove('-translate-y-full');
-        lastScrollY = currentScrollY;
-        return;
-      }
-      
-      // Determine scroll direction
-      if (currentScrollY > lastScrollY) {
-        // Scrolling down - hide header
-        header?.classList.add('-translate-y-full');
-        isScrollingUp = false;
-      } else if (currentScrollY < lastScrollY) {
-        // Scrolling up - show header
-        header?.classList.remove('-translate-y-full');
-        isScrollingUp = true;
-      }
-      
-      lastScrollY = currentScrollY;
-    }
-    
-    // Throttled scroll handler
-    function throttledScroll() {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(handleScroll, 10);
-    }
-    
-    window.addEventListener('scroll', throttledScroll, { passive: true });
   });
 </script>
