@@ -608,6 +608,50 @@ const firstLesson = lessons[0];
           const tracker = new CourseProgressTracker();
           const lastVisited = tracker.getLastVisitedCourse();
           
+          // Check for scroll to specific lesson from congratulations modal
+          const scrollToLessonSlug = sessionStorage.getItem('scrollToLesson');
+          if (scrollToLessonSlug) {
+            sessionStorage.removeItem('scrollToLesson'); // Clear after use
+            
+            // Find and scroll to the specific lesson
+            const targetLessonUrl = `/courses/${currentCourse}/${scrollToLessonSlug}`;
+            const lessonLinks = document.querySelectorAll('a[href]');
+            
+            lessonLinks.forEach(link => {
+              if (link.getAttribute('href') === targetLessonUrl) {
+                const sectionContainer = link.closest('.section-content');
+                if (sectionContainer) {
+                  const toggleButton = document.querySelector(`[data-target="${sectionContainer.id}"]`);
+                  if (toggleButton) {
+                    const icon = toggleButton.querySelector('.toggle-icon');
+                    sectionContainer.style.maxHeight = sectionContainer.scrollHeight + 'px';
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                    
+                    // Scroll to the specific lesson with highlight effect
+                    setTimeout(() => {
+                      link.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      
+                      // Add highlight effect
+                      link.style.background = 'rgba(var(--primary), 0.1)';
+                      link.style.transform = 'scale(1.02)';
+                      link.style.transition = 'all 0.3s ease';
+                      link.style.boxShadow = '0 0 0 2px rgba(var(--primary), 0.2)';
+                      link.style.borderRadius = '8px';
+                      
+                      // Remove highlight after 3 seconds
+                      setTimeout(() => {
+                        link.style.background = '';
+                        link.style.transform = '';
+                        link.style.boxShadow = '';
+                      }, 3000);
+                    }, 300);
+                  }
+                }
+              }
+            });
+            return; // Exit early, don't do normal expansion logic
+          }
+          
           // Check if user has visited this course before
           const hasVisitedCourse = lastVisited && lastVisited.courseSlug === currentCourse;
           
