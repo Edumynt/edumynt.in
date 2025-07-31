@@ -220,4 +220,107 @@ const lessonContent = lesson.body;
       </main>
     </div>
   </body>
+  
+  <script>
+    // Course Progress Tracking System
+    class CourseProgressTracker {
+      constructor() {
+        this.storageKey = 'edumynt_course_progress';
+      }
+      
+      getProgress() {
+        try {
+          const stored = localStorage.getItem(this.storageKey);
+          return stored ? JSON.parse(stored) : {};
+        } catch (e) {
+          console.warn('Failed to load course progress:', e);
+          return {};
+        }
+      }
+      
+      saveProgress(progress) {
+        try {
+          localStorage.setItem(this.storageKey, JSON.stringify(progress));
+        } catch (e) {
+          console.warn('Failed to save course progress:', e);
+        }
+      }
+      
+      trackLessonVisit(courseSlug, lessonSlug, lessonTitle, courseTitle) {
+        const progress = this.getProgress();
+        const timestamp = new Date().toISOString();
+        
+        // Update last visited course
+        progress.lastVisitedCourse = {
+          courseSlug,
+          lessonSlug,
+          lessonTitle,
+          courseTitle,
+          timestamp
+        };
+        
+        // Update course-specific progress
+        if (!progress.courseProgress) progress.courseProgress = {};
+        if (!progress.courseProgress[courseSlug]) {
+          progress.courseProgress[courseSlug] = {
+            visitedLessons: [],
+            lastVisited: null
+          };
+        }
+        
+        const courseProgress = progress.courseProgress[courseSlug];
+        courseProgress.lastVisited = {
+          lessonSlug,
+          lessonTitle,
+          timestamp
+        };
+        
+        // Add to visited lessons if not already there
+        if (!courseProgress.visitedLessons.some(lesson => lesson.slug === lessonSlug)) {
+          courseProgress.visitedLessons.push({
+            slug: lessonSlug,
+            title: lessonTitle,
+            firstVisit: timestamp
+          });
+        }
+        
+        this.saveProgress(progress);
+        
+        // Dispatch custom event for other components to listen
+        window.dispatchEvent(new CustomEvent('courseProgressUpdated', {
+          detail: { courseSlug, lessonSlug, lessonTitle, courseTitle }
+        }));
+      }
+      
+      getLastVisitedCourse() {
+        const progress = this.getProgress();
+        return progress.lastVisitedCourse || null;
+      }
+      
+      getCourseProgress(courseSlug) {
+        const progress = this.getProgress();
+        return progress.courseProgress?.[courseSlug] || null;
+      }
+    }
+    
+    // Initialize tracker and track current lesson visit
+    document.addEventListener('DOMContentLoaded', function() {
+      const tracker = new CourseProgressTracker();
+      
+      // Get current lesson data from URL and page
+      const pathParts = window.location.pathname.split('/');
+      const courseSlug = pathParts[2]; // /courses/[course]/...
+      const lessonSlug = pathParts.slice(3).join('/'); // [...slug]
+      
+      // Get lesson title from page
+      const lessonTitle = document.querySelector('h1')?.textContent?.trim() || 'Unknown Lesson';
+      const courseTitle = document.title.split(' - ')[1] || 'Unknown Course';
+      
+      // Track this lesson visit
+      if (courseSlug && lessonSlug) {
+        tracker.trackLessonVisit(courseSlug, lessonSlug, lessonTitle, courseTitle);
+        console.log('Tracked lesson visit:', { courseSlug, lessonSlug, lessonTitle });
+      }
+    });
+  </script>
 </html>

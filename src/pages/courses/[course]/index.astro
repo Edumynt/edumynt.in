@@ -303,6 +303,168 @@ const firstLesson = lessons[0];
       document.addEventListener('DOMContentLoaded', function() {
         const toggleButtons = document.querySelectorAll('.chapter-toggle');
         
+        // Course Progress Tracking System
+        class CourseProgressTracker {
+          constructor() {
+            this.storageKey = 'edumynt_course_progress';
+          }
+          
+          getProgress() {
+            try {
+              const stored = localStorage.getItem(this.storageKey);
+              return stored ? JSON.parse(stored) : {};
+            } catch (e) {
+              console.warn('Failed to load course progress:', e);
+              return {};
+            }
+          }
+          
+          getCourseProgress(courseSlug) {
+            const progress = this.getProgress();
+            return progress.courseProgress?.[courseSlug] || null;
+          }
+          
+          getLastVisitedCourse() {
+            const progress = this.getProgress();
+            return progress.lastVisitedCourse || null;
+          }
+        }
+        
+        // Initialize progress tracker
+        const tracker = new CourseProgressTracker();
+        
+        // Auto-scroll functionality
+        function handleAutoScroll() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const shouldContinue = urlParams.get('continue') === 'true';
+          
+          if (!shouldContinue) return;
+          
+          const currentCourse = window.location.pathname.split('/')[2]; // /courses/[course]/
+          const lastVisited = tracker.getLastVisitedCourse();
+          
+          if (!lastVisited || lastVisited.courseSlug !== currentCourse) {
+            console.warn('No matching last visited course found');
+            return;
+          }
+          
+          console.log('Auto-scrolling to lesson:', lastVisited.lessonSlug);
+          
+          // Find the lesson link to scroll to
+          const targetLessonUrl = `/courses/${lastVisited.courseSlug}/${lastVisited.lessonSlug}`;
+          const lessonLinks = document.querySelectorAll('a[href]');
+          let targetLink = null;
+          
+          lessonLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === targetLessonUrl) {
+              targetLink = link;
+            }
+          });
+          
+          if (!targetLink) {
+            console.warn('Could not find lesson link to scroll to:', targetLessonUrl);
+            console.log('Available lesson links:', Array.from(lessonLinks).map(l => l.getAttribute('href')));
+            return;
+          }
+          
+          console.log('Found target link:', targetLink);
+          
+          // Expand parent sections if needed
+          function expandParentSections(element) {
+            let current = element.parentElement;
+            
+            while (current && current !== document.body) {
+              if (current.classList?.contains('section-content')) {
+                const toggleButton = document.querySelector(`[data-target="${current.id}"]`);
+                if (toggleButton) {
+                  const icon = toggleButton.querySelector('.toggle-icon');
+                  current.style.maxHeight = current.scrollHeight + 'px';
+                  if (icon) icon.style.transform = 'rotate(180deg)';
+                  console.log('Expanded section:', current.id);
+                }
+              }
+              current = current.parentElement;
+            }
+          }
+          
+          // Expand sections containing the target lesson
+          expandParentSections(targetLink);
+          
+          // Scroll to the lesson with a delay to allow expansions to complete
+          setTimeout(() => {
+            // Double-check if sections need re-expansion after DOM updates
+            const targetRect = targetLink.getBoundingClientRect();
+            if (targetRect.height === 0) {
+              console.log('Target not visible, re-expanding sections');
+              expandParentSections(targetLink);
+              
+              setTimeout(() => {
+                performScroll();
+              }, 200);
+            } else {
+              performScroll();
+            }
+          }, 300);
+          
+          function performScroll() {
+            targetLink.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+            
+            console.log('Scrolled to target lesson');
+            
+            // Add highlight effect
+            targetLink.style.background = 'rgba(var(--primary), 0.1)';
+            targetLink.style.transform = 'scale(1.02)';
+            targetLink.style.transition = 'all 0.3s ease';
+            targetLink.style.boxShadow = '0 0 0 2px rgba(var(--primary), 0.2)';
+            targetLink.style.borderRadius = '8px';
+            
+            // Remove highlight after 3 seconds
+            setTimeout(() => {
+              targetLink.style.background = '';
+              targetLink.style.transform = '';
+              targetLink.style.boxShadow = '';
+            }, 3000);
+            
+            // Remove continue parameter from URL
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+          }
+        }
+        
+        // Add visual progress indicators
+        function addProgressIndicators() {
+          const currentCourse = window.location.pathname.split('/')[2];
+          const courseProgress = tracker.getCourseProgress(currentCourse);
+          
+          if (!courseProgress || !courseProgress.visitedLessons) return;
+          
+          const visitedSlugs = courseProgress.visitedLessons.map(lesson => lesson.slug);
+          
+          // Add visited indicators to lesson links
+          const lessonLinks = document.querySelectorAll('a[href^="/courses/"]');
+          lessonLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            const lessonSlug = href.split('/').slice(3).join('/'); // Remove /courses/[course]/
+            
+            if (visitedSlugs.includes(lessonSlug)) {
+              // Add visited indicator
+              const indicator = document.createElement('div');
+              indicator.className = 'w-2 h-2 bg-primary rounded-full ml-auto';
+              indicator.title = 'Visited';
+              
+              const container = link.querySelector('.flex');
+              if (container) {
+                container.appendChild(indicator);
+              }
+            }
+          });
+        }
+        
+        // Toggle button functionality
         toggleButtons.forEach(button => {
           button.addEventListener('click', function() {
             const targetId = this.getAttribute('data-target');
@@ -324,6 +486,10 @@ const firstLesson = lessons[0];
             }
           });
         });
+        
+        // Initialize features
+        handleAutoScroll();
+        addProgressIndicators();
       });
     </script>
   </body>
