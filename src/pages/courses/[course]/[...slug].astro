@@ -90,13 +90,13 @@ const lessonContent = lesson.body;
     <!-- Fixed Top Bar -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       <div class="flex items-center gap-4 px-4 py-3">
-        <!-- Back Button -->
+        <!-- Back to Course Button -->
         <button 
-          onclick="window.history.back()" 
+          id="backToCourse" 
           class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted/80 transition-colors flex-shrink-0"
         >
           <svg class="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
         
@@ -411,6 +411,17 @@ const lessonContent = lesson.body;
       // Track this lesson visit
       if (courseSlug && lessonSlug) {
         tracker.trackLessonVisit(courseSlug, lessonSlug, lessonTitle, courseTitle);
+      }
+      
+      // Handle back to course button
+      const backToCourseBtn = document.getElementById('backToCourse');
+      if (backToCourseBtn) {
+        backToCourseBtn.addEventListener('click', () => {
+          // Store the current lesson for scrolling
+          sessionStorage.setItem('scrollToLesson', lessonSlug);
+          // Navigate to course page
+          window.location.href = `/courses/${courseSlug}`;
+        });
       }
     });
   </script>
