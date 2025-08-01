@@ -147,7 +147,7 @@
   }
   
   a:hover {
-    @apply underline decoration-primary/60;
+    @apply no-underline;
   }
   
   /* Text Emphasis */
@@ -301,7 +301,7 @@
 }
 
 .prose a:hover {
-  @apply underline decoration-primary/60;
+  @apply no-underline;
 }
 
 .prose strong {
