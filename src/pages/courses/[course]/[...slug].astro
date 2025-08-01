@@ -155,83 +155,30 @@ const lessonContent = lesson.body;
             <Content />
           </div>
 
-          <!-- Finish Lesson Button -->
-          <div class="pt-8 border-t flex justify-center">
-            <button 
-              id="finishLessonBtn"
-              class="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors duration-200 flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105"
-              style="opacity: 1; pointer-events: auto;"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Finish Lesson
-            </button>
+          <!-- Next Lesson Button -->
+          <div class="pt-8 border-t">
+            {nextLesson ? (
+              <a 
+                href={generateLessonUrl(nextLesson)}
+                class="w-full bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 block text-center"
+              >
+                <span>Next: {nextLesson.data.title}</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m-5-5H6" />
+                </svg>
+              </a>
+            ) : (
+              <div class="w-full bg-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-3 shadow-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>🎓 Course Complete!</span>
+              </div>
+            )}
           </div>
         </article>
       </div>
     </main>
-    <!-- Congratulations Modal -->
-    <div id="congratsModal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500">
-      <div class="bg-background rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-all duration-500 relative" id="congratsContent">
-        <!-- Close Button -->
-        <button 
-          id="closeCongratsBtn"
-          class="absolute top-4 right-4 w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
-        >
-          <svg class="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        
-        <!-- Congratulations Content -->
-        <div class="text-center space-y-6">
-          <!-- Trophy Animation -->
-          <div class="w-24 h-24 mx-auto mb-6 animate-bounce">
-            <div class="w-full h-full bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
-              <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C13.1 2 14 2.9 14 4V8C14 9.1 13.1 10 12 10S10 9.1 10 8V4C10 2.9 10.9 2 12 2ZM21 9V7L19 6V4C19 2.9 18.1 2 17 2S15 2.9 15 4V6L13 7V9C13 11.2 14.8 13 17 13S21 11.2 21 9ZM9 7L7 6V4C7 2.9 6.1 2 5 2S3 2.9 3 4V6L1 7V9C1 11.2 2.8 13 5 13S9 11.2 9 7ZM12 13.5C13.7 13.5 15.2 14.4 16.2 15.8C17.1 17.1 17.6 18.7 17.6 20.3V22H6.4V20.3C6.4 18.7 6.9 17.1 7.8 15.8C8.8 14.4 10.3 13.5 12 13.5Z"/>
-              </svg>
-            </div>
-          </div>
-          
-          <div class="space-y-2">
-            <h2 class="text-2xl font-bold text-foreground">🎉 Congratulations!</h2>
-            <p class="text-muted-foreground">You've successfully completed this lesson!</p>
-          </div>
-          
-          <!-- Action Buttons -->
-          <div class="space-y-3">
-            {nextLesson ? (
-              <button 
-                id="nextLessonBtn"
-                data-url={generateLessonUrl(nextLesson)}
-                class="w-full bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center gap-2"
-              >
-                <span>Next Lesson</span>
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m-5-5H6" />
-                </svg>
-              </button>
-            ) : (
-              <div class="text-center py-2">
-                <span class="text-green-600 font-semibold">🎓 Course Complete!</span>
-              </div>
-            )}
-            
-            <button 
-              id="backToCourseBtn"
-              class="w-full bg-muted text-foreground px-6 py-3 rounded-lg font-semibold hover:bg-muted/80 transition-colors duration-200 flex items-center justify-center gap-2"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-              <span>Back to Course</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   <script>
     // Course Progress Tracking System
     class CourseProgressTracker {
@@ -352,7 +299,6 @@ const lessonContent = lesson.body;
       constructor() {
         this.progressBar = document.getElementById('lessonProgressBar');
         this.content = document.getElementById('lessonContent');
-        this.finishBtn = document.getElementById('finishLessonBtn');
         this.currentProgress = 0;
         this.isFinished = false;
         
@@ -368,8 +314,6 @@ const lessonContent = lesson.body;
         
         // Initial progress update
         setTimeout(() => this.updateScrollProgress(), 100);
-        
-        // Don't disable finish button initially - let it be clickable for testing
       }
       
       updateScrollProgress() {
@@ -419,21 +363,12 @@ const lessonContent = lesson.body;
         if (this.progressBar) {
           this.progressBar.style.width = `${percentage}%`;
         }
-        
-        // For now, keep finish button always enabled for testing
-        // Later we can add the 80% logic back if needed
       }
       
       markAsFinished() {
         this.isFinished = true;
         this.currentProgress = 1;
         this.updateProgressDisplay();
-        
-        if (this.finishBtn) {
-          this.finishBtn.classList.remove('animate-pulse');
-          this.finishBtn.style.opacity = '1';
-          this.finishBtn.style.pointerEvents = 'auto';
-        }
       }
     }
     
@@ -454,131 +389,6 @@ const lessonContent = lesson.body;
       if (courseSlug && lessonSlug) {
         tracker.trackLessonVisit(courseSlug, lessonSlug, lessonTitle, courseTitle);
       }
-      
-      // Congratulations modal elements
-      const congratsModal = document.getElementById('congratsModal');
-      const congratsContent = document.getElementById('congratsContent');
-      const finishLessonBtn = document.getElementById('finishLessonBtn');
-      const closeCongratsBtn = document.getElementById('closeCongratsBtn');
-      const nextLessonBtn = document.getElementById('nextLessonBtn');
-      const backToCourseBtn = document.getElementById('backToCourseBtn');
-      
-      // Finish lesson functionality
-      if (finishLessonBtn) {
-        console.log('Finish lesson button found, adding event listener');
-        finishLessonBtn.addEventListener('click', function(e) {
-          console.log('Finish lesson button clicked!');
-          e.preventDefault();
-          
-          // Mark lesson as complete
-          progressTracker.markAsFinished();
-          tracker.markLessonComplete(courseSlug, lessonSlug, lessonTitle);
-          
-          // Show congratulations modal
-          console.log('About to show congratulations modal');
-          showCongratsModal();
-        });
-      } else {
-        console.log('Finish lesson button not found!');
-      }
-      
-      function showCongratsModal() {
-        console.log('showCongratsModal called');
-        console.log('congratsModal:', congratsModal);
-        console.log('congratsContent:', congratsContent);
-        
-        if (congratsModal && congratsContent) {
-          console.log('Showing modal...');
-          congratsModal.classList.remove('opacity-0', 'pointer-events-none');
-          congratsModal.classList.add('opacity-100');
-          
-          setTimeout(() => {
-            congratsContent.classList.remove('scale-95');
-            congratsContent.classList.add('scale-100');
-            console.log('Modal animation complete');
-          }, 50);
-          
-          // Prevent body scroll
-          document.body.style.overflow = 'hidden';
-        } else {
-          console.log('Modal elements not found!');
-        }
-      }
-      
-      function hideCongratsModal() {
-        if (congratsModal && congratsContent) {
-          congratsContent.classList.remove('scale-100');
-          congratsContent.classList.add('scale-95');
-          
-          setTimeout(() => {
-            congratsModal.classList.remove('opacity-100');
-            congratsModal.classList.add('opacity-0', 'pointer-events-none');
-          }, 200);
-          
-          // Restore body scroll
-          document.body.style.overflow = '';
-        }
-      }
-      
-      // Modal close functionality
-      if (closeCongratsBtn) {
-        closeCongratsBtn.addEventListener('click', function() {
-          // Navigate to course page and scroll to next lesson
-          const courseUrl = `/courses/${courseSlug}`;
-          const nextLessonUrl = nextLessonBtn?.dataset?.url;
-          
-          if (nextLessonUrl) {
-            // Store the next lesson info for scrolling on course page
-            const nextLessonSlug = nextLessonUrl.split('/').slice(3).join('/');
-            sessionStorage.setItem('scrollToLesson', nextLessonSlug);
-          }
-          
-          window.location.href = courseUrl;
-        });
-      }
-      
-      // Click outside to close
-      if (congratsModal) {
-        congratsModal.addEventListener('click', function(e) {
-          if (e.target === congratsModal) {
-            hideCongratsModal();
-          }
-        });
-      }
-      
-      // Next lesson button
-      if (nextLessonBtn) {
-        nextLessonBtn.addEventListener('click', function() {
-          const nextLessonUrl = this.dataset.url;
-          if (nextLessonUrl) {
-            window.location.href = nextLessonUrl;
-          }
-        });
-      }
-      
-      // Back to course button
-      if (backToCourseBtn) {
-        backToCourseBtn.addEventListener('click', function() {
-          // Navigate to course page and scroll to next lesson
-          const courseUrl = `/courses/${courseSlug}`;
-          const nextLessonUrl = nextLessonBtn?.dataset?.url;
-          
-          if (nextLessonUrl) {
-            // Store the next lesson info for scrolling on course page
-            const nextLessonSlug = nextLessonUrl.split('/').slice(3).join('/');
-            sessionStorage.setItem('scrollToLesson', nextLessonSlug);
-          }
-          
-          window.location.href = courseUrl;
-        });
-      }
-      
-      // ESC key to close modal
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          hideCongratsModal();
-        }
-      });
     });
   </script>
   </body>
