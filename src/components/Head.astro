@@ -32,6 +32,20 @@ const { title, description } = Astro.props;
   <title>{title}</title>
   <meta name="description" content={description} />
   
+  <!-- Prevent flash of unstyled content by applying theme immediately -->
+  <script is:inline>
+    // Apply theme immediately to prevent flash
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const shouldBeDark = savedTheme === 'dark' || (!savedTheme && systemDark);
+      
+      if (shouldBeDark) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  
   <!-- Theme color updater script -->
   <script>
     // Import theme color updater
