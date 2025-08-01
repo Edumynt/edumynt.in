@@ -74,83 +74,22 @@ const { pageType } = Astro.props;
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Theme management
-    const themeToggle = document.getElementById('themeToggle');
-    
+    // Initialize theme management
+    import('/src/lib/theme-manager.ts').then(({ initTheme }) => {
+      const themeManager = initTheme();
+      
+      // Connect theme toggle button
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', (e) => themeManager.toggle(e));
+      }
+    });
+
     // Settings drawer elements
     const settingsButton = document.getElementById('settingsButton');
     const settingsDrawer = document.getElementById('settingsDrawer');
     const settingsOverlay = document.getElementById('settingsOverlay');
     const closeSettings = document.getElementById('closeSettings');
-    
-    // Load saved theme or default to light
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    
-    function createThemeTransition(event, newTheme) {
-      // Get the button position
-      const button = event.currentTarget;
-      const rect = button.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      // Get all elements that should transition
-      const elements = document.querySelectorAll('*');
-      const maxDistance = Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2);
-      
-      // Calculate distance and delay for each element
-      elements.forEach((element, index) => {
-        const elementRect = element.getBoundingClientRect();
-        const elementCenterX = elementRect.left + elementRect.width / 2;
-        const elementCenterY = elementRect.top + elementRect.height / 2;
-        
-        // Calculate distance from button center to element center
-        const distance = Math.sqrt(
-          Math.pow(elementCenterX - centerX, 2) + Math.pow(elementCenterY - centerY, 2)
-        );
-        
-        // Calculate delay based on distance with eased curve - slower start, faster middle, slower end
-        const normalizedDistance = distance / maxDistance;
-        const easedDelay = normalizedDistance < 0.5 
-          ? 2 * normalizedDistance * normalizedDistance 
-          : 1 - Math.pow(-2 * normalizedDistance + 2, 3) / 2;
-        const delay = easedDelay * 1000; // Max 1000ms delay
-        
-        // Store original transition
-        const originalTransition = element.style.transition;
-        
-        // Set custom transition with delay
-        setTimeout(() => {
-          element.style.transition = 'background-color 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), fill 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-          
-          // Trigger a small visual ripple effect with bounce
-          if (element === button) {
-            element.style.transform = 'scale(1.05)';
-            element.style.transition = 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-            setTimeout(() => {
-              element.style.transform = '';
-            }, 300);
-          }
-          
-          // Reset transition after animation
-          setTimeout(() => {
-            element.style.transition = originalTransition;
-          }, 600);
-        }, delay);
-      });
-    }
-    
-    themeToggle?.addEventListener('click', function(e) {
-      const isDark = document.documentElement.classList.contains('dark');
-      const newTheme = isDark ? 'light' : 'dark';
-      
-      // Create animated transition
-      createThemeTransition(e, newTheme);
-      
-      // Update theme immediately so colors can transition naturally
-      document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', newTheme);
-    });
 
     // Settings drawer functionality
     function openSettings() {

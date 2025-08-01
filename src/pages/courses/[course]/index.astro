@@ -201,6 +201,18 @@ const firstLesson = lessons[0];
             </div>
           </div>
         </div>
+        <button 
+          id="themeToggle"
+          class="flex items-center justify-center w-9 h-9 rounded-full hover:bg-muted/80 transition-colors flex-shrink-0"
+          title="Toggle theme"
+        >
+          <svg class="w-4 h-4 text-foreground dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg class="w-4 h-4 text-foreground hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -331,7 +343,7 @@ const firstLesson = lessons[0];
                     {section.lessons.map((lesson, lessonIndex) => (
                       <a 
                         href={generateLessonUrl(lesson, course)} 
-                        class="flex items-center gap-4 p-5 pl-12 hover:bg-primary/10 transition-all duration-200 group border-b border-border/50 last:border-b-0 hover:border-primary/30"
+                        class="flex items-center gap-4 p-5 pl-16 hover:bg-primary/10 transition-all duration-200 group border-b border-border/50 last:border-b-0 hover:border-primary/30"
                       >
                         <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg text-sm font-bold text-primary transition-all duration-200 flex items-center justify-center border border-primary/20 lesson-indicator" data-lesson-slug={generateLessonUrl(lesson, course).split('/').slice(3).join('/')}>
                           <span class="lesson-number">{lessonIndex + 1}</span>
@@ -386,7 +398,7 @@ const firstLesson = lessons[0];
                               {subsection.lessons.map((lesson, lessonIndex) => (
                                 <a 
                                   href={generateLessonUrl(lesson, course)} 
-                                  class="flex items-center gap-4 p-4 pl-20 hover:bg-primary/5 transition-all duration-200 group border-b last:border-b-0 hover:border-primary/20"
+                                  class="flex items-center gap-4 p-4 pl-24 hover:bg-primary/5 transition-all duration-200 group border-b last:border-b-0 hover:border-primary/20"
                                 >
                                   <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-200 flex items-center justify-center">
                                     {lessonIndex + 1}
@@ -419,6 +431,17 @@ const firstLesson = lessons[0];
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        // Initialize theme management
+        import('/src/lib/theme-manager.ts').then(({ initTheme }) => {
+          const themeManager = initTheme();
+          
+          // Connect theme toggle button
+          const themeToggle = document.getElementById('themeToggle');
+          if (themeToggle) {
+            themeToggle.addEventListener('click', (e) => themeManager.toggle(e));
+          }
+        });
+        
         const toggleButtons = document.querySelectorAll('.chapter-toggle');
         
         // Course Progress Tracking System
