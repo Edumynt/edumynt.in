@@ -331,7 +331,7 @@ const firstLesson = lessons[0];
                     {section.lessons.map((lesson, lessonIndex) => (
                       <a 
                         href={generateLessonUrl(lesson, course)} 
-                        class="flex items-center gap-4 p-5 hover:bg-primary/10 transition-all duration-200 group border-b border-border/50 last:border-b-0 hover:border-primary/30"
+                        class="flex items-center gap-4 p-5 pl-12 hover:bg-primary/10 transition-all duration-200 group border-b border-border/50 last:border-b-0 hover:border-primary/30"
                       >
                         <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg text-sm font-bold text-primary transition-all duration-200 flex items-center justify-center border border-primary/20 lesson-indicator" data-lesson-slug={generateLessonUrl(lesson, course).split('/').slice(3).join('/')}>
                           <span class="lesson-number">{lessonIndex + 1}</span>
@@ -386,7 +386,7 @@ const firstLesson = lessons[0];
                               {subsection.lessons.map((lesson, lessonIndex) => (
                                 <a 
                                   href={generateLessonUrl(lesson, course)} 
-                                  class="flex items-center gap-4 p-4 pl-12 hover:bg-primary/5 transition-all duration-200 group border-b last:border-b-0 hover:border-primary/20"
+                                  class="flex items-center gap-4 p-4 pl-20 hover:bg-primary/5 transition-all duration-200 group border-b last:border-b-0 hover:border-primary/20"
                                 >
                                   <div class="flex-shrink-0 w-6 h-6 bg-primary/10 rounded text-xs font-semibold text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-200 flex items-center justify-center">
                                     {lessonIndex + 1}
