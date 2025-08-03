@@ -6,7 +6,11 @@
       "Bash(mv:*)",
       "Bash(cat \"C:\\Keshav Dev\\CODE\\astroedumynt\\src\\content\\courses\\teaching-methods\\3 structural-method\\Aabha Rani Structural.mdx\")",
       "Bash(cat \"C:\\Keshav Dev\\CODE\\astroedumynt\\src\\content\\courses\\teaching-methods\\11 basic-principles-of-second-language-teaching\\1 selection.mdx\")",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm run build)",
+      "Bash(ls)",
+      "Bash(npm --version)",
+      "Bash(./node_modules/.bin/astro build)"
     ],
     "deny": []
   }
