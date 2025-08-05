@@ -10,7 +10,8 @@
       "Bash(npm run build)",
       "Bash(ls)",
       "Bash(npm --version)",
-      "Bash(./node_modules/.bin/astro build)"
+      "Bash(./node_modules/.bin/astro build)",
+      "Bash(cat:*)"
     ],
     "deny": []
   }
