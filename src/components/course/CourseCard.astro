@@ -10,13 +10,20 @@ export interface Props {
 }
 
 const { outline, compact = false } = Astro.props;
-const { course, stats, firstLesson } = outline;
+const { course, stats } = outline;
 const imageSrc = getImageSrc(course);
 const imageAlt = getImageAlt(course);
 ---
 
-<Card href={courseUrl(course)} class="group block h-full">
-  <div class={compact ? 'relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5' : 'relative h-56 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5'}>
+<Card
+  href={courseUrl(course)}
+  class="group block h-full"
+  data-course-link
+  data-course-id={outline.courseId}
+  data-course-title={course.data.title}
+  data-course-url={courseUrl(course)}
+>
+  <div class={compact ? 'relative h-40 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5' : 'relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5'}>
     <img
       src={imageSrc}
       alt={imageAlt}
@@ -25,23 +32,23 @@ const imageAlt = getImageAlt(course);
     />
     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
     <div class="absolute bottom-4 left-4 right-4">
-      <div class="mb-3 flex flex-wrap gap-2">
+      <h2 class={compact ? 'mb-3 line-clamp-2 text-lg font-display font-bold leading-tight text-white' : 'mb-3 line-clamp-2 text-xl font-display font-bold leading-tight text-white'}>
+        {course.data.title}
+      </h2>
+      <div class="flex flex-wrap gap-2">
         <Badge tone="light" class="capitalize">{course.data.difficulty}</Badge>
         {course.data.duration && <Badge tone="light">{course.data.duration}</Badge>}
         {course.data.featured && <Badge tone="light">Featured</Badge>}
       </div>
-      <h2 class={compact ? 'line-clamp-2 text-xl font-display font-bold leading-tight text-white' : 'line-clamp-2 text-2xl font-display font-bold leading-tight text-white'}>
-        {course.data.title}
-      </h2>
     </div>
   </div>
 
-  <div class={compact ? 'p-5' : 'p-6'}>
-    <p class="mb-5 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{course.data.description}</p>
+  <div class={compact ? 'p-4' : 'p-5'}>
+    <p class={compact ? 'mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground' : 'mb-4 line-clamp-3 text-sm leading-relaxed text-muted-foreground'}>{course.data.description}</p>
 
-    {course.data.exams.length > 0 && (
+    {!compact && course.data.exams.length > 0 && (
       <div class="mb-5 flex flex-wrap gap-2">
-        {course.data.exams.slice(0, compact ? 2 : 3).map(exam => (
+        {course.data.exams.slice(0, 3).map(exam => (
           <Badge tone="primary">{exam}</Badge>
         ))}
       </div>
@@ -60,13 +67,5 @@ const imageAlt = getImageAlt(course);
       </span>
     </div>
 
-    {firstLesson && !compact && (
-      <div class="mt-4 rounded-xl bg-muted p-3">
-        <div class="mb-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">Start with</div>
-        <span class="line-clamp-1 text-sm font-bold text-foreground">
-          {firstLesson.data.title}
-        </span>
-      </div>
-    )}
   </div>
 </Card>

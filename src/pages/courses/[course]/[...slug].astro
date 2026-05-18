@@ -1,10 +1,8 @@
 ---
 import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Navigation from '../../../components/Navigation.astro';
 import Badge from '../../../components/ui/Badge.astro';
-import LessonNav from '../../../components/course/LessonNav.astro';
-import { courseUrl, getLessonContexts } from '../../../lib/course-data';
+import { courseUrl, getLessonContexts, lessonUrl } from '../../../lib/course-data';
 
 export async function getStaticPaths() {
   const contexts = await getLessonContexts();
@@ -26,13 +24,12 @@ const { Content } = await render(lesson);
 
 const title = lesson.data.title;
 const description = lesson.data.description || lesson.data.excerpt || course.data.description;
+const progress = context.totalLessons > 0 ? Math.round(((context.lessonIndex + 1) / context.totalLessons) * 100) : 0;
 ---
 
 <BaseLayout title={title} description={description}>
-  <Navigation pageType="lesson" />
-
   <header class="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-xl">
-    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+    <div class="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
       <a href={courseUrl(course)} class="inline-flex min-w-0 items-center gap-3 text-sm font-bold text-foreground hover:text-primary">
         <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-muted">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -45,12 +42,15 @@ const description = lesson.data.description || lesson.data.excerpt || course.dat
         Lesson {context.lessonIndex + 1} of {context.totalLessons}
       </div>
     </div>
+    <div class="h-1 bg-muted">
+      <div class="h-full bg-primary transition-all" style={`width: ${progress}%`}></div>
+    </div>
   </header>
 
-  <main class="px-4 py-6 pb-24 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-5xl">
+  <main class="px-4 py-8 pb-14 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl">
       <article
-        class="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8 lg:p-10"
+        class="space-y-8"
         data-progress-course-id={context.courseId}
         data-progress-course-title={course.data.title}
         data-progress-lesson-id={lesson.id}
@@ -58,7 +58,7 @@ const description = lesson.data.description || lesson.data.excerpt || course.dat
         data-progress-lesson-url={Astro.url.pathname}
         data-progress-total-lessons={context.totalLessons}
       >
-        <header class="mb-8 border-b border-border pb-8">
+        <header class="border-b border-border pb-6">
           <nav class="mb-5 flex flex-wrap items-center gap-2 text-sm font-semibold text-muted-foreground">
             <a href="/courses" class="hover:text-primary">Courses</a>
             <span>/</span>
@@ -99,7 +99,25 @@ const description = lesson.data.description || lesson.data.excerpt || course.dat
           <Content />
         </div>
 
-        <LessonNav context={context} />
+        {context.nextLesson ? (
+          <div class="border-t border-border pt-8">
+            <a href={lessonUrl(context.nextLesson)} class="group flex items-center justify-between gap-4 rounded-2xl bg-primary px-5 py-4 text-primary-foreground transition hover:bg-primary/90">
+              <span>
+                <span class="mb-1 block text-xs font-bold uppercase tracking-wide opacity-80">Next lesson</span>
+                <span class="font-display text-lg font-bold">{context.nextLesson.data.title}</span>
+              </span>
+              <svg class="h-5 w-5 flex-shrink-0 transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </div>
+        ) : (
+          <div class="border-t border-border pt-8">
+            <a href={courseUrl(course)} class="inline-flex rounded-2xl bg-muted px-5 py-3 text-sm font-bold text-foreground hover:bg-muted/80">
+              Back to course
+            </a>
+          </div>
+        )}
       </article>
     </div>
   </main>

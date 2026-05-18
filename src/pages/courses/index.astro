@@ -2,38 +2,150 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navigation from '../../components/Navigation.astro';
 import CourseCard from '../../components/course/CourseCard.astro';
-import PageHeader from '../../components/ui/PageHeader.astro';
 import { getCourseOutlines } from '../../lib/course-data';
 
 const outlines = await getCourseOutlines();
-const chapterCount = outlines.reduce((total, outline) => total + outline.stats.chapterCount, 0);
-const lessonCount = outlines.reduce((total, outline) => total + outline.stats.lessonCount, 0);
+const examOptions = [...new Set(outlines.flatMap(outline => outline.course.data.exams))].sort();
+const difficultyOptions = [...new Set(outlines.map(outline => outline.course.data.difficulty))].sort();
 
 const title = 'All Courses';
 const description = 'Browse all available courses on Edumynt.';
 ---
 
 <BaseLayout title={title} description={description}>
-  <Navigation pageType="courses" />
+  <Navigation pageType="courses" title="Courses" showFilter />
 
-  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
-      <PageHeader
-        eyebrow="Course Library"
-        title="All Courses"
-        description="Choose a course to see its complete chapter and lesson path."
-        stats={[
-          { label: 'Courses', value: outlines.length },
-          { label: 'Chapters', value: chapterCount },
-          { label: 'Lessons', value: lessonCount },
-        ]}
-      />
+  <div id="courseFilterOverlay" class="fixed inset-0 z-[70] hidden bg-black/40 backdrop-blur-sm"></div>
+  <aside id="courseFilterDrawer" class="fixed right-0 top-0 z-[80] h-full w-80 max-w-[85vw] translate-x-full border-l border-border bg-card shadow-2xl transition-transform duration-300">
+    <div class="flex items-center justify-between border-b border-border p-5">
+      <h2 class="font-display text-lg font-bold text-foreground">Filter courses</h2>
+      <button type="button" id="closeCourseFilter" class="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Close filters">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="space-y-6 p-5">
+      {examOptions.length > 0 && (
+        <section>
+          <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Exams</h3>
+          <div class="space-y-2">
+            {examOptions.map(exam => (
+              <label class="flex items-center gap-3 text-sm font-semibold text-foreground">
+                <input type="checkbox" value={exam} data-filter-exam class="h-4 w-4 rounded border-border accent-primary" />
+                {exam}
+              </label>
+            ))}
+          </div>
+        </section>
+      )}
 
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <section>
+        <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Difficulty</h3>
+        <div class="space-y-2">
+          {difficultyOptions.map(difficulty => (
+            <label class="flex items-center gap-3 text-sm font-semibold capitalize text-foreground">
+              <input type="checkbox" value={difficulty} data-filter-difficulty class="h-4 w-4 rounded border-border accent-primary" />
+              {difficulty}
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <button type="button" id="clearCourseFilters" class="w-full rounded-xl border border-border px-4 py-2 text-sm font-bold text-foreground hover:bg-muted">
+        Clear filters
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 px-4 py-6 pb-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <p class="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Library</p>
+          <h1 class="text-2xl font-display font-extrabold text-foreground md:text-3xl">All courses</h1>
+        </div>
+        <p id="courseResultCount" class="text-sm font-semibold text-muted-foreground">{outlines.length} courses</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" data-course-grid>
         {outlines.map(outline => (
-          <CourseCard outline={outline} />
+          <article
+            data-course-card
+            data-course-title={outline.course.data.title}
+            data-course-exams={outline.course.data.exams.join('|')}
+            data-course-difficulty={outline.course.data.difficulty}
+          >
+            <CourseCard outline={outline} compact />
+          </article>
         ))}
+      </div>
+
+      <div id="courseNoResults" class="mt-8 hidden rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+        No courses match the selected filters.
       </div>
     </div>
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButton = document.getElementById('courseFilterButton');
+      const drawer = document.getElementById('courseFilterDrawer');
+      const overlay = document.getElementById('courseFilterOverlay');
+      const closeButton = document.getElementById('closeCourseFilter');
+      const clearButton = document.getElementById('clearCourseFilters');
+      const cards = Array.from(document.querySelectorAll('[data-course-card]'));
+      const count = document.getElementById('courseResultCount');
+      const noResults = document.getElementById('courseNoResults');
+      const examInputs = Array.from(document.querySelectorAll('[data-filter-exam]'));
+      const difficultyInputs = Array.from(document.querySelectorAll('[data-filter-difficulty]'));
+
+      function openFilter() {
+        drawer?.classList.remove('translate-x-full');
+        overlay?.classList.remove('hidden');
+      }
+
+      function closeFilter() {
+        drawer?.classList.add('translate-x-full');
+        overlay?.classList.add('hidden');
+      }
+
+      function selectedValues(inputs) {
+        return inputs
+          .filter(input => input instanceof HTMLInputElement && input.checked)
+          .map(input => input.value);
+      }
+
+      function applyFilters() {
+        const selectedExams = selectedValues(examInputs);
+        const selectedDifficulties = selectedValues(difficultyInputs);
+        let visible = 0;
+
+        cards.forEach(card => {
+          if (!(card instanceof HTMLElement)) return;
+          const exams = (card.dataset.courseExams || '').split('|').filter(Boolean);
+          const difficulty = card.dataset.courseDifficulty || '';
+          const matchesExam = selectedExams.length === 0 || selectedExams.some(exam => exams.includes(exam));
+          const matchesDifficulty = selectedDifficulties.length === 0 || selectedDifficulties.includes(difficulty);
+          const isVisible = matchesExam && matchesDifficulty;
+          card.classList.toggle('hidden', !isVisible);
+          if (isVisible) visible += 1;
+        });
+
+        if (count) count.textContent = `${visible} ${visible === 1 ? 'course' : 'courses'}`;
+        noResults?.classList.toggle('hidden', visible > 0);
+      }
+
+      filterButton?.addEventListener('click', openFilter);
+      closeButton?.addEventListener('click', closeFilter);
+      overlay?.addEventListener('click', closeFilter);
+      [...examInputs, ...difficultyInputs].forEach(input => input.addEventListener('change', applyFilters));
+      clearButton?.addEventListener('click', () => {
+        [...examInputs, ...difficultyInputs].forEach(input => {
+          if (input instanceof HTMLInputElement) input.checked = false;
+        });
+        applyFilters();
+      });
+    });
+  </script>
 </BaseLayout>

@@ -1,109 +1,157 @@
 ---
+import { getCourseOutlines, courseUrl, lessonUrl } from '../lib/course-data';
+
 export interface Props {
   pageType: 'home' | 'courses' | 'course' | 'lesson';
+  title?: string;
+  titleHref?: string;
+  showFilter?: boolean;
 }
 
-const { pageType } = Astro.props;
+const { pageType, title, titleHref, showFilter = false } = Astro.props;
+const headerTitle = title || (pageType === 'home' ? 'Edumynt' : pageType === 'courses' ? 'Courses' : 'Course');
+const headerHref = titleHref || (pageType === 'home' ? '/' : '/courses');
+
+const outlines = await getCourseOutlines();
+const searchItems = outlines.flatMap(outline => [
+  {
+    title: outline.course.data.title,
+    description: outline.course.data.description,
+    type: 'Course',
+    url: courseUrl(outline.course),
+  },
+  ...outline.lessons.map(lesson => ({
+    title: lesson.data.title,
+    description: lesson.data.description || lesson.data.excerpt || outline.course.data.title,
+    type: 'Lesson',
+    url: lessonUrl(lesson),
+  })),
+]);
+const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
-<!-- Settings Drawer (right) -->
-<div class="fixed inset-0 z-[70] bg-black/50 backdrop-blur-sm opacity-0 invisible transition-all duration-300" id="settingsOverlay"></div>
-<aside class="fixed top-0 right-0 z-[80] h-full w-80 max-w-[85vw] bg-card/95 backdrop-blur-xl border-l border-border/50 shadow-2xl transform translate-x-full transition-all duration-300 ease-in-out flex flex-col rounded-l-2xl" id="settingsDrawer">
-  <!-- Settings Header -->
-  <div class="flex items-center justify-between p-6 border-b border-border/50 rounded-tl-2xl bg-gradient-to-l from-background/50 to-muted/30">
-    <h3 class="text-lg font-display font-semibold">Settings</h3>
-    <button id="closeSettings" class="inline-flex items-center justify-center w-8 h-8 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors">
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
+<header class="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl">
+  <div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <div class="flex min-w-0 items-center gap-4">
+      <a href={headerHref} class="truncate text-lg font-display font-extrabold tracking-tight text-foreground">
+        {headerTitle}
+      </a>
+      <nav class="hidden items-center gap-1 sm:flex">
+        <a href="/" class={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${pageType === 'home' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>Home</a>
+        <a href="/courses" class={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${pageType === 'courses' || pageType === 'course' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>Courses</a>
+      </nav>
+    </div>
 
-  <!-- Settings Content -->
-  <div class="flex-1 overflow-y-auto p-6 rounded-bl-2xl">
-    <!-- Dark Mode Toggle -->
-    <div class="flex items-center justify-between">
-      <span class="font-medium text-foreground">Dark Mode</span>
-      <button id="themeToggle" class="relative inline-flex h-6 w-11 items-center rounded-full bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:bg-primary">
-        <span class="sr-only">Toggle dark mode</span>
-        <span class="toggle-slider inline-block h-4 w-4 transform rounded-full bg-background transition-transform translate-x-1 dark:translate-x-6 shadow-sm"></span>
+    <div class="flex items-center gap-2">
+      <button type="button" data-open-site-search class="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground" aria-label="Search site">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35m1.6-5.4a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+        </svg>
       </button>
+
+      {showFilter && (
+        <button type="button" id="courseFilterButton" class="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground" aria-label="Filter courses">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h18M6 12h12M10 19h4" />
+          </svg>
+        </button>
+      )}
     </div>
   </div>
-</aside>
+</header>
 
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t">
-  <div class="flex items-center justify-around px-2 py-3 max-w-7xl mx-auto">
-    <!-- Home Button -->
-    <a href="/" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
-      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+<div id="siteSearchOverlay" class="fixed inset-0 z-[90] hidden bg-black/50 p-4 backdrop-blur-sm">
+  <div class="mx-auto mt-16 max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+    <div class="flex items-center gap-3 border-b border-border p-4">
+      <svg class="h-5 w-5 flex-shrink-0 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35m1.6-5.4a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
       </svg>
-      <span class="text-xs font-medium">Home</span>
-    </a>
-    
-    <!-- Courses Button -->
-    <a href="/courses" class={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'hover:bg-accent'}`}>
-      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-      </svg>
-      <span class="text-xs font-medium">Courses</span>
-    </a>
-    
-    <!-- Tests Button -->
-    <button class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
-      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-      <span class="text-xs font-medium">Tests</span>
-    </button>
-    
-    <!-- Settings Button -->
-    <button id="settingsButton" class="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-accent transition-colors">
-      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      <span class="text-xs font-medium">Settings</span>
-    </button>
+      <input id="siteSearchInput" class="min-w-0 flex-1 bg-transparent text-base font-semibold text-foreground outline-none placeholder:text-muted-foreground" type="search" placeholder="Search courses and lessons" autocomplete="off" />
+      <button type="button" data-close-site-search class="rounded-lg px-2 py-1 text-sm font-bold text-muted-foreground hover:bg-muted hover:text-foreground">Esc</button>
+    </div>
+    <div id="siteSearchResults" class="max-h-[60vh] overflow-y-auto p-2"></div>
   </div>
-</nav>
+</div>
+
+<script type="application/json" id="siteSearchData" set:html={searchJson}></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Initialize theme management
-    import('/src/lib/theme-manager.ts').then(({ initTheme }) => {
-      const themeManager = initTheme();
-      
-      // Connect theme toggle button
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) {
-        themeToggle.addEventListener('click', (e) => themeManager.toggle(e));
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('siteSearchOverlay');
+    const input = document.getElementById('siteSearchInput');
+    const results = document.getElementById('siteSearchResults');
+    const dataEl = document.getElementById('siteSearchData');
+    const items = JSON.parse(dataEl?.textContent || '[]');
+
+    function renderResults(query) {
+      if (!results) return;
+      const normalized = query.trim().toLowerCase();
+      const filtered = normalized
+        ? items.filter(item => `${item.title} ${item.description} ${item.type}`.toLowerCase().includes(normalized)).slice(0, 12)
+        : items.slice(0, 8);
+
+      results.innerHTML = filtered.length
+        ? filtered.map(item => `
+          <a href="${item.url}" class="block rounded-xl p-3 transition hover:bg-muted">
+            <span class="mb-1 block text-xs font-bold uppercase tracking-wide text-muted-foreground">${item.type}</span>
+            <span class="block font-display font-bold text-foreground">${item.title}</span>
+            <span class="mt-1 line-clamp-1 block text-sm text-muted-foreground">${item.description || ''}</span>
+          </a>
+        `).join('')
+        : '<div class="p-6 text-center text-sm text-muted-foreground">No results found.</div>';
+    }
+
+    function openSearch() {
+      overlay?.classList.remove('hidden');
+      if (input instanceof HTMLInputElement) {
+        input.value = '';
+        renderResults('');
+        requestAnimationFrame(() => input.focus());
       }
+    }
+
+    function closeSearch() {
+      overlay?.classList.add('hidden');
+    }
+
+    document.querySelectorAll('[data-open-site-search]').forEach(button => button.addEventListener('click', openSearch));
+    document.querySelectorAll('[data-close-site-search]').forEach(button => button.addEventListener('click', closeSearch));
+    overlay?.addEventListener('click', event => {
+      if (event.target === overlay) closeSearch();
+    });
+    input?.addEventListener('input', event => {
+      const target = event.target;
+      renderResults(target instanceof HTMLInputElement ? target.value : '');
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === '/' && !(document.activeElement instanceof HTMLInputElement)) {
+        event.preventDefault();
+        openSearch();
+      }
+      if (event.key === 'Escape') closeSearch();
     });
 
-    // Settings drawer elements
-    const settingsButton = document.getElementById('settingsButton');
-    const settingsDrawer = document.getElementById('settingsDrawer');
-    const settingsOverlay = document.getElementById('settingsOverlay');
-    const closeSettings = document.getElementById('closeSettings');
+    document.addEventListener('click', event => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const link = target.closest('[data-course-link]');
+      if (!(link instanceof HTMLElement)) return;
 
-    // Settings drawer functionality
-    function openSettings() {
-      settingsDrawer?.classList.remove('translate-x-full');
-      settingsOverlay?.classList.remove('opacity-0', 'invisible');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeSettingsFunc() {
-      settingsDrawer?.classList.add('translate-x-full');
-      settingsOverlay?.classList.add('opacity-0', 'invisible');
-      document.body.style.overflow = '';
-    }
-
-    settingsButton?.addEventListener('click', openSettings);
-    closeSettings?.addEventListener('click', closeSettingsFunc);
-    settingsOverlay?.addEventListener('click', closeSettingsFunc);
+      try {
+        const recent = JSON.parse(localStorage.getItem('edumynt_recent_courses') || '[]');
+        const next = [
+          {
+            id: link.dataset.courseId,
+            title: link.dataset.courseTitle,
+            url: link.dataset.courseUrl,
+            timestamp: new Date().toISOString(),
+          },
+          ...recent.filter(item => item.id !== link.dataset.courseId),
+        ].filter(item => item.id && item.url).slice(0, 6);
+        localStorage.setItem('edumynt_recent_courses', JSON.stringify(next));
+      } catch {
+        localStorage.removeItem('edumynt_recent_courses');
+      }
+    });
   });
 </script>

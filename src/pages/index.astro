@@ -1,37 +1,94 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
-import ContinueLearning from '../components/course/ContinueLearning.astro';
-import CourseCarousel from '../components/course/CourseCarousel.astro';
-import PageHeader from '../components/ui/PageHeader.astro';
+import CourseCard from '../components/course/CourseCard.astro';
 import { getCourseOutlines } from '../lib/course-data';
 
 const outlines = await getCourseOutlines();
-const chapterCount = outlines.reduce((total, outline) => total + outline.stats.chapterCount, 0);
-const lessonCount = outlines.reduce((total, outline) => total + outline.stats.lessonCount, 0);
+const recentPublished = outlines.slice(0, 3);
 
 const title = 'Literature Courses';
 const description = 'Access our comprehensive literature courses - start learning today.';
 ---
 
 <BaseLayout title={title} description={description}>
-  <Navigation pageType="home" />
+  <Navigation pageType="home" title="Edumynt" />
 
-  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
-      <PageHeader
-        eyebrow="Edumynt"
-        title="Structured literature learning for serious exam preparation"
-        description="Study courses through ordered chapters and lessons, then resume from your last reading point."
-        stats={[
-          { label: 'Courses', value: outlines.length },
-          { label: 'Chapters', value: chapterCount },
-          { label: 'Lessons', value: lessonCount },
-        ]}
-      />
+  <main class="flex-1 px-4 py-6 pb-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl space-y-10">
+      <section>
+        <div class="mb-4 flex items-end justify-between gap-4">
+          <div>
+            <p class="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Continue</p>
+            <h1 class="text-2xl font-display font-extrabold text-foreground md:text-3xl">Recently accessed</h1>
+          </div>
+          <a href="/courses" class="text-sm font-bold text-primary hover:text-primary/80">All courses</a>
+        </div>
 
-      <ContinueLearning />
-      <CourseCarousel outlines={outlines} />
+        <div id="recentCoursesGrid" class="flex snap-x gap-5 overflow-x-auto pb-2">
+          {outlines.map(outline => (
+            <article class="hidden min-w-[85%] snap-start sm:min-w-[calc(50%-0.625rem)] lg:min-w-[calc(33.333%-0.875rem)]" data-recent-course-card data-course-id={outline.courseId}>
+              <CourseCard outline={outline} compact />
+            </article>
+          ))}
+        </div>
+        <div id="recentCoursesEmpty" class="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+          Open a course once and it will appear here.
+        </div>
+      </section>
+
+      <section>
+        <div class="mb-4">
+          <p class="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Published</p>
+          <h2 class="text-2xl font-display font-extrabold text-foreground md:text-3xl">Recently published courses</h2>
+        </div>
+
+        <div class="flex snap-x gap-5 overflow-x-auto pb-2">
+          {recentPublished.map(outline => (
+            <div class="min-w-[85%] snap-start sm:min-w-[calc(50%-0.625rem)] lg:min-w-[calc(33.333%-0.875rem)]">
+              <CourseCard outline={outline} compact />
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = Array.from(document.querySelectorAll('[data-recent-course-card]'));
+      const empty = document.getElementById('recentCoursesEmpty');
+
+      try {
+        const explicitRecent = JSON.parse(localStorage.getItem('edumynt_recent_courses') || '[]');
+        const progress = JSON.parse(localStorage.getItem('edumynt_course_progress') || '{}');
+        const progressCourse = progress.lastVisitedCourse?.courseSlug
+          ? [{ id: progress.lastVisitedCourse.courseSlug }]
+          : [];
+        const recentIds = [...explicitRecent, ...progressCourse]
+          .map(item => item.id)
+          .filter(Boolean);
+        const uniqueIds = [...new Set(recentIds)].slice(0, 3);
+
+        let shown = 0;
+        cards.forEach(card => {
+          if (!(card instanceof HTMLElement)) return;
+          const index = uniqueIds.indexOf(card.dataset.courseId || '');
+          if (index === -1) {
+            card.classList.add('hidden');
+            return;
+          }
+
+          card.style.order = String(index);
+          card.classList.remove('hidden');
+          shown += 1;
+        });
+
+        empty?.classList.toggle('hidden', shown > 0);
+      } catch {
+        localStorage.removeItem('edumynt_recent_courses');
+        empty?.classList.remove('hidden');
+      }
+    });
+  </script>
 </BaseLayout>

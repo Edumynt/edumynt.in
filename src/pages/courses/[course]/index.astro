@@ -4,8 +4,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Navigation from '../../../components/Navigation.astro';
 import Badge from '../../../components/ui/Badge.astro';
 import ChapterAccordion from '../../../components/course/ChapterAccordion.astro';
-import CourseHero from '../../../components/course/CourseHero.astro';
-import { getCourseOutlines } from '../../../lib/course-data';
+import { getCourseOutlines, lessonUrl } from '../../../lib/course-data';
 
 export async function getStaticPaths() {
   const outlines = await getCourseOutlines();
@@ -25,91 +24,127 @@ const description = course.data.description;
 ---
 
 <BaseLayout title={title} description={description}>
-  <Navigation pageType="course" />
+  <Navigation pageType="course" title={course.data.title} titleHref={`/courses/${outline.courseId}`} />
 
-  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
-      <CourseHero outline={outline} />
+  <main class="flex-1 px-4 py-6 pb-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl">
+      <section class="mb-6">
+        <div class="mb-4 flex flex-wrap gap-2">
+          <Badge tone="primary">{outline.stats.chapterCount} chapters</Badge>
+          <Badge tone="muted">{outline.stats.lessonCount} lessons</Badge>
+          {course.data.duration && <Badge tone="muted">{course.data.duration}</Badge>}
+          <Badge tone="muted" class="capitalize">{course.data.difficulty}</Badge>
+        </div>
+        <h1 class="mb-3 text-3xl font-display font-extrabold text-foreground md:text-4xl">{course.data.title}</h1>
+        <p class="max-w-3xl text-muted-foreground">{course.data.description}</p>
+      </section>
 
-      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-        <div class="space-y-8">
-          <section class="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
-            <div class="mb-5">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Overview</p>
-              <h2 class="text-3xl font-display font-bold text-foreground">About this course</h2>
-            </div>
-            <div class="prose prose-lg max-w-none dark:prose-invert">
-              <Content />
-            </div>
-          </section>
+      <div class="mb-6 flex gap-2 overflow-x-auto border-b border-border">
+        <button type="button" class="border-b-2 border-primary px-4 py-3 text-sm font-bold text-foreground" data-course-tab="curriculum">Curriculum</button>
+        <button type="button" class="border-b-2 border-transparent px-4 py-3 text-sm font-bold text-muted-foreground hover:text-foreground" data-course-tab="overview">Overview</button>
+        <button type="button" class="border-b-2 border-transparent px-4 py-3 text-sm font-bold text-muted-foreground hover:text-foreground" data-course-tab="details">Details</button>
+      </div>
 
-          <section>
-            <div class="mb-5">
-              <p class="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
-              <h2 class="text-3xl font-display font-bold text-foreground">Chapters and lessons</h2>
+      <section data-course-panel="curriculum">
+        <div class="mb-5 flex items-center justify-between gap-4">
+          <h2 class="text-2xl font-display font-bold text-foreground">Chapters and lessons</h2>
+          {outline.firstLesson && (
+            <a href={lessonUrl(outline.firstLesson)} class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90">
+              Start
+            </a>
+          )}
+        </div>
+        <ChapterAccordion chapters={outline.chapters} />
+      </section>
+
+      <section class="hidden" data-course-panel="overview">
+        <div class="prose prose-lg max-w-none dark:prose-invert">
+          <Content />
+        </div>
+      </section>
+
+      <section class="hidden space-y-6" data-course-panel="details">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-2xl bg-muted p-4">
+            <div class="text-sm font-semibold text-muted-foreground">Chapters</div>
+            <div class="text-2xl font-display font-bold text-foreground">{outline.stats.chapterCount}</div>
+          </div>
+          <div class="rounded-2xl bg-muted p-4">
+            <div class="text-sm font-semibold text-muted-foreground">Lessons</div>
+            <div class="text-2xl font-display font-bold text-foreground">{outline.stats.lessonCount}</div>
+          </div>
+          {course.data.duration && (
+            <div class="rounded-2xl bg-muted p-4">
+              <div class="text-sm font-semibold text-muted-foreground">Duration</div>
+              <div class="text-lg font-display font-bold text-foreground">{course.data.duration}</div>
             </div>
-            <ChapterAccordion chapters={outline.chapters} />
-          </section>
+          )}
+          <div class="rounded-2xl bg-muted p-4">
+            <div class="text-sm font-semibold text-muted-foreground">Difficulty</div>
+            <div class="text-lg font-display font-bold capitalize text-foreground">{course.data.difficulty}</div>
+          </div>
         </div>
 
-        <aside class="space-y-5 lg:sticky lg:top-6 lg:self-start">
-          <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <h2 class="mb-4 text-xl font-display font-bold text-foreground">Course Details</h2>
-            <dl class="space-y-3 text-sm">
-              <div class="flex items-center justify-between gap-4">
-                <dt class="text-muted-foreground">Chapters</dt>
-                <dd class="font-bold text-foreground">{outline.stats.chapterCount}</dd>
-              </div>
-              <div class="flex items-center justify-between gap-4">
-                <dt class="text-muted-foreground">Lessons</dt>
-                <dd class="font-bold text-foreground">{outline.stats.lessonCount}</dd>
-              </div>
-              {course.data.duration && (
-                <div class="flex items-center justify-between gap-4">
-                  <dt class="text-muted-foreground">Duration</dt>
-                  <dd class="font-bold text-foreground">{course.data.duration}</dd>
-                </div>
-              )}
-              <div class="flex items-center justify-between gap-4">
-                <dt class="text-muted-foreground">Difficulty</dt>
-                <dd class="font-bold capitalize text-foreground">{course.data.difficulty}</dd>
-              </div>
-            </dl>
-          </section>
+        {course.data.exams.length > 0 && (
+          <div>
+            <h2 class="mb-3 text-lg font-display font-bold text-foreground">Exam focus</h2>
+            <div class="flex flex-wrap gap-2">
+              {course.data.exams.map(exam => <Badge tone="primary">{exam}</Badge>)}
+            </div>
+          </div>
+        )}
 
-          {course.data.exams.length > 0 && (
-            <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h2 class="mb-4 text-xl font-display font-bold text-foreground">Exam Focus</h2>
-              <div class="flex flex-wrap gap-2">
-                {course.data.exams.map(exam => <Badge tone="primary">{exam}</Badge>)}
-              </div>
-            </section>
-          )}
+        {course.data.learningOutcomes.length > 0 && (
+          <div>
+            <h2 class="mb-3 text-lg font-display font-bold text-foreground">Learning outcomes</h2>
+            <ul class="grid gap-2 pl-0 sm:grid-cols-2">
+              {course.data.learningOutcomes.map(outcome => (
+                <li class="rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground">{outcome}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-          {course.data.learningOutcomes.length > 0 && (
-            <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h2 class="mb-4 text-xl font-display font-bold text-foreground">Learning Outcomes</h2>
-              <ul class="space-y-3 pl-0">
-                {course.data.learningOutcomes.map(outcome => (
-                  <li class="flex gap-3 text-sm leading-relaxed text-muted-foreground">
-                    <span class="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-primary"></span>
-                    <span>{outcome}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {course.data.tags.length > 0 && (
-            <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h2 class="mb-4 text-xl font-display font-bold text-foreground">Tags</h2>
-              <div class="flex flex-wrap gap-2">
-                {course.data.tags.map(tag => <Badge tone="muted">{tag}</Badge>)}
-              </div>
-            </section>
-          )}
-        </aside>
-      </div>
+        {course.data.tags.length > 0 && (
+          <div>
+            <h2 class="mb-3 text-lg font-display font-bold text-foreground">Tags</h2>
+            <div class="flex flex-wrap gap-2">
+              {course.data.tags.map(tag => <Badge tone="muted">{tag}</Badge>)}
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   </main>
+
+  <script define:vars={{ courseId: outline.courseId, courseTitle: course.data.title, courseUrl: `/courses/${outline.courseId}` }}>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-course-tab]').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const selected = tab.getAttribute('data-course-tab');
+          document.querySelectorAll('[data-course-tab]').forEach(item => {
+            const isActive = item.getAttribute('data-course-tab') === selected;
+            item.classList.toggle('border-primary', isActive);
+            item.classList.toggle('text-foreground', isActive);
+            item.classList.toggle('border-transparent', !isActive);
+            item.classList.toggle('text-muted-foreground', !isActive);
+          });
+          document.querySelectorAll('[data-course-panel]').forEach(panel => {
+            panel.classList.toggle('hidden', panel.getAttribute('data-course-panel') !== selected);
+          });
+        });
+      });
+
+      try {
+        const recent = JSON.parse(localStorage.getItem('edumynt_recent_courses') || '[]');
+        const next = [
+          { id: courseId, title: courseTitle, url: courseUrl, timestamp: new Date().toISOString() },
+          ...recent.filter(item => item.id !== courseId),
+        ].slice(0, 6);
+        localStorage.setItem('edumynt_recent_courses', JSON.stringify(next));
+      } catch {
+        localStorage.removeItem('edumynt_recent_courses');
+      }
+    });
+  </script>
 </BaseLayout>
