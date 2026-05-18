@@ -1,453 +1,69 @@
 ---
 import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
-import Head from '../components/Head.astro';
-import '../styles/global.css';
 
 const courses = await getCollection('courses');
+const publishedCourses = courses
+  .filter(c => c.data.status === 'published')
+  .sort((a, b) => a.data.order - b.data.order);
 
-// Group courses by course name
-const courseGroups = courses.reduce((acc, course) => {
-  const courseName = course.data.course;
-  if (!acc[courseName]) {
-    acc[courseName] = [];
-  }
-  acc[courseName].push(course);
-  return acc;
-}, {});
-
-// Get unique courses with their metadata
-const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) => {
-  const firstLesson = lessons[0];
-  const lessonCount = lessons.length;
-  const chapters = [...new Set(lessons.map(lesson => lesson.data.chapter).filter(Boolean))];
-  
-  return {
-    name: courseName,
-    slug: courseName.toLowerCase().replace(/\s+/g, '-'),
-    description: firstLesson.data.description || `Master ${courseName} with our comprehensive course`,
-    lessonCount,
-    chapterCount: chapters.length,
-  };
-});
+const title = 'Edumynt - Literature Courses';
+const description = 'Access our comprehensive literature courses - start learning today.';
 ---
 
-<html lang="en">
-  <Head 
-    title="Edumynt - Literature Courses"
-    description="Access our comprehensive literature courses - start learning today."
-  />
-  <body class="min-h-screen flex flex-col">
-    <Navigation pageType="home" />
+<BaseLayout title={title} description={description}>
+  <Navigation pageType="home" />
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6 pb-20">
-      <div class="mx-auto max-w-7xl">
-        <!-- Continue Learning Section -->
-        <div id="continueLearningSection" class="mb-12 hidden">
-          <h2 class="text-3xl font-display font-bold text-foreground mb-6">Continue Learning</h2>
-          
-          <!-- Continue Learning Card -->
-          <div class="relative">
-            <div class="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-xl p-6 hover:shadow-xl transition-all duration-300">
-              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                <!-- Course Image Placeholder -->
-                <div class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-primary/20 rounded-xl flex items-center justify-center">
-                  <svg class="h-8 w-8 sm:h-10 sm:w-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                
-                <!-- Course Info -->
-                <div class="flex-1 min-w-0 w-full sm:w-auto">
-                  <div class="flex flex-wrap items-center gap-2 mb-2">
-                    <span class="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">CONTINUE</span>
-                    <span id="continueLastVisited" class="text-xs text-muted-foreground"></span>
-                  </div>
-                  <h3 id="continueCourseTitle" class="font-display font-bold text-lg sm:text-xl text-foreground mb-1 line-clamp-1"></h3>
-                  <p id="continueLessonTitle" class="text-sm text-muted-foreground mb-3 line-clamp-1"></p>
-                  
-                  <!-- Progress Bar -->
-                  <div class="w-full bg-muted rounded-full h-2 mb-3">
-                    <div id="continueProgressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                  </div>
-                </div>
-                
-                <!-- Continue Button -->
-                <div class="flex-shrink-0 w-full sm:w-auto">
-                  <button id="continueButton" class="w-full sm:w-auto bg-primary text-primary-foreground px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center gap-2">
-                    <svg class="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-5-10V3a1 1 0 011-1h1a1 1 0 011 1v1M7 7h10" />
-                    </svg>
-                    Continue
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <main class="flex-1 p-6 pb-20">
+    <div class="mx-auto max-w-7xl">
+      <section class="mb-8">
+        <h2 class="text-3xl font-bold text-foreground mb-6">All Courses</h2>
 
-        <!-- Courses Carousel Section -->
-        <div class="mb-8">
-          <h2 class="text-3xl font-display font-bold text-foreground mb-6">All Courses</h2>
-          
-          <!-- Carousel Container -->
-          <div class="relative">
-            <!-- Carousel Wrapper -->
-            <div class="overflow-hidden rounded-xl">
-              <div id="coursesCarousel" class="flex transition-transform duration-300 ease-in-out gap-6">
-                {uniqueCourses.map((course, index) => (
-                  <div class="flex-shrink-0 w-80">
-                    <a 
-                      href={`/courses/${course.slug}`}
-                      class="group block bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-                    >
-                      <!-- Course Image -->
-                      <div class="h-48 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
-                        <img 
-                          src="/images/course_placeholder.jpg" 
-                          alt={`${course.name} course cover`}
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center\\'><svg class=\\'h-8 w-8 text-primary\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2\\' d=\\'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\\' /></svg></div>'"
-                        />
-                      </div>
-                      
-                      <!-- Course Content -->
-                      <div class="p-6">
-                        <h3 class="font-display font-bold text-xl text-foreground group-hover:text-primary transition-colors mb-3 line-clamp-2">
-                          {course.name}
-                        </h3>
-                        
-                        <p class="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-                          {course.description}
-                        </p>
-                        
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span class="flex items-center gap-1.5">
-                              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                              </svg>
-                              {course.chapterCount} chapters
-                            </span>
-                            <span class="flex items-center gap-1.5">
-                              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                              {course.lessonCount} lessons
-                            </span>
-                          </div>
-                          
-                          <div class="opacity-0 group-hover:opacity-100 transition-opacity">
-                            <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {publishedCourses.map((course) => (
+            <a
+              href={`/courses/${course.slug || course.id}`}
+              class="group block bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+            >
+              <div class="relative w-full aspect-video bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
+                {course.data.image?.src ? (
+                  <img
+                    src={course.data.image.src}
+                    alt={course.data.image.alt || course.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-4xl">📚</span>
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-            
-            <!-- Carousel Navigation -->
-            {uniqueCourses.length > 1 && (
-              <>
-                <!-- Previous Button -->
-                <button 
-                  id="prevBtn" 
-                  class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-background/90 backdrop-blur-sm border border-border rounded-full flex items-center justify-center shadow-lg hover:bg-background hover:shadow-xl transition-all duration-200 hover:scale-110 z-10"
-                >
-                  <svg class="h-5 w-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                
-                <!-- Next Button -->
-                <button 
-                  id="nextBtn" 
-                  class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-background/90 backdrop-blur-sm border border-border rounded-full flex items-center justify-center shadow-lg hover:bg-background hover:shadow-xl transition-all duration-200 hover:scale-110 z-10"
-                >
-                  <svg class="h-5 w-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </>
-            )}
-            
-            <!-- Carousel Indicators -->
-            {uniqueCourses.length > 1 && (
-              <div class="flex justify-center mt-6 gap-2">
-                {uniqueCourses.map((_, index) => (
-                  <button 
-                    class="carousel-indicator w-2 h-2 rounded-full bg-muted transition-all duration-200 hover:bg-primary/50"
-                    data-index={index}
-                  ></button>
-                ))}
+
+              <div class="p-4">
+                <div class="flex items-center gap-2 mb-2">
+                  {course.data.difficulty && (
+                    <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary capitalize">
+                      {course.data.difficulty}
+                    </span>
+                  )}
+                  {course.data.duration && (
+                    <span class="text-xs text-muted-foreground">{course.data.duration}</span>
+                  )}
+                </div>
+
+                <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-lg leading-tight mb-2">
+                  {course.data.title}
+                </h3>
+
+                <p class="text-sm text-muted-foreground line-clamp-2">
+                  {course.data.description}
+                </p>
               </div>
-            )}
-          </div>
+            </a>
+          ))}
         </div>
-      </div>
-    </main>
-    
-    <script>
-      // Course Progress Tracking System (same as lesson page)
-      class CourseProgressTracker {
-        constructor() {
-          this.storageKey = 'edumynt_course_progress';
-        }
-        
-        getProgress() {
-          try {
-            const stored = localStorage.getItem(this.storageKey);
-            return stored ? JSON.parse(stored) : {};
-          } catch (e) {
-            console.warn('Failed to load course progress:', e);
-            return {};
-          }
-        }
-        
-        getLastVisitedCourse() {
-          const progress = this.getProgress();
-          return progress.lastVisitedCourse || null;
-        }
-        
-        getCourseProgress(courseSlug) {
-          const progress = this.getProgress();
-          return progress.courseProgress?.[courseSlug] || null;
-        }
-        
-        calculateProgress(courseSlug, totalLessons) {
-          const courseProgress = this.getCourseProgress(courseSlug);
-          if (!courseProgress || !courseProgress.visitedLessons) return 0;
-          
-          const visitedCount = courseProgress.visitedLessons.length;
-          return Math.min(100, Math.round((visitedCount / totalLessons) * 100));
-        }
-      }
-      
-      document.addEventListener('DOMContentLoaded', function() {
-        const tracker = new CourseProgressTracker();
-        
-        // Initialize Continue Learning section
-        function initializeContinueLearning() {
-          const lastVisited = tracker.getLastVisitedCourse();
-          const continueSection = document.getElementById('continueLearningSection');
-          
-          if (!lastVisited || !continueSection) return;
-          
-          // Show the continue learning section
-          continueSection.classList.remove('hidden');
-          
-          // Populate the continue learning card
-          const courseTitleEl = document.getElementById('continueCourseTitle');
-          const lessonTitleEl = document.getElementById('continueLessonTitle');
-          const lastVisitedEl = document.getElementById('continueLastVisited');
-          const progressBarEl = document.getElementById('continueProgressBar');
-          const continueButtonEl = document.getElementById('continueButton');
-          
-          if (courseTitleEl) courseTitleEl.textContent = lastVisited.courseTitle;
-          if (lessonTitleEl) lessonTitleEl.textContent = `Last: ${lastVisited.lessonTitle}`;
-          
-          // Format last visited time
-          if (lastVisitedEl) {
-            const visitTime = new Date(lastVisited.timestamp);
-            const now = new Date();
-            const diffMs = now - visitTime;
-            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-            const diffDays = Math.floor(diffHours / 24);
-            
-            let timeText = '';
-            if (diffDays > 0) {
-              timeText = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-            } else if (diffHours > 0) {
-              timeText = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            } else {
-              timeText = 'Recently';
-            }
-            lastVisitedEl.textContent = timeText;
-          }
-          
-          // Calculate and show progress (mock calculation for now)
-          const mockProgress = Math.floor(Math.random() * 60) + 10; // 10-70% progress
-          if (progressBarEl) {
-            progressBarEl.style.width = `${mockProgress}%`;
-          }
-          
-          // Add continue button functionality
-          if (continueButtonEl) {
-            continueButtonEl.addEventListener('click', function() {
-              // Navigate to the course page with a special query parameter for auto-scroll
-              const courseUrl = `/courses/${lastVisited.courseSlug}?continue=true`;
-              window.location.href = courseUrl;
-            });
-          }
-        }
-        
-        // Initialize continue learning
-        initializeContinueLearning();
-        
-        // Listen for course progress updates
-        window.addEventListener('courseProgressUpdated', function() {
-          initializeContinueLearning();
-        });
-        
-        // Carousel functionality (existing code)
-        const carousel = document.getElementById('coursesCarousel');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const indicators = document.querySelectorAll('.carousel-indicator');
-        
-        if (!carousel) return;
-        
-        let currentIndex = 0;
-        const cardWidth = 320; // w-80 = 320px
-        const gap = 24; // gap-6 = 24px
-        const itemWidth = cardWidth + gap;
-        
-        // Get visible cards count based on container width
-        function getVisibleCards() {
-          const containerWidth = carousel.parentElement?.offsetWidth || 0;
-          return Math.floor(containerWidth / itemWidth) || 1;
-        }
-        
-        const totalCards = carousel.children.length;
-        let visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        
-        function updateCarousel() {
-          const translateX = -(currentIndex * itemWidth);
-          carousel.style.transform = `translateX(${translateX}px)`;
-          
-          // Update indicators
-          indicators.forEach((indicator, index) => {
-            if (index === currentIndex) {
-              indicator.classList.remove('bg-muted');
-              indicator.classList.add('bg-primary');
-            } else {
-              indicator.classList.remove('bg-primary');
-              indicator.classList.add('bg-muted');
-            }
-          });
-          
-          // Update button states
-          if (prevBtn) {
-            prevBtn.disabled = currentIndex === 0;
-            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
-          }
-          
-          if (nextBtn) {
-            nextBtn.disabled = currentIndex >= maxIndex;
-            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
-          }
-        }
-        
-        function nextSlide() {
-          if (currentIndex < maxIndex) {
-            currentIndex++;
-            updateCarousel();
-          }
-        }
-        
-        function prevSlide() {
-          if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-          }
-        }
-        
-        function goToSlide(index) {
-          if (index >= 0 && index <= maxIndex) {
-            currentIndex = index;
-            updateCarousel();
-          }
-        }
-        
-        // Event listeners
-        nextBtn?.addEventListener('click', nextSlide);
-        prevBtn?.addEventListener('click', prevSlide);
-        
-        indicators.forEach((indicator, index) => {
-          indicator.addEventListener('click', () => goToSlide(index));
-        });
-        
-        // Auto-slide functionality (optional)
-        let autoSlideInterval;
-        
-        function startAutoSlide() {
-          autoSlideInterval = setInterval(() => {
-            if (currentIndex >= maxIndex) {
-              currentIndex = 0;
-            } else {
-              currentIndex++;
-            }
-            updateCarousel();
-          }, 5000);
-        }
-        
-        function stopAutoSlide() {
-          clearInterval(autoSlideInterval);
-        }
-        
-        // Start auto-slide if there are multiple cards
-        if (totalCards > visibleCards) {
-          startAutoSlide();
-          
-          // Pause auto-slide on hover
-          carousel.parentElement?.addEventListener('mouseenter', stopAutoSlide);
-          carousel.parentElement?.addEventListener('mouseleave', startAutoSlide);
-        }
-        
-        // Handle window resize
-        window.addEventListener('resize', () => {
-          visibleCards = getVisibleCards();
-          const newMaxIndex = Math.max(0, totalCards - visibleCards);
-          if (currentIndex > newMaxIndex) {
-            currentIndex = newMaxIndex;
-          }
-          updateCarousel();
-        });
-        
-        // Initialize
-        updateCarousel();
-        
-        // Touch/swipe support for mobile
-        let startX = 0;
-        let isDragging = false;
-        
-        carousel.addEventListener('touchstart', (e) => {
-          startX = e.touches[0].clientX;
-          isDragging = true;
-          stopAutoSlide();
-        });
-        
-        carousel.addEventListener('touchmove', (e) => {
-          if (!isDragging) return;
-          e.preventDefault();
-        });
-        
-        carousel.addEventListener('touchend', (e) => {
-          if (!isDragging) return;
-          isDragging = false;
-          
-          const endX = e.changedTouches[0].clientX;
-          const diff = startX - endX;
-          
-          if (Math.abs(diff) > 50) { // Minimum swipe distance
-            if (diff > 0) {
-              nextSlide();
-            } else {
-              prevSlide();
-            }
-          }
-          
-          if (totalCards > visibleCards) {
-            startAutoSlide();
-          }
-        });
-      });
-    </script>
-  </body>
-</html>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

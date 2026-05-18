@@ -20,45 +20,53 @@ const seoSchema = z.object({
 });
 
 // ============================================================
-// Course Collection (index.mdx in course root)
+// Course Collection (index.mdx in course root folder)
 // ============================================================
 
 const courseSchema = z.object({
   // Identity
   title: z.string().min(1, 'Course title is required'),
-  slug: z.string().optional(), // Auto-generated from folder name if not provided
+  slug: z.string().optional(), // Auto-generated from folder name
 
   // Descriptions
   description: z.string().min(1, 'Short description is required'),
-  longDescription: z.string().optional(), // Full markdown description
+  longDescription: z.string().optional(), // Full markdown for course detail page
 
-  // Categorization
+  // Categorization — all 3 tiers support category + tags for search/filter
   category: z.string().default('uncategorized'),
   tags: z.array(z.string()).default([]),
 
+  // Exams — a course can belong to multiple exams
+  exams: z.array(z.string()).default([]),
+  // Examples: ["UGC NET", "UPSC", "PSC", "NET/JRF", "SET"]
+
+  // Difficulty
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']).default('intermediate'),
+
   // Course metadata
-  level: z.enum(['beginner', 'intermediate', 'advanced']).default('intermediate'),
   duration: z.string().optional(), // e.g. "12 weeks"
   prerequisites: z.array(z.string()).default([]),
   learningOutcomes: z.array(z.string()).default([]),
 
-  // Instructor
-  instructor: z.object({
+  // Instructors — multiple instructors per course
+  instructors: z.array(z.object({
     name: z.string(),
     bio: z.string().optional(),
     avatar: z.string().optional(),
-  }).optional(),
+  })).default([{ name: 'Edumynt' }]),
 
   // Media
-  image: imageSchema.optional(),
-  coverImage: imageSchema.optional(),
+  image: imageSchema.optional(),       // Thumbnail for cards
+  coverImage: imageSchema.optional(),  // Hero/banner for course page
+  videoPreview: z.string().optional(), // Promo video URL (YouTube, etc.)
 
-  // Display order
+  // Display
   order: z.number().default(0),
   featured: z.boolean().default(false),
 
-  // Status
+  // Status & versioning
   status: z.enum(['draft', 'published', 'archived']).default('published'),
+  version: z.string().default('1.0.0'),
 
   // SEO
   seo: seoSchema.optional(),
@@ -76,22 +84,34 @@ const chapterSchema = z.object({
   // Descriptions
   description: z.string().optional(),
 
+  // Categorization
+  category: z.string().default('uncategorized'),
+  tags: z.array(z.string()).default([]),
+
   // Chapter metadata
   order: z.number().default(0),
-  estimatedTime: z.string().optional(), // e.g. "45 min"
+  estimatedTime: z.string().optional(), // Auto-calculated from lessons, shown as estimate
+
+  // Instructors — chapter can have different instructors
+  instructors: z.array(z.object({
+    name: z.string(),
+    bio: z.string().optional(),
+    avatar: z.string().optional(),
+  })).default([{ name: 'Edumynt' }]),
 
   // Media
   image: imageSchema.optional(),
 
-  // Status
+  // Status & versioning
   status: z.enum(['draft', 'published', 'archived']).default('published'),
+  version: z.string().default('1.0.0'),
 
   // SEO
   seo: seoSchema.optional(),
 });
 
 // ============================================================
-// Lesson Collection (individual .mdx files)
+// Lesson Collection (individual .mdx files in chapter folders)
 // ============================================================
 
 const lessonSchema = z.object({
@@ -101,9 +121,10 @@ const lessonSchema = z.object({
 
   // Descriptions
   description: z.string().optional(),
-  excerpt: z.string().optional(), // Short preview text
+  excerpt: z.string().optional(), // Short preview for cards
 
   // Categorization
+  category: z.string().default('uncategorized'),
   tags: z.array(z.string()).default([]),
 
   // Lesson metadata
@@ -111,9 +132,15 @@ const lessonSchema = z.object({
   estimatedTime: z.string().optional(), // e.g. "15 min"
   type: z.enum(['lesson', 'quiz', 'assignment', 'resource']).default('lesson'),
 
-  // Authors
-  author: z.string().optional(),
-  contributors: z.array(z.string()).default([]),
+  // Difficulty
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']).default('intermediate'),
+
+  // Instructors — lesson can have specific instructors
+  instructors: z.array(z.object({
+    name: z.string(),
+    bio: z.string().optional(),
+    avatar: z.string().optional(),
+  })).default([{ name: 'Edumynt' }]),
 
   // Dates
   date: z.date().optional(),
@@ -126,8 +153,9 @@ const lessonSchema = z.object({
   // Display
   featured: z.boolean().default(false),
 
-  // Status
+  // Status & versioning
   status: z.enum(['draft', 'published', 'archived']).default('published'),
+  version: z.string().default('1.0.0'),
 
   // SEO
   seo: seoSchema.optional(),
@@ -138,17 +166,17 @@ const lessonSchema = z.object({
 // ============================================================
 
 const courses = defineCollection({
-  loader: glob({ pattern: '**/index.mdx', base: './src/content/courses' }),
+  loader: glob({ pattern: '*/index.mdx', base: './src/content/courses' }),
   schema: courseSchema,
 });
 
 const chapters = defineCollection({
-  loader: glob({ pattern: '**/index.mdx', base: './src/content/courses' }),
+  loader: glob({ pattern: '*/*/index.mdx', base: './src/content/courses' }),
   schema: chapterSchema,
 });
 
 const lessons = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/courses' }),
+  loader: glob({ pattern: '*/*/!(index).{mdx,md}', base: './src/content/courses' }),
   schema: lessonSchema,
 });
 
@@ -159,7 +187,7 @@ export const collections = {
 };
 
 // ============================================================
-// Type Exports (for use in .astro files)
+// Type Exports
 // ============================================================
 
 export type Course = z.infer<typeof courseSchema>;

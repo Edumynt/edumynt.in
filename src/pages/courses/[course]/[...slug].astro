@@ -1,428 +1,90 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Navigation from '../../../components/Navigation.astro';
-import Head from '../../../components/Head.astro';
-import Button from '../../../components/ui/Button.astro';
-import '../../../styles/global.css';
 
 export async function getStaticPaths() {
-  const courses = await getCollection('courses');
-  
-  return courses.map((lesson) => {
-    const courseSlug = lesson.data.course.toLowerCase().replace(/\s+/g, '-');
-    const pathParts = lesson.slug.split('/').slice(1); // Remove course name
-    
-    return {
-      params: { 
-        course: courseSlug,
-        slug: pathParts.join('/') 
-      },
-      props: { lesson }
-    };
-  });
+  const lessons = await getCollection('lessons');
+  return lessons
+    .filter(l => l.data.status === 'published')
+    .filter((lesson) => {
+      const parts = lesson.id.split('/');
+      return parts.length >= 3 && parts[0] && !parts.at(-1)?.startsWith('index');
+    })
+    .map((lesson) => {
+      // lesson.id format: "course-name/chapter-name/lesson-file"
+      const [course, ...slugParts] = lesson.id.split('/');
+
+      return {
+        params: { course, slug: slugParts.join('/') },
+        props: { lesson },
+      };
+    });
 }
 
-const { course, slug } = Astro.params;
 const { lesson } = Astro.props;
 
-// Get all lessons in this course
-const allCourses = await getCollection('courses');
-const courseLessons = allCourses.filter(l => l.data.course === lesson.data.course);
+const idParts = lesson.id.split('/');
+const courseId = idParts[0];
+const chapterId = idParts.length > 2 ? idParts[1] : null;
 
-// Helper function to generate lesson URL
-function generateLessonUrl(lesson) {
-  const courseSlug = lesson.data.course.toLowerCase().replace(/\s+/g, '-');
-  const pathParts = lesson.slug.split('/').slice(1);
-  return `/courses/${courseSlug}/${pathParts.join('/')}`;
-}
+const { Content } = await render(lesson);
 
-// Group lessons by their folder structure
-const lessonsByFolder = {};
-courseLessons.forEach(l => {
-  const pathParts = l.slug.split('/').slice(1); // Remove course name
-  const folderPath = pathParts.slice(0, -1).join('/') || 'root';
-  
-  if (!lessonsByFolder[folderPath]) {
-    lessonsByFolder[folderPath] = [];
-  }
-  lessonsByFolder[folderPath].push(l);
-});
-
-// Sort lessons within each folder
-Object.keys(lessonsByFolder).forEach(folder => {
-  lessonsByFolder[folder].sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
-});
-
-// Build breadcrumbs
-const pathParts = lesson.slug.split('/').slice(1); // Remove course name
-const folders = pathParts.slice(0, -1); // Remove filename
-
-const breadcrumbs = [
-  { name: 'All Courses', url: '/courses' },
-  { name: lesson.data.course, url: `/courses/${course}` }
-];
-
-folders.forEach(folder => {
-  breadcrumbs.push({
-    name: folder.charAt(0).toUpperCase() + folder.slice(1).replace(/-/g, ' '),
-    url: null
-  });
-});
-
-// Find previous and next lessons
-const allLessonsFlat = courseLessons.sort((a, b) => a.slug.localeCompare(b.slug));
-const currentIndex = allLessonsFlat.findIndex(l => l.slug === lesson.slug);
-const prevLesson = currentIndex > 0 ? allLessonsFlat[currentIndex - 1] : null;
-const nextLesson = currentIndex < allLessonsFlat.length - 1 ? allLessonsFlat[currentIndex + 1] : null;
-
-const { Content } = await lesson.render();
-
-// Get the raw content for TOC extraction
-const lessonContent = lesson.body;
+const title = `${lesson.data.title} - Edumynt`;
+const description = lesson.data.description || '';
 ---
 
-<html lang="en">
-  <Head 
-    title={`${lesson.data.title} - ${lesson.data.course}`}
-    description={lesson.data.description}
-  />
-  <body class="min-h-screen bg-background text-foreground overflow-x-hidden">
-    <!-- Fixed Top Bar -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      <div class="flex items-center gap-4 px-4 py-3">
-        <!-- Back to Course Button -->
-        <button 
-          id="backToCourse" 
-          class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted/80 transition-colors flex-shrink-0"
-        >
-          <svg class="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        
-        <!-- Progress Bar Container -->
-        <div class="flex-1 mx-2">
-          <div class="w-full bg-muted rounded-full h-2">
-            <div id="lessonProgressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-          </div>
-        </div>
-        
-        <!-- Theme Toggle Button -->
-        <button 
-          id="themeToggle"
-          class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-muted/80 transition-colors flex-shrink-0"
-          title="Toggle theme"
-        >
-          <svg class="w-5 h-5 text-foreground dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-          <svg class="w-5 h-5 text-foreground hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </button>
-      </div>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="pt-20">
-      <div class="mx-auto max-w-4xl px-6 lg:px-8 py-8">
-        <article class="space-y-8">
-          <!-- Lesson Header -->
-          <header class="space-y-3 pb-4 border-b">
-            <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-foreground leading-tight">
-              {lesson.data.title}
-            </h1>
-            
-            {lesson.data.description && (
-              <p class="text-base text-muted-foreground leading-relaxed max-w-3xl">
-                {lesson.data.description}
-              </p>
+<BaseLayout title={title} description={description}>
+  <Navigation pageType="lesson" />
+
+  <main class="pt-20">
+    <div class="mx-auto max-w-4xl px-6 lg:px-8 py-8">
+      <article class="space-y-8">
+        <header class="space-y-3 pb-4 border-b">
+          <nav class="text-sm text-muted-foreground mb-2">
+            <a href="/courses" class="hover:text-primary">Courses</a>
+            <span class="mx-2">›</span>
+            <a href={`/courses/${courseId}`} class="hover:text-primary capitalize">{courseId.replace(/-/g, ' ')}</a>
+            {chapterId && (
+              <>
+                <span class="mx-2">›</span>
+                <span class="capitalize">{chapterId.replace(/-/g, ' ')}</span>
+              </>
             )}
-            
-            <div class="flex flex-wrap items-center gap-3">
-              {lesson.data.tags && (
-                <div class="flex flex-wrap gap-1.5">
-                  {lesson.data.tags.map(tag => (
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {lesson.data.date && (
-                <time class="text-xs font-medium text-muted-foreground">
-                  {new Date(lesson.data.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </time>
-              )}
-            </div>
-          </header>
+          </nav>
 
-          <!-- Lesson Content -->
-          <div id="lessonContent" class="prose prose-lg prose-slate max-w-none dark:prose-invert prose-headings:scroll-mt-28 prose-headings:font-bold prose-headings:tracking-tight lg:prose-headings:scroll-mt-[8.5rem] prose-lead:text-muted-foreground prose-lead:text-xl prose-lead:leading-8 prose-p:text-foreground prose-p:leading-8 prose-a:font-semibold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:font-bold prose-strong:text-foreground prose-code:bg-muted prose-code:text-foreground prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:text-sm prose-code:font-mono prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg prose-blockquote:border-l-4 prose-blockquote:border-primary/30 prose-blockquote:pl-6 prose-blockquote:text-muted-foreground prose-blockquote:italic prose-th:font-bold prose-th:text-foreground prose-td:text-foreground">
-            <Content />
-          </div>
+          <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-foreground leading-tight">
+            {lesson.data.title}
+          </h1>
 
-          <!-- Next Lesson Button -->
-          <div class="pt-8 border-t">
-            {nextLesson ? (
-              <a 
-                href={generateLessonUrl(nextLesson)}
-                class="w-full bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors duration-200 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 block text-center"
-              >
-                <span>Next: {nextLesson.data.title}</span>
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m-5-5H6" />
-                </svg>
-              </a>
-            ) : (
-              <div class="w-full bg-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-3 shadow-lg">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>🎓 Course Complete!</span>
+          {lesson.data.description && (
+            <p class="text-base text-muted-foreground leading-relaxed max-w-3xl">
+              {lesson.data.description}
+            </p>
+          )}
+
+          <div class="flex flex-wrap items-center gap-3">
+            {lesson.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-1.5">
+                {lesson.data.tags.map(tag => (
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                    {tag}
+                  </span>
+                ))}
               </div>
             )}
+            {lesson.data.estimatedTime && (
+              <span class="text-xs font-medium text-muted-foreground">
+                ⏱ {lesson.data.estimatedTime}
+              </span>
+            )}
           </div>
-        </article>
-      </div>
-    </main>
-  <script>
-    // Course Progress Tracking System
-    class CourseProgressTracker {
-      constructor() {
-        this.storageKey = 'edumynt_course_progress';
-      }
-      
-      getProgress() {
-        try {
-          const stored = localStorage.getItem(this.storageKey);
-          return stored ? JSON.parse(stored) : {};
-        } catch (e) {
-          console.warn('Failed to load course progress:', e);
-          return {};
-        }
-      }
-      
-      saveProgress(progress) {
-        try {
-          localStorage.setItem(this.storageKey, JSON.stringify(progress));
-        } catch (e) {
-          console.warn('Failed to save course progress:', e);
-        }
-      }
-      
-      trackLessonVisit(courseSlug, lessonSlug, lessonTitle, courseTitle) {
-        const progress = this.getProgress();
-        const timestamp = new Date().toISOString();
-        
-        // Update last visited course
-        progress.lastVisitedCourse = {
-          courseSlug,
-          lessonSlug,
-          lessonTitle,
-          courseTitle,
-          timestamp
-        };
-        
-        // Update course-specific progress
-        if (!progress.courseProgress) progress.courseProgress = {};
-        if (!progress.courseProgress[courseSlug]) {
-          progress.courseProgress[courseSlug] = {
-            visitedLessons: [],
-            completedLessons: [],
-            lastVisited: null
-          };
-        }
-        
-        const courseProgress = progress.courseProgress[courseSlug];
-        courseProgress.lastVisited = {
-          lessonSlug,
-          lessonTitle,
-          timestamp
-        };
-        
-        // Add to visited lessons if not already there
-        if (!courseProgress.visitedLessons.some(lesson => lesson.slug === lessonSlug)) {
-          courseProgress.visitedLessons.push({
-            slug: lessonSlug,
-            title: lessonTitle,
-            firstVisit: timestamp
-          });
-        }
-        
-        this.saveProgress(progress);
-        
-        // Dispatch custom event for other components to listen
-        window.dispatchEvent(new CustomEvent('courseProgressUpdated', {
-          detail: { courseSlug, lessonSlug, lessonTitle, courseTitle }
-        }));
-      }
-      
-      markLessonComplete(courseSlug, lessonSlug, lessonTitle) {
-        const progress = this.getProgress();
-        const timestamp = new Date().toISOString();
-        
-        if (!progress.courseProgress) progress.courseProgress = {};
-        if (!progress.courseProgress[courseSlug]) {
-          progress.courseProgress[courseSlug] = {
-            visitedLessons: [],
-            completedLessons: [],
-            lastVisited: null
-          };
-        }
-        
-        const courseProgress = progress.courseProgress[courseSlug];
-        
-        // Add to completed lessons if not already there
-        if (!courseProgress.completedLessons.some(lesson => lesson.slug === lessonSlug)) {
-          courseProgress.completedLessons.push({
-            slug: lessonSlug,
-            title: lessonTitle,
-            completedAt: timestamp
-          });
-        }
-        
-        this.saveProgress(progress);
-        
-        // Dispatch completion event
-        window.dispatchEvent(new CustomEvent('lessonCompleted', {
-          detail: { courseSlug, lessonSlug, lessonTitle }
-        }));
-      }
-      
-      getLastVisitedCourse() {
-        const progress = this.getProgress();
-        return progress.lastVisitedCourse || null;
-      }
-      
-      getCourseProgress(courseSlug) {
-        const progress = this.getProgress();
-        return progress.courseProgress?.[courseSlug] || null;
-      }
-    }
-    
-    // Lesson Progress Tracker
-    class LessonProgressTracker {
-      constructor() {
-        this.progressBar = document.getElementById('lessonProgressBar');
-        this.content = document.getElementById('lessonContent');
-        this.currentProgress = 0;
-        this.isFinished = false;
-        
-        this.initializeTracking();
-      }
-      
-      initializeTracking() {
-        if (!this.content || !this.progressBar) return;
-        
-        // Track scroll progress
-        window.addEventListener('scroll', () => this.updateScrollProgress());
-        window.addEventListener('resize', () => this.updateScrollProgress());
-        
-        // Initial progress update
-        setTimeout(() => this.updateScrollProgress(), 100);
-      }
-      
-      updateScrollProgress() {
-        if (!this.content || this.isFinished) return;
-        
-        // Get current scroll position
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-        
-        // Get content position and dimensions
-        const contentRect = this.content.getBoundingClientRect();
-        const contentTop = contentRect.top + scrollTop;
-        const contentHeight = contentRect.height;
-        const contentBottom = contentTop + contentHeight;
-        
-        // Calculate progress based on scroll position relative to content
-        let scrollProgress = 0;
-        
-        if (scrollTop <= contentTop - windowHeight) {
-          // Above the content area
-          scrollProgress = 0;
-        } else if (scrollTop >= contentBottom - windowHeight) {
-          // Past the content area (reached the end)
-          scrollProgress = 1;
-        } else {
-          // Within the content reading area
-          const startReading = contentTop - windowHeight;
-          const endReading = contentBottom - windowHeight;
-          const readingRange = endReading - startReading;
-          
-          if (readingRange > 0) {
-            scrollProgress = (scrollTop - startReading) / readingRange;
-          }
-        }
-        
-        // Ensure progress is between 0 and 1
-        scrollProgress = Math.max(0, Math.min(1, scrollProgress));
-        
-        this.currentProgress = scrollProgress;
-        this.updateProgressDisplay();
-      }
-      
-      updateProgressDisplay() {
-        const percentage = Math.round(this.currentProgress * 100);
-        
-        if (this.progressBar) {
-          this.progressBar.style.width = `${percentage}%`;
-        }
-      }
-      
-      markAsFinished() {
-        this.isFinished = true;
-        this.currentProgress = 1;
-        this.updateProgressDisplay();
-      }
-    }
-    
-    
-    // Initialize everything when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize theme management
-      import('/src/lib/theme-manager.ts').then(({ initTheme }) => {
-        const themeManager = initTheme();
-        
-        // Connect theme toggle button
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-          themeToggle.addEventListener('click', (e) => themeManager.toggle(e));
-        }
-      });
-      
-      const tracker = new CourseProgressTracker();
-      const progressTracker = new LessonProgressTracker();
-      
-      // Get current lesson data from URL and page
-      const pathParts = window.location.pathname.split('/');
-      const courseSlug = pathParts[2];
-      const lessonSlug = pathParts.slice(3).join('/');
-      
-      const lessonTitle = document.querySelector('h1')?.textContent?.trim() || 'Unknown Lesson';
-      const courseTitle = document.title.split(' - ')[1] || 'Unknown Course';
-      
-      // Track this lesson visit
-      if (courseSlug && lessonSlug) {
-        tracker.trackLessonVisit(courseSlug, lessonSlug, lessonTitle, courseTitle);
-      }
-      
-      // Handle back to course button
-      const backToCourseBtn = document.getElementById('backToCourse');
-      if (backToCourseBtn) {
-        backToCourseBtn.addEventListener('click', () => {
-          // Store the current lesson for scrolling
-          sessionStorage.setItem('scrollToLesson', lessonSlug);
-          // Navigate to course page
-          window.location.href = `/courses/${courseSlug}`;
-        });
-      }
-    });
-  </script>
-  </body>
+        </header>
+
+        <div class="prose prose-lg max-w-none dark:prose-invert">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </main>
+</BaseLayout>
