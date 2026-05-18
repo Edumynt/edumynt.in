@@ -29,17 +29,12 @@ const description = 'Browse all available courses on Edumynt.';
             class="group block bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
           >
             <div class="relative w-full aspect-video bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
-              {course.data.image?.src ? (
-                <img
-                  src={course.data.image.src}
-                  alt={course.data.image.alt || course.data.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              ) : (
-                <div class="w-full h-full flex items-center justify-center">
-                  <span class="text-4xl">📚</span>
-                </div>
-              )}
+              <img
+                src={course.data.image?.src || '/images/course_placeholder.jpg'}
+                alt={course.data.image?.alt || course.data.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onerror="this.onerror=null; this.src='/images/course_placeholder.jpg';"
+              />
             </div>
 
             <div class="p-4">
