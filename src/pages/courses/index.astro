@@ -1,12 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navigation from '../../components/Navigation.astro';
+import CourseCard from '../../components/course/CourseCard.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import { getCourseOutlines } from '../../lib/course-data';
 
-const courses = await getCollection('courses');
-const publishedCourses = courses
-  .filter(c => c.data.status === 'published')
-  .sort((a, b) => a.data.order - b.data.order);
+const outlines = await getCourseOutlines();
+const chapterCount = outlines.reduce((total, outline) => total + outline.stats.chapterCount, 0);
+const lessonCount = outlines.reduce((total, outline) => total + outline.stats.lessonCount, 0);
 
 const title = 'All Courses';
 const description = 'Browse all available courses on Edumynt.';
@@ -15,47 +16,22 @@ const description = 'Browse all available courses on Edumynt.';
 <BaseLayout title={title} description={description}>
   <Navigation pageType="courses" />
 
-  <main class="flex-1 p-6 pb-20">
+  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-      <header class="mb-8">
-        <h1 class="text-3xl font-bold text-foreground mb-2">All Courses</h1>
-        <p class="text-muted-foreground">Choose a course to start learning</p>
-      </header>
+      <PageHeader
+        eyebrow="Course Library"
+        title="All Courses"
+        description="Choose a course to see its complete chapter and lesson path."
+        stats={[
+          { label: 'Courses', value: outlines.length },
+          { label: 'Chapters', value: chapterCount },
+          { label: 'Lessons', value: lessonCount },
+        ]}
+      />
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {publishedCourses.map((course) => (
-          <a
-            href={`/courses/${course.slug || course.id}`}
-            class="group block bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
-          >
-            <div class="relative w-full aspect-video bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
-              <img
-                src={course.data.image?.src || '/images/course_placeholder.jpg'}
-                alt={course.data.image?.alt || course.data.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                onerror="this.onerror=null; this.src='/images/course_placeholder.jpg';"
-              />
-            </div>
-
-            <div class="p-4">
-              <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-lg leading-tight mb-2">
-                {course.data.title}
-              </h3>
-
-              <p class="text-sm text-muted-foreground mb-3 line-clamp-2">
-                {course.data.description}
-              </p>
-
-              <div class="flex items-center gap-4 text-xs text-muted-foreground">
-                {course.data.duration && (
-                  <span>{course.data.duration}</span>
-                )}
-                {course.data.difficulty && (
-                  <span class="capitalize">{course.data.difficulty}</span>
-                )}
-              </div>
-            </div>
-          </a>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {outlines.map(outline => (
+          <CourseCard outline={outline} />
         ))}
       </div>
     </div>

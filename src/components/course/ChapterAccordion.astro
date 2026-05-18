@@ -1,0 +1,99 @@
+---
+import Badge from '../ui/Badge.astro';
+import type { ChapterOutline } from '../../lib/course-data';
+import { lessonUrl } from '../../lib/course-data';
+
+export interface Props {
+  chapters: ChapterOutline[];
+}
+
+const { chapters } = Astro.props;
+---
+
+<section class="space-y-4" data-chapter-accordion>
+  {chapters.map((section, index) => {
+    const isOpen = index === 0;
+
+    return (
+      <article class="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+        <button
+          class="flex w-full items-center justify-between gap-4 bg-muted/70 p-5 text-left transition hover:bg-muted sm:p-6"
+          type="button"
+          aria-expanded={isOpen ? 'true' : 'false'}
+          data-chapter-toggle
+        >
+          <div class="flex min-w-0 items-center gap-4">
+            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-card text-base font-display font-extrabold text-foreground">
+              {index + 1}
+            </div>
+            <div class="min-w-0">
+              <h2 class="mb-1 line-clamp-1 text-xl font-display font-bold text-foreground">{section.chapter.data.title}</h2>
+              {section.chapter.data.description && (
+                <p class="mb-2 line-clamp-1 text-sm text-muted-foreground">{section.chapter.data.description}</p>
+              )}
+              <div class="flex flex-wrap gap-2">
+                <Badge tone="muted">{section.lessonCount} lessons</Badge>
+                {section.estimatedTime && <Badge tone="muted">{section.estimatedTime}</Badge>}
+              </div>
+            </div>
+          </div>
+          <svg class={`h-5 w-5 flex-shrink-0 text-muted-foreground transition duration-300 ${isOpen ? 'rotate-180' : ''}`} data-chapter-icon fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div class={`grid transition-all duration-300 ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`} data-chapter-panel>
+          <div class="overflow-hidden">
+            {section.lessons.length > 0 ? (
+              <div class="divide-y divide-border">
+                {section.lessons.map((lesson, lessonIndex) => (
+                  <a href={lessonUrl(lesson)} class="group flex items-center gap-4 p-5 transition hover:bg-muted/60 sm:px-6">
+                    <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                      {lessonIndex + 1}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <h3 class="mb-1 line-clamp-1 text-base font-display font-bold text-foreground transition group-hover:text-primary">{lesson.data.title}</h3>
+                      {(lesson.data.excerpt || lesson.data.description) && (
+                        <p class="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{lesson.data.excerpt || lesson.data.description}</p>
+                      )}
+                      <div class="mt-2 flex flex-wrap gap-2">
+                        <Badge tone="muted" class="capitalize">{lesson.data.type}</Badge>
+                        {lesson.data.estimatedTime && <Badge tone="muted">{lesson.data.estimatedTime}</Badge>}
+                        <Badge tone="muted" class="capitalize">{lesson.data.difficulty}</Badge>
+                      </div>
+                    </div>
+                    <svg class="h-5 w-5 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="p-6 text-sm text-muted-foreground">No lessons published in this chapter yet.</div>
+            )}
+          </div>
+        </div>
+      </article>
+    );
+  })}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-chapter-accordion]').forEach(accordion => {
+      accordion.querySelectorAll('[data-chapter-toggle]').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const article = toggle.closest('article');
+          const panel = article?.querySelector('[data-chapter-panel]');
+          const icon = article?.querySelector('[data-chapter-icon]');
+          const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+          toggle.setAttribute('aria-expanded', String(!isOpen));
+          panel?.classList.toggle('grid-rows-[1fr]', !isOpen);
+          panel?.classList.toggle('grid-rows-[0fr]', isOpen);
+          icon?.classList.toggle('rotate-180', !isOpen);
+        });
+      });
+    });
+  });
+</script>

@@ -1,37 +1,114 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Navigation from '../../../components/Navigation.astro';
+import Badge from '../../../components/ui/Badge.astro';
+import ChapterAccordion from '../../../components/course/ChapterAccordion.astro';
+import CourseHero from '../../../components/course/CourseHero.astro';
+import { getCourseOutlines } from '../../../lib/course-data';
 
 export async function getStaticPaths() {
-  const courses = await getCollection('courses');
-  return courses
-    .filter(c => c.data.status === 'published')
-    .map(course => ({
-      params: { course: course.slug || course.id },
-      props: { course },
-    }));
+  const outlines = await getCourseOutlines();
+
+  return outlines.map(outline => ({
+    params: { course: outline.courseId },
+    props: { outline },
+  }));
 }
 
-const { course } = Astro.props;
+const { outline } = Astro.props;
+const { course } = outline;
 const { Content } = await render(course);
 
-const title = `${course.data.title} - Edumynt`;
+const title = course.data.title;
 const description = course.data.description;
 ---
 
 <BaseLayout title={title} description={description}>
   <Navigation pageType="course" />
 
-  <main class="flex-1 p-6 pb-20">
+  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-      <header class="mb-8">
-        <h1 class="text-3xl font-bold text-foreground mb-2">{course.data.title}</h1>
-        <p class="text-muted-foreground">{course.data.description}</p>
-      </header>
+      <CourseHero outline={outline} />
 
-      <div class="prose prose-lg max-w-none">
-        <Content />
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div class="space-y-8">
+          <section class="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
+            <div class="mb-5">
+              <p class="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Overview</p>
+              <h2 class="text-3xl font-display font-bold text-foreground">About this course</h2>
+            </div>
+            <div class="prose prose-lg max-w-none dark:prose-invert">
+              <Content />
+            </div>
+          </section>
+
+          <section>
+            <div class="mb-5">
+              <p class="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Curriculum</p>
+              <h2 class="text-3xl font-display font-bold text-foreground">Chapters and lessons</h2>
+            </div>
+            <ChapterAccordion chapters={outline.chapters} />
+          </section>
+        </div>
+
+        <aside class="space-y-5 lg:sticky lg:top-6 lg:self-start">
+          <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <h2 class="mb-4 text-xl font-display font-bold text-foreground">Course Details</h2>
+            <dl class="space-y-3 text-sm">
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-muted-foreground">Chapters</dt>
+                <dd class="font-bold text-foreground">{outline.stats.chapterCount}</dd>
+              </div>
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-muted-foreground">Lessons</dt>
+                <dd class="font-bold text-foreground">{outline.stats.lessonCount}</dd>
+              </div>
+              {course.data.duration && (
+                <div class="flex items-center justify-between gap-4">
+                  <dt class="text-muted-foreground">Duration</dt>
+                  <dd class="font-bold text-foreground">{course.data.duration}</dd>
+                </div>
+              )}
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-muted-foreground">Difficulty</dt>
+                <dd class="font-bold capitalize text-foreground">{course.data.difficulty}</dd>
+              </div>
+            </dl>
+          </section>
+
+          {course.data.exams.length > 0 && (
+            <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <h2 class="mb-4 text-xl font-display font-bold text-foreground">Exam Focus</h2>
+              <div class="flex flex-wrap gap-2">
+                {course.data.exams.map(exam => <Badge tone="primary">{exam}</Badge>)}
+              </div>
+            </section>
+          )}
+
+          {course.data.learningOutcomes.length > 0 && (
+            <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <h2 class="mb-4 text-xl font-display font-bold text-foreground">Learning Outcomes</h2>
+              <ul class="space-y-3 pl-0">
+                {course.data.learningOutcomes.map(outcome => (
+                  <li class="flex gap-3 text-sm leading-relaxed text-muted-foreground">
+                    <span class="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-primary"></span>
+                    <span>{outcome}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {course.data.tags.length > 0 && (
+            <section class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+              <h2 class="mb-4 text-xl font-display font-bold text-foreground">Tags</h2>
+              <div class="flex flex-wrap gap-2">
+                {course.data.tags.map(tag => <Badge tone="muted">{tag}</Badge>)}
+              </div>
+            </section>
+          )}
+        </aside>
       </div>
     </div>
   </main>

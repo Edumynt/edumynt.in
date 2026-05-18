@@ -1,0 +1,43 @@
+---
+import Badge from './Badge.astro';
+
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  stats?: Array<{ label: string; value: string | number }>;
+}
+
+const { eyebrow, title, description, stats = [] } = Astro.props;
+---
+
+<header class="mb-8 overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+  <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+    <div class="max-w-3xl">
+      {eyebrow && (
+        <div class="mb-3">
+          <Badge tone="primary">{eyebrow}</Badge>
+        </div>
+      )}
+      <h1 class="mb-4 text-4xl font-display font-extrabold tracking-tight text-foreground md:text-5xl">
+        {title}
+      </h1>
+      {description && (
+        <p class="max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          {description}
+        </p>
+      )}
+    </div>
+
+    {stats.length > 0 && (
+      <div class="grid grid-cols-3 gap-3 text-center">
+        {stats.map(stat => (
+          <div class="rounded-2xl bg-muted px-4 py-3">
+            <div class="text-2xl font-display font-bold text-foreground">{stat.value}</div>
+            <div class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</header>

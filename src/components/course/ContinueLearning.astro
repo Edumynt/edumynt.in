@@ -1,0 +1,83 @@
+---
+---
+
+<section id="continueLearningSection" class="mb-12 hidden">
+  <div class="mb-5 flex items-end justify-between gap-4">
+    <div>
+      <p class="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Resume</p>
+      <h2 class="text-3xl font-display font-bold text-foreground">Continue Learning</h2>
+    </div>
+  </div>
+
+  <div class="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 via-card to-primary/5 p-6 shadow-sm">
+    <div class="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-2xl"></div>
+    <div class="relative flex flex-col gap-5 sm:flex-row sm:items-center">
+      <div class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+        <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex flex-wrap items-center gap-2">
+          <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-primary-foreground">Continue</span>
+          <span id="continueLastVisited" class="text-xs font-medium text-muted-foreground"></span>
+        </div>
+        <h3 id="continueCourseTitle" class="mb-1 line-clamp-1 text-xl font-display font-bold text-foreground"></h3>
+        <p id="continueLessonTitle" class="mb-4 line-clamp-1 text-sm text-muted-foreground"></p>
+        <div class="h-2 overflow-hidden rounded-full bg-muted">
+          <div id="continueProgressBar" class="h-full rounded-full bg-primary transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <a id="continueButton" href="/courses" class="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground shadow-sm transition hover:bg-primary/90">
+        Continue
+        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const storageKey = 'edumynt_course_progress';
+    const continueSection = document.getElementById('continueLearningSection');
+    const continueButton = document.getElementById('continueButton');
+
+    try {
+      const progress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      const lastVisited = progress.lastVisitedCourse;
+      if (!lastVisited || !continueSection) return;
+
+      continueSection.classList.remove('hidden');
+
+      const courseTitle = document.getElementById('continueCourseTitle');
+      const lessonTitle = document.getElementById('continueLessonTitle');
+      const lastVisitedText = document.getElementById('continueLastVisited');
+      const progressBar = document.getElementById('continueProgressBar');
+
+      if (courseTitle) courseTitle.textContent = lastVisited.courseTitle || 'Course';
+      if (lessonTitle) lessonTitle.textContent = lastVisited.lessonTitle ? `Last lesson: ${lastVisited.lessonTitle}` : 'Resume where you left off';
+      if (continueButton && lastVisited.lessonUrl) continueButton.setAttribute('href', lastVisited.lessonUrl);
+
+      if (lastVisitedText && lastVisited.timestamp) {
+        const diffMs = Date.now() - new Date(lastVisited.timestamp).getTime();
+        const diffHours = Math.max(0, Math.floor(diffMs / 3600000));
+        const diffDays = Math.floor(diffHours / 24);
+        lastVisitedText.textContent = diffDays > 0 ? `${diffDays}d ago` : diffHours > 0 ? `${diffHours}h ago` : 'Just now';
+      }
+
+      if (progressBar && lastVisited.courseSlug) {
+        const courseProgress = progress.courseProgress?.[lastVisited.courseSlug];
+        const visitedCount = courseProgress?.visitedLessons?.length || 0;
+        const totalLessons = Number(lastVisited.totalLessons || courseProgress?.totalLessons || 0);
+        const percent = totalLessons > 0 ? Math.min(100, Math.round((visitedCount / totalLessons) * 100)) : 0;
+        progressBar.style.width = `${percent}%`;
+      }
+    } catch {
+      localStorage.removeItem(storageKey);
+    }
+  });
+</script>

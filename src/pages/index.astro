@@ -1,64 +1,37 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
+import ContinueLearning from '../components/course/ContinueLearning.astro';
+import CourseCarousel from '../components/course/CourseCarousel.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import { getCourseOutlines } from '../lib/course-data';
 
-const courses = await getCollection('courses');
-const publishedCourses = courses
-  .filter(c => c.data.status === 'published')
-  .sort((a, b) => a.data.order - b.data.order);
+const outlines = await getCourseOutlines();
+const chapterCount = outlines.reduce((total, outline) => total + outline.stats.chapterCount, 0);
+const lessonCount = outlines.reduce((total, outline) => total + outline.stats.lessonCount, 0);
 
-const title = 'Edumynt - Literature Courses';
+const title = 'Literature Courses';
 const description = 'Access our comprehensive literature courses - start learning today.';
 ---
 
 <BaseLayout title={title} description={description}>
   <Navigation pageType="home" />
 
-  <main class="flex-1 p-6 pb-20">
+  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-      <section class="mb-8">
-        <h2 class="text-3xl font-bold text-foreground mb-6">All Courses</h2>
+      <PageHeader
+        eyebrow="Edumynt"
+        title="Structured literature learning for serious exam preparation"
+        description="Study courses through ordered chapters and lessons, then resume from your last reading point."
+        stats={[
+          { label: 'Courses', value: outlines.length },
+          { label: 'Chapters', value: chapterCount },
+          { label: 'Lessons', value: lessonCount },
+        ]}
+      />
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {publishedCourses.map((course) => (
-            <a
-              href={`/courses/${course.slug || course.id}`}
-              class="group block bg-card border border-border rounded-xl overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
-            >
-              <div class="relative w-full aspect-video bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
-                <img
-                  src={course.data.image?.src || '/images/course_placeholder.jpg'}
-                  alt={course.data.image?.alt || course.data.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  onerror="this.onerror=null; this.src='/images/course_placeholder.jpg';"
-                />
-              </div>
-
-              <div class="p-4">
-                <div class="flex items-center gap-2 mb-2">
-                  {course.data.difficulty && (
-                    <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary capitalize">
-                      {course.data.difficulty}
-                    </span>
-                  )}
-                  {course.data.duration && (
-                    <span class="text-xs text-muted-foreground">{course.data.duration}</span>
-                  )}
-                </div>
-
-                <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors text-lg leading-tight mb-2">
-                  {course.data.title}
-                </h3>
-
-                <p class="text-sm text-muted-foreground line-clamp-2">
-                  {course.data.description}
-                </p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
+      <ContinueLearning />
+      <CourseCarousel outlines={outlines} />
     </div>
   </main>
 </BaseLayout>

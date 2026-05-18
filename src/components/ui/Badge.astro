@@ -1,0 +1,25 @@
+---
+export interface Props {
+  tone?: 'default' | 'primary' | 'muted' | 'light';
+  class?: string;
+}
+
+const { tone = 'default', class: className = '' } = Astro.props;
+
+const tones = {
+  default: 'bg-card text-foreground border border-border',
+  primary: 'bg-primary/10 text-primary border border-primary/15',
+  muted: 'bg-muted text-muted-foreground border border-transparent',
+  light: 'bg-white/20 text-white border border-white/25 backdrop-blur-sm',
+};
+
+const classes = [
+  'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold leading-none',
+  tones[tone],
+  className,
+].join(' ');
+---
+
+<span class={classes}>
+  <slot />
+</span>
