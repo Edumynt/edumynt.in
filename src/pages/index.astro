@@ -2,8 +2,6 @@
 import { getCollection } from 'astro:content';
 import Navigation from '../components/Navigation.astro';
 import Head from '../components/Head.astro';
-import Button from '../components/ui/Button.astro';
-import Card from '../components/ui/Card.astro';
 import '../styles/global.css';
 
 const courses = await getCollection('courses');
@@ -195,9 +193,6 @@ const uniqueCourses = Object.entries(courseGroups).map(([courseName, lessons]) =
     </main>
     
     <script>
-      // Import and register PWA
-      import('/src/lib/pwa.ts');
-      
       // Course Progress Tracking System (same as lesson page)
       class CourseProgressTracker {
         constructor() {
