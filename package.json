@@ -9,7 +9,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "app:start": "npm --prefix ../edumyntinapp start -- --clear",
+    "app:android": "npm --prefix ../edumyntinapp run android",
+    "app:ios": "npm --prefix ../edumyntinapp run ios",
+    "app:web": "npm --prefix ../edumyntinapp run web",
+    "app:typecheck": "npm --prefix ../edumyntinapp run typecheck",
+    "app:doctor": "npm --prefix ../edumyntinapp run doctor"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
