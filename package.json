@@ -15,7 +15,9 @@
     "app:ios": "npm --prefix ../edumyntinapp run ios",
     "app:web": "npm --prefix ../edumyntinapp run web",
     "app:typecheck": "npm --prefix ../edumyntinapp run typecheck",
-    "app:doctor": "npm --prefix ../edumyntinapp run doctor"
+    "app:doctor": "npm --prefix ../edumyntinapp run doctor",
+    "cf:dev": "wrangler pages dev ./dist",
+    "cf:deploy": "wrangler pages deploy ./dist"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
@@ -27,5 +29,9 @@
     "astro-icon": "^1.1.5",
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240117.0",
+    "wrangler": "^3.25.0"
   }
 }

@@ -8,6 +8,7 @@ import icon from 'astro-icon';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://edumynt.in',
+  output: 'static', // Static output for Cloudflare Pages
   integrations: [
     mdx(),
     sitemap(),
