@@ -18,6 +18,7 @@ export async function getStaticPaths() {
 const { outline } = Astro.props;
 const { course } = outline;
 const { Content } = await render(course);
+const bannerImage = course.data.coverImage || course.data.image;
 
 const title = course.data.title;
 const description = course.data.description;
@@ -29,6 +30,17 @@ const description = course.data.description;
   <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
     <div class="mx-auto max-w-5xl">
       <section class="mb-6">
+        {bannerImage?.src && (
+          <div class="mb-5 overflow-hidden rounded-3xl border border-border bg-muted">
+            <img
+              src={bannerImage.src}
+              alt={bannerImage.alt || course.data.title}
+              class="h-48 w-full object-cover sm:h-64"
+              onerror="this.closest('div').remove();"
+            />
+          </div>
+        )}
+
         <div class="mb-4 flex flex-wrap gap-2">
           <Badge tone="primary">{outline.stats.chapterCount} chapters</Badge>
           <Badge tone="muted">{outline.stats.lessonCount} lessons</Badge>
@@ -42,7 +54,6 @@ const description = course.data.description;
       <div class="mb-6 flex gap-2 overflow-x-auto border-b border-border">
         <button type="button" class="border-b-2 border-primary px-4 py-3 text-sm font-bold text-foreground" data-course-tab="curriculum">Curriculum</button>
         <button type="button" class="border-b-2 border-transparent px-4 py-3 text-sm font-bold text-muted-foreground hover:text-foreground" data-course-tab="overview">Overview</button>
-        <button type="button" class="border-b-2 border-transparent px-4 py-3 text-sm font-bold text-muted-foreground hover:text-foreground" data-course-tab="details">Details</button>
       </div>
 
       <section data-course-panel="curriculum">
@@ -57,13 +68,7 @@ const description = course.data.description;
         <ChapterAccordion chapters={outline.chapters} />
       </section>
 
-      <section class="hidden" data-course-panel="overview">
-        <div class="prose prose-lg max-w-none dark:prose-invert">
-          <Content />
-        </div>
-      </section>
-
-      <section class="hidden space-y-6" data-course-panel="details">
+      <section class="hidden space-y-6" data-course-panel="overview">
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div class="rounded-2xl bg-muted p-4">
             <div class="text-sm font-semibold text-muted-foreground">Chapters</div>
@@ -105,6 +110,15 @@ const description = course.data.description;
           </div>
         )}
 
+        {course.data.prerequisites.length > 0 && (
+          <div>
+            <h2 class="mb-3 text-lg font-display font-bold text-foreground">Prerequisites</h2>
+            <div class="flex flex-wrap gap-2">
+              {course.data.prerequisites.map(item => <Badge tone="muted">{item}</Badge>)}
+            </div>
+          </div>
+        )}
+
         {course.data.tags.length > 0 && (
           <div>
             <h2 class="mb-3 text-lg font-display font-bold text-foreground">Tags</h2>
@@ -113,6 +127,10 @@ const description = course.data.description;
             </div>
           </div>
         )}
+
+        <div class="prose prose-lg max-w-none dark:prose-invert">
+          <Content />
+        </div>
       </section>
     </div>
   </main>

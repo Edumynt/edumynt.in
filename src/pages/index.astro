@@ -15,15 +15,10 @@ const description = 'Access our comprehensive literature courses - start learnin
   <Navigation pageType="home" title="Edumynt" />
 
   <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
-    <div class="mx-auto max-w-6xl space-y-10">
+    <div class="mx-auto max-w-6xl space-y-8">
       <section>
-        <div class="mb-4 flex items-end justify-between gap-4">
-          <div>
-            <p class="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Continue</p>
-            <h1 class="text-2xl font-display font-extrabold text-foreground md:text-3xl">Recently accessed</h1>
-          </div>
-          <a href="/courses" class="text-sm font-bold text-primary hover:text-primary/80">All courses</a>
-        </div>
+        <h1 class="sr-only">Recently accessed courses</h1>
+        <p class="mb-3 text-sm font-bold text-muted-foreground">Recent</p>
 
         <div id="recentCoursesGrid" class="flex snap-x gap-5 overflow-x-auto pb-2">
           {outlines.map(outline => (
@@ -38,10 +33,8 @@ const description = 'Access our comprehensive literature courses - start learnin
       </section>
 
       <section>
-        <div class="mb-4">
-          <p class="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Published</p>
-          <h2 class="text-2xl font-display font-extrabold text-foreground md:text-3xl">Recently published courses</h2>
-        </div>
+        <h2 class="sr-only">Recently published courses</h2>
+        <p class="mb-3 text-sm font-bold text-muted-foreground">New</p>
 
         <div class="flex snap-x gap-5 overflow-x-auto pb-2">
           {recentPublished.map(outline => (
