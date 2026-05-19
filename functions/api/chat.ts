@@ -7,12 +7,26 @@ interface ChatRequest {
   courseId?: string;
   lessonId?: string;
   courseContext?: string;
+  pageUrl?: string;
 }
 
 interface OpenRouterMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
 }
+
+interface CourseChunk {
+  id: string;
+  courseId: string;
+  title: string;
+  content: string;
+  type: 'course' | 'chapter' | 'lesson';
+}
+
+// Cache for content index
+let contentCache: CourseChunk[] | null = null;
+let cacheTime = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 // Primary model - owl-alpha (free on OpenRouter)
 const DEFAULT_MODEL = 'openrouter/owl-alpha';
@@ -39,8 +53,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
+    // Get content index
+    const contentIndex = await getContentIndex();
+    
     // Build system prompt with course context
-    const systemPrompt = buildSystemPrompt(body);
+    const systemPrompt = buildSystemPrompt(body, contentIndex);
 
     // Prepare messages for OpenRouter
     const messages: OpenRouterMessage[] = [
@@ -96,40 +113,141 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   return context.next();
 };
 
-function buildSystemPrompt(body: ChatRequest): string {
-  const { courseId, lessonId, courseContext } = body;
+/**
+ * Fetch content index from static JSON file
+ */
+async function getContentIndex(): Promise<CourseChunk[]> {
+  const now = Date.now();
+  
+  if (contentCache && (now - cacheTime) < CACHE_TTL) {
+    return contentCache;
+  }
+  
+  try {
+    // Fetch from the static file we generated at build time
+    const response = await fetch('https://edumynt.in/content-index.json');
+    if (response.ok) {
+      contentCache = await response.json();
+      cacheTime = now;
+      return contentCache || [];
+    }
+  } catch (error) {
+    console.error('Failed to fetch content index:', error);
+  }
+  
+  return [];
+}
+
+/**
+ * Search for relevant content based on query
+ */
+function searchRelevantChunks(
+  chunks: CourseChunk[],
+  query: string,
+  currentCourse?: string,
+  maxChunks: number = 5
+): CourseChunk[] {
+  const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  
+  if (queryWords.length === 0) return [];
+  
+  const scored = chunks.map(chunk => {
+    let score = 0;
+    const content = chunk.content.toLowerCase();
+    const title = chunk.title.toLowerCase();
+    
+    // Boost for current course
+    if (currentCourse && chunk.courseId.toLowerCase().includes(currentCourse.toLowerCase())) {
+      score += 20;
+    }
+    
+    // Score based on keyword matches in title (higher weight)
+    for (const word of queryWords) {
+      if (title.includes(word)) score += 10;
+      // Count occurrences in content
+      const regex = new RegExp(word, 'gi');
+      const matches = content.match(regex);
+      if (matches) score += Math.min(matches.length, 5);
+    }
+    
+    return { chunk, score };
+  });
+  
+  return scored
+    .filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, maxChunks)
+    .map(s => s.chunk);
+}
+
+/**
+ * Build system prompt with all available context
+ */
+function buildSystemPrompt(body: ChatRequest, contentIndex: CourseChunk[]): string {
+  const { message, courseId, courseContext, pageUrl } = body;
+
+  // Get relevant content from index
+  const relevantChunks = searchRelevantChunks(contentIndex, message, courseId, 5);
+  const relevantContent = relevantChunks.map(chunk => 
+    `## ${chunk.title} (${chunk.type})\n${chunk.content.substring(0, 1500)}`
+  ).join('\n\n---\n\n');
+
+  // Get course list for general queries
+  const courseList = contentIndex
+    .filter(c => c.type === 'course')
+    .map(c => `- **${c.title}**`)
+    .join('\n');
 
   let prompt = `You are a helpful tutor for Edumynt, an educational platform for UGC NET and other competitive exam preparation.
 
-Your role:
+## Your Role
 - Help students understand course concepts clearly
 - Provide explanations based on the course content
 - Answer questions about literary works, authors, and exam preparation
 - Be concise but thorough in your responses
 - Use markdown formatting for better readability
+- If asked about courses, list the available courses
+
+## Available Courses
+${courseList}
+
+## Site Information
+- This is an educational platform for UGC NET English literature preparation
+- Courses cover Indian Writers, Literary Periods, Literary Movements, Teaching Methods, and more
+- The platform includes study materials, practice MCQs, and exam preparation resources
 
 `;
 
-  if (courseId) {
-    prompt += `The student is currently studying: ${courseId}\n\n`;
+  // Add relevant content if found
+  if (relevantContent) {
+    prompt += `## Relevant Course Content
+${relevantContent}
+
+`;
   }
 
-  if (lessonId) {
-    prompt += `Current lesson: ${lessonId}\n\n`;
-  }
-
+  // Add current page context if available
   if (courseContext) {
-    prompt += `Relevant course content:
-${courseContext}
+    prompt += `## Current Page Content
+${courseContext.substring(0, 2000)}
 
-Instructions:
+`;
+  }
+
+  // Add page URL context
+  if (pageUrl) {
+    prompt += `## Current Page URL
+${pageUrl}
+
+`;
+  }
+
+  prompt += `## Instructions
 - Base your answer primarily on the provided course context
 - If the question goes beyond the context, you may provide general knowledge but clarify when you're doing so
 - Always be encouraging and supportive
-- Suggest related topics from the course when relevant`;
-  } else {
-    prompt += `Note: No specific course context was provided. Answer based on your general knowledge about the topic, focusing on UGC NET exam preparation and Indian literature.`;
-  }
+- Suggest related topics from the course when relevant
+- If asked about something not in the course content, politely let the user know and suggest what they can ask about`;
 
   return prompt;
 }
@@ -172,7 +290,7 @@ async function callOpenRouter(
     body: JSON.stringify({
       model,
       messages,
-      max_tokens: 1500,
+      max_tokens: 2000,
       temperature: 0.7,
       top_p: 0.9,
     }),

@@ -13,89 +13,91 @@ const description = 'Browse all available courses on Edumynt.';
 ---
 
 <BaseLayout title={title} description={description}>
-  <Navigation pageType="courses" title="Courses" showFilter />
+  <div class="lg:ml-64">
+    <Navigation pageType="courses" title="Courses" showFilter />
 
-  <div id="courseFilterOverlay" class="fixed inset-0 z-[70] hidden bg-black/40 backdrop-blur-sm"></div>
-  <aside id="courseFilterDrawer" class="fixed right-0 top-0 z-[80] h-full w-80 max-w-[85vw] translate-x-full border-l border-border bg-card shadow-2xl transition-transform duration-300">
-    <div class="flex items-center justify-between border-b border-border p-5">
-      <h2 class="font-display text-lg font-bold text-foreground">Filter courses</h2>
-      <button type="button" id="closeCourseFilter" class="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Close filters">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <div class="space-y-6 p-5">
-      <p id="courseFilterCount" class="rounded-xl bg-muted px-4 py-3 text-sm font-bold text-foreground">
-        {outlines.length} courses available
-      </p>
+    <div id="courseFilterOverlay" class="fixed inset-0 z-[70] hidden bg-black/40 backdrop-blur-sm"></div>
+    <aside id="courseFilterDrawer" class="fixed right-0 top-0 z-[80] h-full w-80 max-w-[85vw] translate-x-full border-l border-border bg-card shadow-2xl transition-transform duration-300">
+      <div class="flex items-center justify-between border-b border-border p-5">
+        <h2 class="font-display text-lg font-bold text-foreground">Filter courses</h2>
+        <button type="button" id="closeCourseFilter" class="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Close filters">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="space-y-6 p-5">
+        <p id="courseFilterCount" class="rounded-xl bg-muted px-4 py-3 text-sm font-bold text-foreground">
+          {outlines.length} courses available
+        </p>
 
-      {examOptions.length > 0 && (
+        {examOptions.length > 0 && (
+          <section>
+            <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Exams</h3>
+            <div class="space-y-2">
+              {examOptions.map(exam => (
+                <label class="flex items-center gap-3 text-sm font-semibold text-foreground">
+                  <input type="checkbox" value={exam} data-filter-exam class="h-4 w-4 rounded border-border accent-primary" />
+                  {exam}
+                </label>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section>
-          <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Exams</h3>
+          <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Difficulty</h3>
           <div class="space-y-2">
-            {examOptions.map(exam => (
-              <label class="flex items-center gap-3 text-sm font-semibold text-foreground">
-                <input type="checkbox" value={exam} data-filter-exam class="h-4 w-4 rounded border-border accent-primary" />
-                {exam}
+            {difficultyOptions.map(difficulty => (
+              <label class="flex items-center gap-3 text-sm font-semibold capitalize text-foreground">
+                <input type="checkbox" value={difficulty} data-filter-difficulty class="h-4 w-4 rounded border-border accent-primary" />
+                {difficulty}
               </label>
             ))}
           </div>
         </section>
-      )}
 
-      <section>
-        <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Difficulty</h3>
-        <div class="space-y-2">
-          {difficultyOptions.map(difficulty => (
-            <label class="flex items-center gap-3 text-sm font-semibold capitalize text-foreground">
-              <input type="checkbox" value={difficulty} data-filter-difficulty class="h-4 w-4 rounded border-border accent-primary" />
-              {difficulty}
-            </label>
+        <button type="button" id="clearCourseFilters" class="w-full rounded-xl border border-border px-4 py-2 text-sm font-bold text-foreground hover:bg-muted">
+          Clear filters
+        </button>
+      </div>
+    </aside>
+
+    <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
+      <div class="mx-auto max-w-5xl">
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="ty-kicker mb-1">Library</p>
+            <h1 class="ty-title">All courses</h1>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="courseViewToggle" class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted" aria-label="Switch course view">
+              List
+            </button>
+            <p id="courseResultCount" class="text-sm font-semibold text-muted-foreground">{outlines.length} courses</p>
+          </div>
+        </div>
+
+        <div class="course-grid grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3" data-course-grid data-view="grid">
+          {outlines.map(outline => (
+            <article
+              data-course-card
+              data-course-title={outline.course.data.title}
+              data-course-exams={outline.course.data.exams.join('|')}
+              data-course-difficulty={outline.course.data.difficulty}
+            >
+              <CourseCard outline={outline} compact />
+            </article>
           ))}
         </div>
-      </section>
 
-      <button type="button" id="clearCourseFilters" class="w-full rounded-xl border border-border px-4 py-2 text-sm font-bold text-foreground hover:bg-muted">
-        Clear filters
-      </button>
-    </div>
-  </aside>
-
-  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
-    <div class="mx-auto max-w-6xl">
-      <div class="mb-5 flex items-end justify-between gap-4">
-        <div>
-          <p class="ty-kicker mb-1">Library</p>
-          <h1 class="ty-title">All courses</h1>
-        </div>
-        <div class="flex items-center gap-2">
-          <button type="button" id="courseViewToggle" class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted" aria-label="Switch course view">
-            List
-          </button>
-          <p id="courseResultCount" class="text-sm font-semibold text-muted-foreground">{outlines.length} courses</p>
+        <div id="courseNoResults" class="mt-8 hidden rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground sm:p-8">
+          <p class="mb-4 font-semibold">No courses match the selected filters.</p>
+          <button type="button" data-clear-course-filters-empty class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">Clear filters</button>
         </div>
       </div>
-
-      <div class="course-grid grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" data-course-grid data-view="grid">
-        {outlines.map(outline => (
-          <article
-            data-course-card
-            data-course-title={outline.course.data.title}
-            data-course-exams={outline.course.data.exams.join('|')}
-            data-course-difficulty={outline.course.data.difficulty}
-          >
-            <CourseCard outline={outline} compact />
-          </article>
-        ))}
-      </div>
-
-      <div id="courseNoResults" class="mt-8 hidden rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-        <p class="mb-4 font-semibold">No courses match the selected filters.</p>
-        <button type="button" data-clear-course-filters-empty class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">Clear filters</button>
-      </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

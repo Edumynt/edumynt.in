@@ -32,16 +32,12 @@ const searchItems = outlines.flatMap(outline => [
 const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
-<header class="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl">
-  <div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+<header class="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl lg:hidden">
+  <div class="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
     <div class="flex min-w-0 items-center gap-4">
       <a href={headerHref} class="truncate text-lg font-display font-extrabold tracking-tight text-foreground">
         {headerTitle}
       </a>
-      <nav class="hidden items-center gap-1 sm:flex">
-        <a href="/" class={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${pageType === 'home' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>Home</a>
-        <a href="/courses" class={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${pageType === 'courses' || pageType === 'course' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>Courses</a>
-      </nav>
     </div>
 
     <div class="flex items-center gap-2">
@@ -62,6 +58,60 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
   </div>
 </header>
 
+<aside class="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-border bg-card lg:flex" id="desktopSidebar">
+  <div class="flex h-16 items-center gap-3 border-b border-border px-5">
+    <a href="/" class="text-xl font-display font-extrabold tracking-tight text-foreground">
+      Edumynt
+    </a>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto px-3 py-4" aria-label="Primary">
+    <div className="mb-1 px-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+      Menu
+    </div>
+    <a href="/" class={`mt-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+      <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+      Home
+    </a>
+    <a href="/courses" class={`mt-1 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+      <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      Courses
+    </a>
+
+    <div class="mt-6 mb-1 px-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+      Library
+    </div>
+    {outlines.map(outline => (
+      <a href={courseUrl(outline.course)} class={`mt-1 flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition truncate ${pageType === 'course' && headerTitle === outline.course.data.title ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+        <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <span class="truncate">{outline.course.data.title}</span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="border-t border-border p-3">
+    <button type="button" data-open-site-search class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground">
+      <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35m1.6-5.4a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+      </svg>
+      Search
+    </button>
+    <button type="button" id="sidebarSettingsButton" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground">
+      <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      Settings
+    </button>
+  </div>
+</aside>
+
 <div id="siteSearchOverlay" class="fixed inset-0 z-[90] hidden bg-black/50 p-4 backdrop-blur-sm">
   <div class="mx-auto mt-16 max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
     <div class="flex items-center gap-3 border-b border-border p-4">
@@ -77,8 +127,8 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 
 {showBottomNav && (
   <>
-    <nav class="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:hidden" aria-label="Primary">
-      <div class="mx-auto flex max-w-7xl items-center justify-around px-2 py-3">
+    <nav class="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur supports-[backdrop-filter]:bg-background/80 lg:hidden" aria-label="Primary">
+      <div class="mx-auto flex max-w-7xl items-center justify-around px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         <a href="/" class={`flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold transition ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -88,10 +138,17 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 
         <a href="/courses" class={`flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold transition ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.32.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
           Courses
         </a>
+
+        <button type="button" data-open-site-search class="flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground" aria-label="Search">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35m1.6-5.4a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          </svg>
+          Search
+        </button>
 
         <button type="button" id="settingsButton" class="flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground" aria-label="Open settings">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -256,8 +313,8 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 
     syncCourseProgress();
 
-    // Settings drawer
     const settingsButton = document.getElementById('settingsButton');
+    const sidebarSettingsButton = document.getElementById('sidebarSettingsButton');
     const settingsDrawer = document.getElementById('settingsDrawer');
     const settingsOverlay = document.getElementById('settingsOverlay');
     const closeSettings = document.getElementById('closeSettings');
@@ -276,10 +333,10 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
     }
 
     settingsButton?.addEventListener('click', openSettings);
+    sidebarSettingsButton?.addEventListener('click', openSettings);
     closeSettings?.addEventListener('click', closeSettingsFunc);
     settingsOverlay?.addEventListener('click', closeSettingsFunc);
 
-    // Theme toggle
     if (themeToggle) {
       const slider = themeToggle.querySelector('[data-theme-toggle-slider]');
 

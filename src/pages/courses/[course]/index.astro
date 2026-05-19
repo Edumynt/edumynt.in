@@ -25,158 +25,160 @@ const description = course.data.description;
 ---
 
 <BaseLayout title={title} description={description}>
-  <Navigation pageType="course" title={course.data.title} titleHref={`/courses/${outline.courseId}`} />
+  <div class="lg:ml-64">
+    <Navigation pageType="course" title={course.data.title} titleHref={`/courses/${outline.courseId}`} />
 
-  <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
-    <div class="mx-auto max-w-6xl">
-      <section class="mb-6">
-        {bannerImage?.src && (
-          <div class="mb-5 overflow-hidden rounded-3xl border border-border bg-muted">
-            <img
-              src={bannerImage.src}
-              alt={bannerImage.alt || course.data.title}
-              class="h-48 w-full object-cover sm:h-64"
-              onerror="this.closest('div').remove();"
-            />
-          </div>
-        )}
-
-        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex flex-wrap gap-2">
-            <Badge tone="primary">{outline.stats.chapterCount} chapters</Badge>
-            <Badge tone="muted">{outline.stats.lessonCount} lessons</Badge>
-            {course.data.duration && <Badge tone="muted">{course.data.duration}</Badge>}
-            <Badge tone="muted" class="capitalize">{course.data.difficulty}</Badge>
-          </div>
-          <button type="button" data-share-course class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">
-            Share
-          </button>
-        </div>
-        <h1 class="ty-display mb-3">{course.data.title}</h1>
-        <p class="ty-body-muted max-w-3xl">{course.data.description}</p>
-      </section>
-
-      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]">
-        <div class="min-w-0">
-          <div class="mb-6 flex gap-2 overflow-x-auto border-b border-border">
-            <button type="button" class="border-b-2 border-primary px-4 py-3 text-sm font-bold text-foreground" data-course-tab="curriculum">Curriculum</button>
-            <button type="button" class="border-b-2 border-transparent px-4 py-3 text-sm font-bold text-muted-foreground hover:text-foreground" data-course-tab="overview">Overview</button>
-          </div>
-
-          <section data-course-panel="curriculum">
-            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-              <h2 class="ty-title-sm">Chapters and lessons</h2>
-              <div class="flex flex-wrap gap-2">
-                <button type="button" data-expand-chapters class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">Expand all</button>
-                <button type="button" data-collapse-chapters class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">Collapse all</button>
-                {outline.firstLesson && (
-                  <a href={lessonUrl(outline.firstLesson)} class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90">
-                    Start
-                  </a>
-                )}
-              </div>
+    <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
+      <div class="mx-auto max-w-5xl">
+        <section class="mb-6">
+          {bannerImage?.src && (
+            <div class="mb-5 overflow-hidden rounded-2xl border border-border bg-muted sm:rounded-3xl">
+              <img
+                src={bannerImage.src}
+                alt={bannerImage.alt || course.data.title}
+                class="h-40 w-full object-cover sm:h-56 md:h-64"
+                onerror="this.closest('div').remove();"
+              />
             </div>
-            <ChapterAccordion chapters={outline.chapters} />
-          </section>
+          )}
 
-          <section class="hidden space-y-6" data-course-panel="overview">
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <div class="rounded-2xl bg-muted p-4">
-                <div class="text-sm font-semibold text-muted-foreground">Chapters</div>
-                <div class="text-2xl font-display font-bold text-foreground">{outline.stats.chapterCount}</div>
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap gap-2">
+              <Badge tone="primary">{outline.stats.chapterCount} chapters</Badge>
+              <Badge tone="muted">{outline.stats.lessonCount} lessons</Badge>
+              {course.data.duration && <Badge tone="muted">{course.data.duration}</Badge>}
+              <Badge tone="muted" class="capitalize">{course.data.difficulty}</Badge>
+            </div>
+            <button type="button" data-share-course class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">
+              Share
+            </button>
+          </div>
+          <h1 class="ty-display mb-3">{course.data.title}</h1>
+          <p class="ty-body-muted max-w-3xl">{course.data.description}</p>
+        </section>
+
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-8">
+          <div class="min-w-0">
+            <div class="mb-6 flex gap-1 overflow-x-auto border-b border-border">
+              <button type="button" class="whitespace-nowrap border-b-2 border-primary px-3 py-3 text-sm font-bold text-foreground sm:px-4" data-course-tab="curriculum">Curriculum</button>
+              <button type="button" class="whitespace-nowrap border-b-2 border-transparent px-3 py-3 text-sm font-bold text-muted-foreground hover:text-foreground sm:px-4" data-course-tab="overview">Overview</button>
+            </div>
+
+            <section data-course-panel="curriculum">
+              <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <h2 class="ty-title-sm">Chapters and lessons</h2>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" data-expand-chapters class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">Expand all</button>
+                  <button type="button" data-collapse-chapters class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">Collapse all</button>
+                  {outline.firstLesson && (
+                    <a href={lessonUrl(outline.firstLesson)} class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90">
+                      Start
+                    </a>
+                  )}
+                </div>
               </div>
-              <div class="rounded-2xl bg-muted p-4">
-                <div class="text-sm font-semibold text-muted-foreground">Lessons</div>
-                <div class="text-2xl font-display font-bold text-foreground">{outline.stats.lessonCount}</div>
+              <ChapterAccordion chapters={outline.chapters} />
+            </section>
+
+            <section class="hidden space-y-6" data-course-panel="overview">
+              <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-4">
+                <div class="rounded-2xl bg-muted p-3 sm:p-4">
+                  <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Chapters</div>
+                  <div class="text-xl font-display font-bold text-foreground sm:text-2xl">{outline.stats.chapterCount}</div>
+                </div>
+                <div class="rounded-2xl bg-muted p-3 sm:p-4">
+                  <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Lessons</div>
+                  <div class="text-xl font-display font-bold text-foreground sm:text-2xl">{outline.stats.lessonCount}</div>
+                </div>
+                {course.data.duration && (
+                  <div class="rounded-2xl bg-muted p-3 sm:p-4">
+                    <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Duration</div>
+                    <div class="text-base font-display font-bold text-foreground sm:text-lg">{course.data.duration}</div>
+                  </div>
+                )}
+                <div class="rounded-2xl bg-muted p-3 sm:p-4">
+                  <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Difficulty</div>
+                  <div class="text-base font-display font-bold capitalize text-foreground sm:text-lg">{course.data.difficulty}</div>
+                </div>
               </div>
-              {course.data.duration && (
-                <div class="rounded-2xl bg-muted p-4">
-                  <div class="text-sm font-semibold text-muted-foreground">Duration</div>
-                  <div class="text-lg font-display font-bold text-foreground">{course.data.duration}</div>
+
+              {course.data.exams.length > 0 && (
+                <div>
+                  <h2 class="mb-3 text-lg font-display font-bold text-foreground">Exam focus</h2>
+                  <div class="flex flex-wrap gap-2">
+                    {course.data.exams.map(exam => <Badge tone="primary">{exam}</Badge>)}
+                  </div>
                 </div>
               )}
-              <div class="rounded-2xl bg-muted p-4">
-                <div class="text-sm font-semibold text-muted-foreground">Difficulty</div>
-                <div class="text-lg font-display font-bold capitalize text-foreground">{course.data.difficulty}</div>
-              </div>
-            </div>
 
-            {course.data.exams.length > 0 && (
-              <div>
-                <h2 class="mb-3 text-lg font-display font-bold text-foreground">Exam focus</h2>
-                <div class="flex flex-wrap gap-2">
-                  {course.data.exams.map(exam => <Badge tone="primary">{exam}</Badge>)}
+              {course.data.learningOutcomes.length > 0 && (
+                <div>
+                  <h2 class="mb-3 text-lg font-display font-bold text-foreground">Learning outcomes</h2>
+                  <ul class="grid gap-2 pl-0 sm:grid-cols-2">
+                    {course.data.learningOutcomes.map(outcome => (
+                      <li class="rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground">{outcome}</li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            )}
+              )}
 
-            {course.data.learningOutcomes.length > 0 && (
-              <div>
-                <h2 class="mb-3 text-lg font-display font-bold text-foreground">Learning outcomes</h2>
-                <ul class="grid gap-2 pl-0 sm:grid-cols-2">
-                  {course.data.learningOutcomes.map(outcome => (
-                    <li class="rounded-xl bg-muted px-4 py-3 text-sm text-muted-foreground">{outcome}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {course.data.prerequisites.length > 0 && (
-              <div>
-                <h2 class="mb-3 text-lg font-display font-bold text-foreground">Prerequisites</h2>
-                <div class="flex flex-wrap gap-2">
-                  {course.data.prerequisites.map(item => <Badge tone="muted">{item}</Badge>)}
+              {course.data.prerequisites.length > 0 && (
+                <div>
+                  <h2 class="mb-3 text-lg font-display font-bold text-foreground">Prerequisites</h2>
+                  <div class="flex flex-wrap gap-2">
+                    {course.data.prerequisites.map(item => <Badge tone="muted">{item}</Badge>)}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {course.data.tags.length > 0 && (
-              <div>
-                <h2 class="mb-3 text-lg font-display font-bold text-foreground">Tags</h2>
-                <div class="flex flex-wrap gap-2">
-                  {course.data.tags.map(tag => <Badge tone="muted">{tag}</Badge>)}
+              {course.data.tags.length > 0 && (
+                <div>
+                  <h2 class="mb-3 text-lg font-display font-bold text-foreground">Tags</h2>
+                  <div class="flex flex-wrap gap-2">
+                    {course.data.tags.map(tag => <Badge tone="muted">{tag}</Badge>)}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div class="prose prose-lg max-w-none dark:prose-invert">
-              <Content />
-            </div>
-          </section>
-        </div>
-
-        <aside class="hidden lg:block">
-          <div class="sticky top-20 space-y-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
-            <p class="ty-kicker">Course</p>
-            <div class="space-y-3">
-              <div>
-                <p class="text-sm font-semibold text-muted-foreground">Lessons</p>
-                <p class="text-xl font-display font-extrabold text-foreground">{outline.stats.lessonCount}</p>
+              <div class="prose prose-lg max-w-none dark:prose-invert">
+                <Content />
               </div>
-              <div>
-                <p class="text-sm font-semibold text-muted-foreground">Chapters</p>
-                <p class="text-xl font-display font-extrabold text-foreground">{outline.stats.chapterCount}</p>
-              </div>
-              <div class="hidden" data-course-progress-wrap>
-                <div class="mb-1 flex justify-between text-xs font-bold text-muted-foreground">
-                  <span>Progress</span>
-                  <span data-course-progress-label>0%</span>
-                </div>
-                <div class="h-2 overflow-hidden rounded-full bg-muted">
-                  <div class="h-full rounded-full bg-primary" data-course-progress-bar style="width: 0%"></div>
-                </div>
-              </div>
-            </div>
-            {outline.firstLesson && (
-              <a href={lessonUrl(outline.firstLesson)} class="block rounded-xl bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground hover:bg-primary/90">
-                Start learning
-              </a>
-            )}
+            </section>
           </div>
-        </aside>
+
+          <aside class="hidden lg:block">
+            <div class="sticky top-6 space-y-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <p class="ty-kicker">Course</p>
+              <div class="space-y-3">
+                <div>
+                  <p class="text-sm font-semibold text-muted-foreground">Lessons</p>
+                  <p class="text-xl font-display font-extrabold text-foreground">{outline.stats.lessonCount}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-muted-foreground">Chapters</p>
+                  <p class="text-xl font-display font-extrabold text-foreground">{outline.stats.chapterCount}</p>
+                </div>
+                <div class="hidden" data-course-progress-wrap>
+                  <div class="mb-1 flex justify-between text-xs font-bold text-muted-foreground">
+                    <span>Progress</span>
+                    <span data-course-progress-label>0%</span>
+                  </div>
+                  <div class="h-2 overflow-hidden rounded-full bg-muted">
+                    <div class="h-full rounded-full bg-primary" data-course-progress-bar style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+              {outline.firstLesson && (
+                <a href={lessonUrl(outline.firstLesson)} class="block rounded-xl bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground hover:bg-primary/90">
+                  Start learning
+                </a>
+              )}
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script define:vars={{ courseId: outline.courseId, courseTitle: course.data.title, courseUrl: `/courses/${outline.courseId}` }}>
     document.addEventListener('DOMContentLoaded', () => {
