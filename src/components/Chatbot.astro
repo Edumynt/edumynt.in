@@ -167,8 +167,8 @@ const { courseId } = Astro.props;
     const messages = document.getElementById('chat-messages');
     const suggestedButtons = document.querySelectorAll('.suggested-question');
     
-    // API URL - will be configured via environment
-    const API_URL = document.querySelector('meta[name="chat-api-url"]')?.content || '';
+    // API URL - use relative path for Cloudflare Pages Functions
+    const API_URL = '/api/chat';
     
     // Toggle chat window
     toggle.addEventListener('click', () => {
@@ -263,8 +263,15 @@ const { courseId } = Astro.props;
       });
       
       if (!response.ok) {
-        const error = await response.json().catch(() => ({ error: 'Unknown error' }));
-        throw new Error(error.error || `HTTP error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        let error;
+        try {
+          error = JSON.parse(errorText);
+        } catch {
+          error = { error: errorText || 'Unknown error' };
+        }
+        throw new Error(error.error || error.message || `HTTP error: ${response.status}`);
       }
       
       return response.json();
