@@ -13,21 +13,26 @@ const { outline, compact = false } = Astro.props;
 const { course, stats } = outline;
 const imageSrc = getImageSrc(course);
 const imageAlt = getImageAlt(course);
+const exams = course.data.exams.slice(0, compact ? 1 : 2);
 ---
 
 <Card
   href={courseUrl(course)}
-  class="group block h-full"
+  class="course-card group block h-full overflow-hidden"
   data-course-link
   data-course-id={outline.courseId}
   data-course-title={course.data.title}
   data-course-url={courseUrl(course)}
+  aria-label={`Open ${course.data.title}`}
 >
-  <div class={compact ? 'relative h-40 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5' : 'relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5'}>
+  <div class={`course-card__image skeleton ${compact ? 'relative h-40 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5' : 'relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5'}`}>
     <img
       src={imageSrc}
       alt={imageAlt}
+      loading="lazy"
+      decoding="async"
       class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+      onload="this.closest('.skeleton')?.classList.remove('skeleton');"
       onerror="this.onerror=null; this.src='/images/course_placeholder.jpg';"
     />
     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
@@ -38,12 +43,13 @@ const imageAlt = getImageAlt(course);
       <div class="flex flex-wrap gap-2">
         <Badge tone="light" class="capitalize">{course.data.difficulty}</Badge>
         {course.data.duration && <Badge tone="light">{course.data.duration}</Badge>}
+        {exams.map(exam => <Badge tone="light">{exam}</Badge>)}
         {course.data.featured && <Badge tone="light">Featured</Badge>}
       </div>
     </div>
   </div>
 
-  <div class={compact ? 'p-4' : 'p-5'}>
+  <div class={`course-card__body ${compact ? 'p-4' : 'p-5'}`}>
     <p class={compact ? 'mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground' : 'mb-4 line-clamp-3 text-sm leading-relaxed text-muted-foreground'}>{course.data.description}</p>
 
     {!compact && course.data.exams.length > 0 && (
@@ -54,17 +60,29 @@ const imageAlt = getImageAlt(course);
       </div>
     )}
 
-    <div class="flex items-center justify-between gap-4 border-t border-border pt-4">
-      <div class="flex flex-wrap gap-4 text-xs font-semibold text-muted-foreground">
-        <span>{stats.chapterCount} chapters</span>
-        <span>{stats.lessonCount} lessons</span>
+    <div class="space-y-3 border-t border-border pt-4">
+      <div class="hidden" data-course-progress-wrap>
+        <div class="mb-1 flex items-center justify-between text-xs font-bold text-muted-foreground">
+          <span>Progress</span>
+          <span data-course-progress-label>0%</span>
+        </div>
+        <div class="h-1.5 overflow-hidden rounded-full bg-muted">
+          <div class="h-full rounded-full bg-primary transition-all duration-500" data-course-progress-bar style="width: 0%"></div>
+        </div>
       </div>
-      <span class="inline-flex items-center text-sm font-bold text-primary">
-        Open
-        <svg class="ml-1 h-4 w-4 transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-        </svg>
-      </span>
+
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex flex-wrap gap-4 text-xs font-semibold text-muted-foreground">
+          <span>{stats.chapterCount} chapters</span>
+          <span>{stats.lessonCount} lessons</span>
+        </div>
+        <span class="inline-flex items-center text-sm font-bold text-primary">
+          Open
+          <svg class="ml-1 h-4 w-4 transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </span>
+      </div>
     </div>
 
   </div>

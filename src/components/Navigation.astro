@@ -138,17 +138,39 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
     function renderResults(query) {
       if (!results) return;
       const normalized = query.trim().toLowerCase();
-      const filtered = normalized
-        ? items.filter(item => `${item.title} ${item.description} ${item.type}`.toLowerCase().includes(normalized)).slice(0, 12)
-        : items.slice(0, 8);
+      const source = normalized
+        ? items
+            .map(item => {
+              const haystack = `${item.title} ${item.description || ''} ${item.type}`.toLowerCase();
+              if (!haystack.includes(normalized)) return undefined;
+              const title = item.title.toLowerCase();
+              const score = title === normalized ? 0 : title.startsWith(normalized) ? 1 : item.type === 'Course' ? 2 : 3;
+              return { ...item, score };
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.score - b.score || a.title.localeCompare(b.title))
+            .slice(0, 18)
+        : items.slice(0, 10);
 
-      results.innerHTML = filtered.length
-        ? filtered.map(item => `
-          <a href="${item.url}" class="block rounded-xl p-3 transition hover:bg-muted">
-            <span class="mb-1 block text-xs font-bold uppercase tracking-wide text-muted-foreground">${item.type}</span>
-            <span class="block font-display font-bold text-foreground">${item.title}</span>
-            <span class="mt-1 line-clamp-1 block text-sm text-muted-foreground">${item.description || ''}</span>
-          </a>
+      const grouped = source.reduce((groups, item) => {
+        const key = item.type === 'Course' ? 'Courses' : 'Lessons';
+        groups[key] = groups[key] || [];
+        groups[key].push(item);
+        return groups;
+      }, {});
+
+      results.innerHTML = source.length
+        ? Object.entries(grouped).map(([group, groupItems]) => `
+          <section class="py-2">
+            <h3 class="px-3 pb-1 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">${group}</h3>
+            ${groupItems.map(item => `
+              <a href="${item.url}" class="block rounded-xl p-3 transition hover:bg-muted">
+                <span class="mb-1 block text-xs font-bold uppercase tracking-wide text-muted-foreground">${item.type}</span>
+                <span class="block font-display font-bold text-foreground">${item.title}</span>
+                <span class="mt-1 line-clamp-1 block text-sm text-muted-foreground">${item.description || ''}</span>
+              </a>
+            `).join('')}
+          </section>
         `).join('')
         : '<div class="p-6 text-center text-sm text-muted-foreground">No results found.</div>';
     }
@@ -206,6 +228,33 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
         localStorage.removeItem('edumynt_recent_courses');
       }
     });
+
+    function syncCourseProgress() {
+      try {
+        const progress = JSON.parse(localStorage.getItem('edumynt_course_progress') || '{}');
+        const courseProgress = progress.courseProgress || {};
+
+        document.querySelectorAll('[data-course-link]').forEach(card => {
+          if (!(card instanceof HTMLElement)) return;
+          const courseId = card.dataset.courseId;
+          const item = courseId ? courseProgress[courseId] : undefined;
+          const visited = Array.isArray(item?.visitedLessons) ? item.visitedLessons.length : 0;
+          const total = Number(item?.totalLessons || 0);
+          const percent = total > 0 ? Math.min(100, Math.round((visited / total) * 100)) : 0;
+          const wrap = card.querySelector('[data-course-progress-wrap]');
+          const bar = card.querySelector('[data-course-progress-bar]');
+          const label = card.querySelector('[data-course-progress-label]');
+
+          wrap?.classList.toggle('hidden', percent === 0);
+          if (bar instanceof HTMLElement) bar.style.width = `${percent}%`;
+          if (label) label.textContent = `${percent}%`;
+        });
+      } catch {
+        localStorage.removeItem('edumynt_course_progress');
+      }
+    }
+
+    syncCourseProgress();
 
     // Settings drawer
     const settingsButton = document.getElementById('settingsButton');

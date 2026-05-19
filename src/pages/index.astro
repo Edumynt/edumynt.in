@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import CourseCard from '../components/course/CourseCard.astro';
+import ContinueLearning from '../components/course/ContinueLearning.astro';
 import { getCourseOutlines } from '../lib/course-data';
 
 const outlines = await getCourseOutlines();
@@ -16,9 +17,11 @@ const description = 'Access our comprehensive literature courses - start learnin
 
   <main class="flex-1 px-4 py-6 pb-24 sm:px-6 sm:pb-12 lg:px-8">
     <div class="mx-auto max-w-6xl space-y-8">
+      <ContinueLearning />
+
       <section>
         <h1 class="sr-only">Recently accessed courses</h1>
-        <p class="mb-3 text-sm font-bold text-muted-foreground">Recent</p>
+        <p class="ty-caption mb-3">Recent</p>
 
         <div id="recentCoursesGrid" class="flex snap-x gap-5 overflow-x-auto pb-2">
           {outlines.map(outline => (
@@ -34,7 +37,7 @@ const description = 'Access our comprehensive literature courses - start learnin
 
       <section>
         <h2 class="sr-only">Recently published courses</h2>
-        <p class="mb-3 text-sm font-bold text-muted-foreground">New</p>
+        <p class="ty-caption mb-3">New</p>
 
         <div class="flex snap-x gap-5 overflow-x-auto pb-2">
           {recentPublished.map(outline => (

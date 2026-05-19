@@ -15,7 +15,12 @@ const { chapters } = Astro.props;
     const isOpen = index === 0;
 
     return (
-      <article class="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <article
+        class="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+        data-chapter-item
+        data-chapter-id={section.chapter.id}
+        data-chapter-lesson-ids={section.lessons.map(lesson => lesson.id).join('|')}
+      >
         <button
           class="flex w-full items-center justify-between gap-4 bg-muted/70 p-5 text-left transition hover:bg-muted sm:p-6"
           type="button"
@@ -33,6 +38,7 @@ const { chapters } = Astro.props;
               )}
               <div class="flex flex-wrap gap-2">
                 <Badge tone="muted">{section.lessonCount} lessons</Badge>
+                <Badge tone="muted" class="hidden" data-chapter-progress-count>0/{section.lessonCount} done</Badge>
                 {section.estimatedTime && <Badge tone="muted">{section.estimatedTime}</Badge>}
               </div>
             </div>
@@ -81,19 +87,53 @@ const { chapters } = Astro.props;
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-chapter-accordion]').forEach(accordion => {
+      function setOpen(article, open) {
+        const toggle = article?.querySelector('[data-chapter-toggle]');
+        const panel = article?.querySelector('[data-chapter-panel]');
+        const icon = article?.querySelector('[data-chapter-icon]');
+
+        toggle?.setAttribute('aria-expanded', String(open));
+        panel?.classList.toggle('grid-rows-[1fr]', open);
+        panel?.classList.toggle('grid-rows-[0fr]', !open);
+        icon?.classList.toggle('rotate-180', open);
+      }
+
       accordion.querySelectorAll('[data-chapter-toggle]').forEach(toggle => {
         toggle.addEventListener('click', () => {
           const article = toggle.closest('article');
-          const panel = article?.querySelector('[data-chapter-panel]');
-          const icon = article?.querySelector('[data-chapter-icon]');
           const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-
-          toggle.setAttribute('aria-expanded', String(!isOpen));
-          panel?.classList.toggle('grid-rows-[1fr]', !isOpen);
-          panel?.classList.toggle('grid-rows-[0fr]', isOpen);
-          icon?.classList.toggle('rotate-180', !isOpen);
+          setOpen(article, !isOpen);
         });
       });
+
+      accordion.addEventListener('edumynt:chapters-open-all', () => {
+        accordion.querySelectorAll('[data-chapter-item]').forEach(article => setOpen(article, true));
+      });
+
+      accordion.addEventListener('edumynt:chapters-collapse-all', () => {
+        accordion.querySelectorAll('[data-chapter-item]').forEach(article => setOpen(article, false));
+      });
+
+      try {
+        const progress = JSON.parse(localStorage.getItem('edumynt_course_progress') || '{}');
+        const courseProgress = progress.courseProgress || {};
+
+        accordion.querySelectorAll('[data-chapter-item]').forEach(article => {
+          if (!(article instanceof HTMLElement)) return;
+          const courseId = (article.dataset.chapterId || '').split('/')[0];
+          const visited = courseProgress[courseId]?.visitedLessons || [];
+          const lessons = (article.dataset.chapterLessonIds || '').split('|').filter(Boolean);
+          const done = lessons.filter(id => visited.includes(id)).length;
+          const badge = article.querySelector('[data-chapter-progress-count]');
+
+          if (badge) {
+            badge.textContent = `${done}/${lessons.length} done`;
+            badge.classList.toggle('hidden', done === 0);
+          }
+        });
+      } catch {
+        localStorage.removeItem('edumynt_course_progress');
+      }
     });
   });
 </script>

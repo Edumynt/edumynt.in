@@ -26,6 +26,10 @@ const description = 'Browse all available courses on Edumynt.';
       </button>
     </div>
     <div class="space-y-6 p-5">
+      <p id="courseFilterCount" class="rounded-xl bg-muted px-4 py-3 text-sm font-bold text-foreground">
+        {outlines.length} courses available
+      </p>
+
       {examOptions.length > 0 && (
         <section>
           <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Exams</h3>
@@ -62,13 +66,18 @@ const description = 'Browse all available courses on Edumynt.';
     <div class="mx-auto max-w-6xl">
       <div class="mb-5 flex items-end justify-between gap-4">
         <div>
-          <p class="mb-1 text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Library</p>
-          <h1 class="text-2xl font-display font-extrabold text-foreground md:text-3xl">All courses</h1>
+          <p class="ty-kicker mb-1">Library</p>
+          <h1 class="ty-title">All courses</h1>
         </div>
-        <p id="courseResultCount" class="text-sm font-semibold text-muted-foreground">{outlines.length} courses</p>
+        <div class="flex items-center gap-2">
+          <button type="button" id="courseViewToggle" class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted" aria-label="Switch course view">
+            List
+          </button>
+          <p id="courseResultCount" class="text-sm font-semibold text-muted-foreground">{outlines.length} courses</p>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" data-course-grid>
+      <div class="course-grid grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" data-course-grid data-view="grid">
         {outlines.map(outline => (
           <article
             data-course-card
@@ -82,7 +91,8 @@ const description = 'Browse all available courses on Edumynt.';
       </div>
 
       <div id="courseNoResults" class="mt-8 hidden rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-        No courses match the selected filters.
+        <p class="mb-4 font-semibold">No courses match the selected filters.</p>
+        <button type="button" data-clear-course-filters-empty class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">Clear filters</button>
       </div>
     </div>
   </main>
@@ -94,11 +104,16 @@ const description = 'Browse all available courses on Edumynt.';
       const overlay = document.getElementById('courseFilterOverlay');
       const closeButton = document.getElementById('closeCourseFilter');
       const clearButton = document.getElementById('clearCourseFilters');
+      const emptyClearButton = document.querySelector('[data-clear-course-filters-empty]');
+      const viewToggle = document.getElementById('courseViewToggle');
+      const grid = document.querySelector('[data-course-grid]');
       const cards = Array.from(document.querySelectorAll('[data-course-card]'));
       const count = document.getElementById('courseResultCount');
+      const filterCount = document.getElementById('courseFilterCount');
       const noResults = document.getElementById('courseNoResults');
       const examInputs = Array.from(document.querySelectorAll('[data-filter-exam]'));
       const difficultyInputs = Array.from(document.querySelectorAll('[data-filter-difficulty]'));
+      const params = new URLSearchParams(window.location.search);
 
       function openFilter() {
         drawer?.classList.remove('translate-x-full');
@@ -114,6 +129,33 @@ const description = 'Browse all available courses on Edumynt.';
         return inputs
           .filter(input => input instanceof HTMLInputElement && input.checked)
           .map(input => input.value);
+      }
+
+      function setValues(inputs, values) {
+        inputs.forEach(input => {
+          if (input instanceof HTMLInputElement) input.checked = values.includes(input.value);
+        });
+      }
+
+      function syncUrl(selectedExams, selectedDifficulties) {
+        const nextParams = new URLSearchParams(window.location.search);
+        nextParams.delete('exam');
+        nextParams.delete('difficulty');
+        selectedExams.forEach(item => nextParams.append('exam', item));
+        selectedDifficulties.forEach(item => nextParams.append('difficulty', item));
+        const query = nextParams.toString();
+        window.history.replaceState({}, '', query ? `${window.location.pathname}?${query}` : window.location.pathname);
+      }
+
+      function setView(view) {
+        const nextView = view === 'list' ? 'list' : 'grid';
+        if (grid instanceof HTMLElement) grid.dataset.view = nextView;
+        if (viewToggle) viewToggle.textContent = nextView === 'list' ? 'Grid' : 'List';
+        const nextParams = new URLSearchParams(window.location.search);
+        if (nextView === 'list') nextParams.set('view', 'list');
+        else nextParams.delete('view');
+        const query = nextParams.toString();
+        window.history.replaceState({}, '', query ? `${window.location.pathname}?${query}` : window.location.pathname);
       }
 
       function applyFilters() {
@@ -133,19 +175,33 @@ const description = 'Browse all available courses on Edumynt.';
         });
 
         if (count) count.textContent = `${visible} ${visible === 1 ? 'course' : 'courses'}`;
+        if (filterCount) filterCount.textContent = `${visible} ${visible === 1 ? 'course matches' : 'courses match'}`;
         noResults?.classList.toggle('hidden', visible > 0);
+        syncUrl(selectedExams, selectedDifficulties);
       }
 
       filterButton?.addEventListener('click', openFilter);
       closeButton?.addEventListener('click', closeFilter);
       overlay?.addEventListener('click', closeFilter);
-      [...examInputs, ...difficultyInputs].forEach(input => input.addEventListener('change', applyFilters));
-      clearButton?.addEventListener('click', () => {
+      function clearFilters() {
         [...examInputs, ...difficultyInputs].forEach(input => {
           if (input instanceof HTMLInputElement) input.checked = false;
         });
         applyFilters();
+      }
+
+      setValues(examInputs, params.getAll('exam'));
+      setValues(difficultyInputs, params.getAll('difficulty'));
+      setView(params.get('view') || 'grid');
+
+      [...examInputs, ...difficultyInputs].forEach(input => input.addEventListener('change', applyFilters));
+      clearButton?.addEventListener('click', clearFilters);
+      emptyClearButton?.addEventListener('click', clearFilters);
+      viewToggle?.addEventListener('click', () => {
+        const current = grid instanceof HTMLElement ? grid.dataset.view : 'grid';
+        setView(current === 'list' ? 'grid' : 'list');
       });
+      applyFilters();
     });
   </script>
 </BaseLayout>
