@@ -8,16 +8,19 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "npm run build && wrangler dev",
     "astro": "astro",
     "app:start": "npm --prefix ../edumyntinapp start -- --clear",
     "app:android": "npm --prefix ../edumyntinapp run android",
     "app:ios": "npm --prefix ../edumyntinapp run ios",
     "app:web": "npm --prefix ../edumyntinapp run web",
     "app:typecheck": "npm --prefix ../edumyntinapp run typecheck",
-    "app:doctor": "npm --prefix ../edumyntinapp run doctor"
+    "app:doctor": "npm --prefix ../edumyntinapp run doctor",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.5.2",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/sitemap": "^3.7.2",
     "@tailwindcss/postcss": "^4.3.0",
@@ -27,5 +30,11 @@
     "astro-icon": "^1.1.5",
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.93.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }

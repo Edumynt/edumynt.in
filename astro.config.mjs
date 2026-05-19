@@ -5,9 +5,12 @@ import sitemap from '@astrojs/sitemap';
 import compress from 'astro-compress';
 import icon from 'astro-icon';
 
+import cloudflare from '@astrojs/cloudflare';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://edumynt.in',
+
   integrations: [
     mdx(),
     sitemap(),
@@ -20,10 +23,13 @@ export default defineConfig({
     }),
     icon(),
   ],
+
   markdown: {
     shikiConfig: {
       theme: 'github-dark',
       wrap: true,
     },
   },
+
+  adapter: cloudflare(),
 });
