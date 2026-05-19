@@ -6,11 +6,13 @@ export interface Props {
   title?: string;
   titleHref?: string;
   showFilter?: boolean;
+  showBottomNav?: boolean;
 }
 
-const { pageType, title, titleHref, showFilter = false } = Astro.props;
+const { pageType, title, titleHref, showFilter = false, showBottomNav: requestedShowBottomNav } = Astro.props;
 const headerTitle = title || (pageType === 'home' ? 'Edumynt' : pageType === 'courses' ? 'Courses' : 'Course');
 const headerHref = titleHref || (pageType === 'home' ? '/' : '/courses');
+const showBottomNav = requestedShowBottomNav ?? pageType !== 'lesson';
 
 const outlines = await getCourseOutlines();
 const searchItems = outlines.flatMap(outline => [
@@ -72,6 +74,56 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
     <div id="siteSearchResults" class="max-h-[60vh] overflow-y-auto p-2"></div>
   </div>
 </div>
+
+{showBottomNav && (
+  <>
+    <nav class="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:hidden" aria-label="Primary">
+      <div class="mx-auto flex max-w-7xl items-center justify-around px-2 py-3">
+        <a href="/" class={`flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold transition ${pageType === 'home' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
+
+        <a href="/courses" class={`flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold transition ${pageType === 'courses' || pageType === 'course' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.32.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          Courses
+        </a>
+
+        <button type="button" id="settingsButton" class="flex flex-col items-center gap-1 rounded-xl px-4 py-2 text-xs font-bold text-muted-foreground transition hover:bg-muted hover:text-foreground" aria-label="Open settings">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Settings
+        </button>
+      </div>
+    </nav>
+
+    <div class="invisible fixed inset-0 z-[70] bg-black/50 opacity-0 backdrop-blur-sm transition-all duration-300" id="settingsOverlay"></div>
+    <aside class="fixed right-0 top-0 z-[80] flex h-full w-80 max-w-[85vw] translate-x-full flex-col rounded-l-2xl border-l border-border bg-card/95 shadow-2xl backdrop-blur-xl transition-transform duration-300" id="settingsDrawer">
+      <div class="flex items-center justify-between border-b border-border p-6">
+        <h3 class="font-display text-lg font-semibold text-foreground">Settings</h3>
+        <button type="button" id="closeSettings" class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition hover:bg-muted hover:text-foreground" aria-label="Close settings">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-6">
+        <div class="flex items-center justify-between gap-4">
+          <span class="font-semibold text-foreground">Dark mode</span>
+          <button type="button" id="themeToggle" class="relative inline-flex h-6 w-11 items-center rounded-full bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="Toggle dark mode">
+            <span class="inline-block h-4 w-4 translate-x-1 rounded-full bg-background shadow-sm transition-transform" data-theme-toggle-slider></span>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </>
+)}
 
 <script type="application/json" id="siteSearchData" set:html={searchJson}></script>
 
@@ -138,7 +190,8 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
       if (!(link instanceof HTMLElement)) return;
 
       try {
-        const recent = JSON.parse(localStorage.getItem('edumynt_recent_courses') || '[]');
+        const storedRecent = JSON.parse(localStorage.getItem('edumynt_recent_courses') || '[]');
+        const recent = Array.isArray(storedRecent) ? storedRecent : [];
         const next = [
           {
             id: link.dataset.courseId,
@@ -153,5 +206,48 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
         localStorage.removeItem('edumynt_recent_courses');
       }
     });
+
+    // Settings drawer
+    const settingsButton = document.getElementById('settingsButton');
+    const settingsDrawer = document.getElementById('settingsDrawer');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const closeSettings = document.getElementById('closeSettings');
+    const themeToggle = document.getElementById('themeToggle');
+
+    function openSettings() {
+      settingsDrawer?.classList.remove('translate-x-full');
+      settingsOverlay?.classList.remove('opacity-0', 'invisible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSettingsFunc() {
+      settingsDrawer?.classList.add('translate-x-full');
+      settingsOverlay?.classList.add('opacity-0', 'invisible');
+      document.body.style.overflow = '';
+    }
+
+    settingsButton?.addEventListener('click', openSettings);
+    closeSettings?.addEventListener('click', closeSettingsFunc);
+    settingsOverlay?.addEventListener('click', closeSettingsFunc);
+
+    // Theme toggle
+    if (themeToggle) {
+      const slider = themeToggle.querySelector('[data-theme-toggle-slider]');
+
+      function syncThemeToggle(isDark) {
+        themeToggle.classList.toggle('bg-primary', isDark);
+        themeToggle.classList.toggle('bg-muted', !isDark);
+        slider?.classList.toggle('translate-x-6', isDark);
+        slider?.classList.toggle('translate-x-1', !isDark);
+      }
+
+      syncThemeToggle(document.documentElement.classList.contains('dark'));
+
+      themeToggle.addEventListener('click', () => {
+        const nowDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+        syncThemeToggle(nowDark);
+      });
+    }
   });
 </script>
