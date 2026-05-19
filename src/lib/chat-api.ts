@@ -47,7 +47,7 @@ export async function sendChatMessage(request: ChatRequest): Promise<ChatRespons
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
-    throw new Error(error.error || `HTTP error: ${response.status}`);
+    throw new Error((error as { error: string }).error || `HTTP error: ${response.status}`);
   }
 
   return response.json();
