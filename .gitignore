@@ -4,6 +4,7 @@ node_modules
 # Build output
 dist
 .astro
+public/content-index.json
 
 # Environment variables
 .env

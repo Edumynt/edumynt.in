@@ -2,7 +2,6 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Badge from '../../../components/ui/Badge.astro';
-import Chatbot from '../../../components/Chatbot.astro';
 import { courseUrl, getLessonContexts, lessonUrl } from '../../../lib/course-data';
 
 export async function getStaticPaths() {
@@ -197,7 +196,4 @@ const freshnessLabel = freshnessDate
       }
     });
   </script>
-  
-  <!-- Course Chatbot -->
-  <Chatbot courseId={context.courseId} client:load />
 </BaseLayout>
