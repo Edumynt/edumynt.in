@@ -10,40 +10,40 @@ export interface Props {
 const { chapters } = Astro.props;
 ---
 
-<section class="space-y-4" data-chapter-accordion>
+<section class="space-y-3" data-chapter-accordion>
   {chapters.map((section, index) => {
     const isOpen = index === 0;
 
     return (
       <article
-        class="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+        class="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
         data-chapter-item
         data-chapter-id={section.chapter.id}
         data-chapter-lesson-ids={section.lessons.map(lesson => lesson.id).join('|')}
       >
         <button
-          class="flex w-full items-center justify-between gap-4 bg-muted/70 p-5 text-left transition hover:bg-muted sm:p-6"
+          class="flex w-full items-start justify-between gap-3 bg-muted/70 p-4 text-left transition hover:bg-muted sm:gap-4"
           type="button"
           aria-expanded={isOpen ? 'true' : 'false'}
           data-chapter-toggle
         >
-          <div class="flex min-w-0 items-center gap-4">
-            <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-card text-base font-display font-extrabold text-foreground">
+          <div class="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+            <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-border bg-card text-sm font-display font-extrabold text-foreground">
               {index + 1}
             </div>
-            <div class="min-w-0">
-              <h2 class="mb-1 line-clamp-1 text-xl font-display font-bold text-foreground">{section.chapter.data.title}</h2>
-              {section.chapter.data.description && (
-                <p class="mb-2 line-clamp-1 text-sm text-muted-foreground">{section.chapter.data.description}</p>
-              )}
+            <div class="min-w-0 flex-1">
+              <h2 class="mb-2 text-base font-display font-bold leading-snug text-foreground sm:text-lg">{section.chapter.data.title}</h2>
               <div class="flex flex-wrap gap-2">
                 <Badge tone="muted">{section.lessonCount} lessons</Badge>
                 <Badge tone="muted" class="hidden" data-chapter-progress-count>0/{section.lessonCount} done</Badge>
                 {section.estimatedTime && <Badge tone="muted">{section.estimatedTime}</Badge>}
               </div>
+              <div class="mt-3 hidden h-1.5 overflow-hidden rounded-full bg-background" data-chapter-progress-track>
+                <div class="h-full rounded-full bg-primary transition-all duration-500" data-chapter-progress-bar style="width: 0%"></div>
+              </div>
             </div>
           </div>
-          <svg class={`h-5 w-5 flex-shrink-0 text-muted-foreground transition duration-300 ${isOpen ? 'rotate-180' : ''}`} data-chapter-icon fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <svg class={`mt-2 h-5 w-5 flex-shrink-0 text-muted-foreground transition duration-300 ${isOpen ? 'rotate-180' : ''}`} data-chapter-icon fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -53,22 +53,30 @@ const { chapters } = Astro.props;
             {section.lessons.length > 0 ? (
               <div class="divide-y divide-border">
                 {section.lessons.map((lesson, lessonIndex) => (
-                  <a href={lessonUrl(lesson)} class="group flex items-center gap-4 p-5 transition hover:bg-muted/60 sm:px-6">
-                    <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                      {lessonIndex + 1}
+                  <a
+                    href={lessonUrl(lesson)}
+                    class="group flex items-start gap-3 p-3 transition hover:bg-muted/60 sm:px-4"
+                    data-lesson-item
+                    data-lesson-id={lesson.id}
+                    data-lesson-title={lesson.data.title}
+                    data-lesson-type={lesson.data.type}
+                    data-lesson-complete="false"
+                  >
+                    <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary" data-lesson-status-icon>
+                      <span data-lesson-number>{lessonIndex + 1}</span>
+                      <svg class="hidden h-4 w-4" data-lesson-check fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                      </svg>
                     </div>
                     <div class="min-w-0 flex-1">
-                      <h3 class="mb-1 line-clamp-1 text-base font-display font-bold text-foreground transition group-hover:text-primary">{lesson.data.title}</h3>
-                      {(lesson.data.excerpt || lesson.data.description) && (
-                        <p class="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{lesson.data.excerpt || lesson.data.description}</p>
-                      )}
+                      <h3 class="text-sm font-display font-bold leading-snug text-foreground transition group-hover:text-primary sm:text-base" data-lesson-title-text>{lesson.data.title}</h3>
                       <div class="mt-2 flex flex-wrap gap-2">
                         <Badge tone="muted" class="capitalize">{lesson.data.type}</Badge>
                         {lesson.data.estimatedTime && <Badge tone="muted">{lesson.data.estimatedTime}</Badge>}
                         <Badge tone="muted" class="capitalize">{lesson.data.difficulty}</Badge>
                       </div>
                     </div>
-                    <svg class="h-5 w-5 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg class="mt-1 h-5 w-5 flex-shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   </a>
@@ -117,6 +125,7 @@ const { chapters } = Astro.props;
       try {
         const progress = JSON.parse(localStorage.getItem('edumynt_course_progress') || '{}');
         const courseProgress = progress.courseProgress || {};
+        const lastVisited = progress.lastVisitedCourse;
 
         accordion.querySelectorAll('[data-chapter-item]').forEach(article => {
           if (!(article instanceof HTMLElement)) return;
@@ -125,12 +134,47 @@ const { chapters } = Astro.props;
           const lessons = (article.dataset.chapterLessonIds || '').split('|').filter(Boolean);
           const done = lessons.filter(id => visited.includes(id)).length;
           const badge = article.querySelector('[data-chapter-progress-count]');
+          const progressTrack = article.querySelector('[data-chapter-progress-track]');
+          const progressBar = article.querySelector('[data-chapter-progress-bar]');
+          const percent = lessons.length > 0 ? Math.round((done / lessons.length) * 100) : 0;
 
           if (badge) {
             badge.textContent = `${done}/${lessons.length} done`;
             badge.classList.toggle('hidden', done === 0);
           }
+
+          if (progressTrack) progressTrack.classList.toggle('hidden', done === 0);
+          if (progressBar instanceof HTMLElement) progressBar.style.width = `${percent}%`;
+          article.dataset.chapterComplete = String(lessons.length > 0 && done === lessons.length);
         });
+
+        accordion.querySelectorAll('[data-lesson-item]').forEach(item => {
+          if (!(item instanceof HTMLElement)) return;
+
+          const courseId = (item.dataset.lessonId || '').split('/')[0];
+          const visited = courseProgress[courseId]?.visitedLessons || [];
+          const isComplete = visited.includes(item.dataset.lessonId || '');
+          const isCurrent = lastVisited?.lessonId === item.dataset.lessonId;
+          const marker = item.querySelector('[data-lesson-status-icon]');
+          const number = item.querySelector('[data-lesson-number]');
+          const check = item.querySelector('[data-lesson-check]');
+          const title = item.querySelector('[data-lesson-title-text]');
+
+          item.dataset.lessonComplete = String(isComplete);
+          item.classList.toggle('bg-muted/40', isComplete);
+          item.classList.toggle('ring-1', isCurrent);
+          item.classList.toggle('ring-primary/30', isCurrent);
+          marker?.classList.toggle('bg-primary', isComplete);
+          marker?.classList.toggle('text-primary-foreground', isComplete);
+          marker?.classList.toggle('bg-primary/10', !isComplete);
+          marker?.classList.toggle('text-primary', !isComplete);
+          number?.classList.toggle('hidden', isComplete);
+          check?.classList.toggle('hidden', !isComplete);
+          title?.classList.toggle('text-muted-foreground', isComplete);
+          title?.classList.toggle('text-foreground', !isComplete);
+        });
+
+        document.dispatchEvent(new CustomEvent('edumynt:course-progress-ready'));
       } catch {
         localStorage.removeItem('edumynt_course_progress');
       }
