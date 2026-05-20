@@ -5,7 +5,7 @@ import Navigation from '../../../components/Navigation.astro';
 import CourseHero from '../../../components/course/CourseHero.astro';
 import Badge from '../../../components/ui/Badge.astro';
 import ChapterAccordion from '../../../components/course/ChapterAccordion.astro';
-import { getCourseOutlines, lessonUrl } from '../../../lib/course-data';
+import { getCourseOutlines } from '../../../lib/course-data';
 
 export async function getStaticPaths() {
   const outlines = await getCourseOutlines();
@@ -22,13 +22,6 @@ const { Content } = await render(course);
 
 const title = course.data.title;
 const description = course.data.description;
-const firstLessonUrl = outline.firstLesson ? lessonUrl(outline.firstLesson) : undefined;
-const courseLessons = outline.lessons.map(lesson => ({
-  id: lesson.id,
-  title: lesson.data.title,
-  type: lesson.data.type,
-  url: lessonUrl(lesson),
-}));
 const lessonTypeCounts = outline.lessons.reduce<Record<string, number>>((counts, lesson) => {
   counts[lesson.data.type] = (counts[lesson.data.type] || 0) + 1;
   return counts;
@@ -39,84 +32,17 @@ const pluralizeType = (type: string, count: number) => {
   return `${count} ${count === 1 ? type : plural}`;
 };
 const typeSummary = lessonTypes.map(type => pluralizeType(type, lessonTypeCounts[type] ?? 0));
-const visibleLearningOutcomes = course.data.learningOutcomes.slice(0, 4);
 ---
 
 <BaseLayout title={title} description={description}>
   <div class="lg:ml-64">
-    <Navigation pageType="course" title={course.data.title} titleHref={`/courses/${outline.courseId}`} />
+    <Navigation pageType="course" title={course.data.title} titleHref={`/courses/${outline.courseId}`} showBottomNav={false} />
 
-    <main class="flex-1 px-4 py-6 pb-44 sm:px-6 sm:pb-16 lg:px-8">
+    <main class="flex-1 px-4 py-6 pb-14 sm:px-6 sm:pb-16 lg:px-8">
       <div class="mx-auto max-w-5xl">
         <CourseHero outline={outline} />
 
-        <section class="mb-8" aria-labelledby="course-highlights-title">
-          <div class="mb-4">
-            <p class="ty-kicker mb-1">Course overview</p>
-            <h2 id="course-highlights-title" class="ty-title-sm">At a glance</h2>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            <div class="rounded-xl bg-muted p-4">
-              <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Chapters</div>
-              <div class="text-xl font-display font-bold text-foreground sm:text-2xl">{outline.stats.chapterCount}</div>
-            </div>
-            <div class="rounded-xl bg-muted p-4">
-              <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Lessons</div>
-              <div class="text-xl font-display font-bold text-foreground sm:text-2xl">{outline.stats.lessonCount}</div>
-            </div>
-            <div class="rounded-xl bg-muted p-4">
-              <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Duration</div>
-              <div class="text-base font-display font-bold text-foreground sm:text-lg">{course.data.duration || 'Self-paced'}</div>
-            </div>
-            <div class="rounded-xl bg-muted p-4">
-              <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Difficulty</div>
-              <div class="text-base font-display font-bold capitalize text-foreground sm:text-lg">{course.data.difficulty}</div>
-            </div>
-          </div>
-
-          <div class="mt-5 grid gap-5 md:grid-cols-2">
-            {course.data.exams.length > 0 && (
-              <div>
-                <h3 class="mb-2 text-sm font-display font-bold text-foreground">Exam focus</h3>
-                <div class="flex flex-wrap gap-2">
-                  {course.data.exams.map(exam => <Badge tone="primary">{exam}</Badge>)}
-                </div>
-              </div>
-            )}
-
-            {visibleLearningOutcomes.length > 0 && (
-              <div>
-                <h3 class="mb-2 text-sm font-display font-bold text-foreground">What you will learn</h3>
-                <ul class="space-y-2 pl-0">
-                  {visibleLearningOutcomes.map(outcome => (
-                    <li class="text-sm leading-relaxed text-muted-foreground">{outcome}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {course.data.prerequisites.length > 0 && (
-              <div>
-                <h3 class="mb-2 text-sm font-display font-bold text-foreground">Prerequisites</h3>
-                <div class="flex flex-wrap gap-2">
-                  {course.data.prerequisites.map(item => <Badge tone="muted">{item}</Badge>)}
-                </div>
-              </div>
-            )}
-
-            {typeSummary.length > 0 && (
-              <div>
-                <h3 class="mb-2 text-sm font-display font-bold text-foreground">Includes</h3>
-                <div class="flex flex-wrap gap-2">
-                  {typeSummary.map(item => <Badge tone="muted">{item}</Badge>)}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-8">
+        <div>
           <div class="min-w-0">
             <div class="mb-6 flex gap-1 overflow-x-auto border-b border-border" role="tablist" aria-label="Course details">
               <button
@@ -145,58 +71,21 @@ const visibleLearningOutcomes = course.data.learningOutcomes.slice(0, 4);
             </div>
 
             <section id="course-panel-curriculum" role="tabpanel" aria-labelledby="course-tab-curriculum" tabindex="0" data-course-panel="curriculum">
-              <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h2 class="ty-title-sm">Chapters and lessons</h2>
-                  <p class="mt-1 text-sm font-semibold text-muted-foreground" data-curriculum-filter-count>{outline.stats.lessonCount} lessons</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <button type="button" data-expand-chapters class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">Expand all</button>
-                  <button type="button" data-collapse-chapters class="rounded-xl border border-border bg-card px-3 py-2 text-sm font-bold text-foreground hover:bg-muted">Collapse all</button>
-                  {firstLessonUrl && (
-                    <a href={firstLessonUrl} class="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90" data-course-primary-cta>
-                      <span data-course-primary-cta-label>Start</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              <div class="mb-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_12rem_auto]">
-                <div>
-                  <label for="curriculumSearch" class="sr-only">Search lessons</label>
-                  <input
-                    id="curriculumSearch"
-                    type="search"
-                    data-curriculum-search
-                    class="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary"
-                    placeholder="Search lessons"
-                    autocomplete="off"
-                  />
-                </div>
-                <div>
-                  <label for="curriculumType" class="sr-only">Filter by lesson type</label>
-                  <select
-                    id="curriculumType"
-                    data-curriculum-type
-                    class="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm font-semibold capitalize text-foreground outline-none transition focus:border-primary"
-                  >
-                    <option value="all">All types</option>
-                    {lessonTypes.map(type => <option value={type}>{type}</option>)}
-                  </select>
-                </div>
-                <label class="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm font-bold text-foreground">
-                  <input type="checkbox" data-curriculum-incomplete class="h-4 w-4 rounded border-border accent-primary" />
-                  Incomplete only
-                </label>
-              </div>
-
-              <div class="mb-4 hidden rounded-xl border border-dashed border-border p-5 text-center text-sm font-semibold text-muted-foreground" data-curriculum-empty>
-                No lessons match the selected filters.
+              <div class="mb-5">
+                <h2 class="ty-title-sm">Chapters and lessons</h2>
+                <p class="mt-1 text-sm font-semibold text-muted-foreground">{outline.stats.lessonCount} lessons</p>
               </div>
               <ChapterAccordion chapters={outline.chapters} />
             </section>
 
             <section id="course-panel-overview" class="hidden space-y-6" role="tabpanel" aria-labelledby="course-tab-overview" tabindex="0" data-course-panel="overview">
+              <div>
+                <h2 class="mb-3 text-lg font-display font-bold text-foreground">Overview</h2>
+                <p class="max-w-3xl text-base leading-relaxed text-muted-foreground">
+                  {course.data.longDescription || course.data.description}
+                </p>
+              </div>
+
               <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-4">
                 <div class="rounded-2xl bg-muted p-3 sm:p-4">
                   <div class="text-xs font-semibold text-muted-foreground sm:text-sm">Chapters</div>
@@ -247,6 +136,15 @@ const visibleLearningOutcomes = course.data.learningOutcomes.slice(0, 4);
                 </div>
               )}
 
+              {typeSummary.length > 0 && (
+                <div>
+                  <h2 class="mb-3 text-lg font-display font-bold text-foreground">Includes</h2>
+                  <div class="flex flex-wrap gap-2">
+                    {typeSummary.map(item => <Badge tone="muted">{item}</Badge>)}
+                  </div>
+                </div>
+              )}
+
               {course.data.tags.length > 0 && (
                 <div>
                   <h2 class="mb-3 text-lg font-display font-bold text-foreground">Tags</h2>
@@ -261,78 +159,12 @@ const visibleLearningOutcomes = course.data.learningOutcomes.slice(0, 4);
               </div>
             </section>
           </div>
-
-          <aside class="hidden lg:block">
-            <div class="sticky top-6 space-y-5 rounded-2xl border border-border bg-card p-5 shadow-sm">
-              <div>
-                <p class="ty-kicker mb-2">Continue</p>
-                <p class="text-sm font-semibold text-muted-foreground" data-course-sidebar-status>Ready to start</p>
-              </div>
-
-              <div class="hidden" data-course-progress-wrap>
-                <div class="mb-1 flex justify-between text-xs font-bold text-muted-foreground">
-                  <span>Progress</span>
-                  <span data-course-progress-label>0%</span>
-                </div>
-                <div class="h-2 overflow-hidden rounded-full bg-muted">
-                  <div class="h-full rounded-full bg-primary" data-course-progress-bar style="width: 0%"></div>
-                </div>
-              </div>
-
-              {firstLessonUrl && (
-                <a href={firstLessonUrl} class="block rounded-xl bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground hover:bg-primary/90" data-course-primary-cta>
-                  <span data-course-primary-cta-label>Start learning</span>
-                </a>
-              )}
-              <button type="button" data-share-course class="w-full rounded-xl border border-border bg-card px-4 py-3 text-center text-sm font-bold text-foreground hover:bg-muted">
-                <span data-share-label>Share</span>
-              </button>
-
-              <div class="border-t border-border pt-4">
-                <div class="grid grid-cols-2 gap-3">
-                  <div>
-                    <p class="text-xs font-semibold text-muted-foreground">Lessons</p>
-                    <p class="text-lg font-display font-extrabold text-foreground">{outline.stats.lessonCount}</p>
-                  </div>
-                  <div>
-                    <p class="text-xs font-semibold text-muted-foreground">Chapters</p>
-                    <p class="text-lg font-display font-extrabold text-foreground">{outline.stats.chapterCount}</p>
-                  </div>
-                </div>
-                {typeSummary.length > 0 && (
-                  <div class="mt-4">
-                    <p class="mb-2 text-xs font-semibold text-muted-foreground">Includes</p>
-                    <div class="flex flex-wrap gap-2">
-                      {typeSummary.map(item => <Badge tone="muted">{item}</Badge>)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
     </main>
-
-    {firstLessonUrl && (
-      <div class="fixed bottom-20 left-4 right-4 z-50 rounded-2xl border border-border bg-card p-3 shadow-2xl lg:hidden" data-mobile-course-cta>
-        <div class="mb-3 hidden" data-course-progress-wrap>
-          <div class="mb-1 flex justify-between text-xs font-bold text-muted-foreground">
-            <span>Progress</span>
-            <span data-course-progress-label>0%</span>
-          </div>
-          <div class="h-2 overflow-hidden rounded-full bg-muted">
-            <div class="h-full rounded-full bg-primary" data-course-progress-bar style="width: 0%"></div>
-          </div>
-        </div>
-        <a href={firstLessonUrl} class="block rounded-xl bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground hover:bg-primary/90" data-course-primary-cta>
-          <span data-course-primary-cta-label>Start learning</span>
-        </a>
-      </div>
-    )}
   </div>
 
-  <script define:vars={{ courseId: outline.courseId, courseTitle: course.data.title, courseUrl: `/courses/${outline.courseId}`, courseLessons }}>
+  <script define:vars={{ courseId: outline.courseId, courseTitle: course.data.title, courseUrl: `/courses/${outline.courseId}` }}>
     document.addEventListener('DOMContentLoaded', () => {
       const tabs = Array.from(document.querySelectorAll('[data-course-tab]'));
       const panels = Array.from(document.querySelectorAll('[data-course-panel]'));
@@ -381,145 +213,8 @@ const visibleLearningOutcomes = course.data.learningOutcomes.slice(0, 4);
 
       activateTab('curriculum');
 
-      document.querySelector('[data-expand-chapters]')?.addEventListener('click', () => {
-        document.querySelector('[data-chapter-accordion]')?.dispatchEvent(new CustomEvent('edumynt:chapters-open-all'));
-      });
-
-      document.querySelector('[data-collapse-chapters]')?.addEventListener('click', () => {
-        document.querySelector('[data-chapter-accordion]')?.dispatchEvent(new CustomEvent('edumynt:chapters-collapse-all'));
-      });
-
-      function setShareLabel(button, text) {
-        const label = button.querySelector('[data-share-label]');
-        if (!label) return;
-        label.textContent = text;
-        window.clearTimeout(button._shareTimer);
-        button._shareTimer = window.setTimeout(() => {
-          label.textContent = 'Share';
-        }, 1800);
-      }
-
-      document.querySelectorAll('[data-share-course]').forEach(button => {
-        button.addEventListener('click', async () => {
-          const shareData = { title: courseTitle, text: courseTitle, url: window.location.href };
-
-          if (navigator.share) {
-            try {
-              await navigator.share(shareData);
-              setShareLabel(button, 'Shared');
-              return;
-            } catch {
-              return;
-            }
-          }
-
-          try {
-            await navigator.clipboard?.writeText(window.location.href);
-            setShareLabel(button, 'Link copied');
-          } catch {
-            setShareLabel(button, 'Copy failed');
-          }
-        });
-      });
-
-      function setChapterOpen(article, open) {
-        const toggle = article?.querySelector('[data-chapter-toggle]');
-        const panel = article?.querySelector('[data-chapter-panel]');
-        const icon = article?.querySelector('[data-chapter-icon]');
-
-        toggle?.setAttribute('aria-expanded', String(open));
-        panel?.classList.toggle('grid-rows-[1fr]', open);
-        panel?.classList.toggle('grid-rows-[0fr]', !open);
-        icon?.classList.toggle('rotate-180', open);
-      }
-
-      function applyCurriculumFilters() {
-        const search = document.querySelector('[data-curriculum-search]');
-        const type = document.querySelector('[data-curriculum-type]');
-        const incomplete = document.querySelector('[data-curriculum-incomplete]');
-        const count = document.querySelector('[data-curriculum-filter-count]');
-        const empty = document.querySelector('[data-curriculum-empty]');
-        const query = search instanceof HTMLInputElement ? search.value.trim().toLowerCase() : '';
-        const selectedType = type instanceof HTMLSelectElement ? type.value : 'all';
-        const incompleteOnly = incomplete instanceof HTMLInputElement && incomplete.checked;
-        const activeFilter = Boolean(query || selectedType !== 'all' || incompleteOnly);
-        let visible = 0;
-
-        document.querySelectorAll('[data-lesson-item]').forEach(item => {
-          if (!(item instanceof HTMLElement)) return;
-
-          const title = (item.dataset.lessonTitle || '').toLowerCase();
-          const lessonType = item.dataset.lessonType || '';
-          const isComplete = item.dataset.lessonComplete === 'true';
-          const isVisible = (!query || title.includes(query))
-            && (selectedType === 'all' || lessonType === selectedType)
-            && (!incompleteOnly || !isComplete);
-
-          item.classList.toggle('hidden', !isVisible);
-          if (isVisible) visible += 1;
-        });
-
-        document.querySelectorAll('[data-chapter-item]').forEach(article => {
-          if (!(article instanceof HTMLElement)) return;
-          const lessons = Array.from(article.querySelectorAll('[data-lesson-item]'));
-          const hasVisibleLesson = lessons.some(item => !item.classList.contains('hidden'));
-          const showChapter = lessons.length === 0 ? !activeFilter : hasVisibleLesson;
-
-          article.classList.toggle('hidden', !showChapter);
-          if (activeFilter && showChapter) setChapterOpen(article, true);
-        });
-
-        if (count) {
-          count.textContent = activeFilter
-            ? `${visible} of ${courseLessons.length} lessons`
-            : `${courseLessons.length} lessons`;
-        }
-        empty?.classList.toggle('hidden', visible > 0 || !activeFilter);
-      }
-
-      document.querySelector('[data-curriculum-search]')?.addEventListener('input', applyCurriculumFilters);
-      document.querySelector('[data-curriculum-type]')?.addEventListener('change', applyCurriculumFilters);
-      document.querySelector('[data-curriculum-incomplete]')?.addEventListener('change', applyCurriculumFilters);
-      document.addEventListener('edumynt:course-progress-ready', applyCurriculumFilters);
-
       try {
         const recent = JSON.parse(localStorage.getItem('edumynt_recent_courses') || '[]');
-        const progress = JSON.parse(localStorage.getItem('edumynt_course_progress') || '{}');
-        const courseProgress = progress.courseProgress?.[courseId];
-        const visitedLessons = Array.isArray(courseProgress?.visitedLessons) ? courseProgress.visitedLessons : [];
-        const total = Number(courseProgress?.totalLessons || courseLessons.length);
-        const percent = total > 0 ? Math.min(100, Math.round((visitedLessons.length / total) * 100)) : 0;
-        const lastVisited = progress.lastVisitedCourse?.courseSlug === courseId ? progress.lastVisitedCourse : undefined;
-        const firstUnvisited = courseLessons.find(lesson => !visitedLessons.includes(lesson.id));
-        const fallbackLesson = courseLessons[0];
-        const targetLesson = lastVisited?.lessonUrl
-          ? { title: lastVisited.lessonTitle || 'Last lesson', url: lastVisited.lessonUrl }
-          : firstUnvisited || fallbackLesson;
-        const isComplete = total > 0 && visitedLessons.length >= total;
-        const ctaLabel = visitedLessons.length === 0 ? 'Start learning' : isComplete ? 'Review course' : 'Resume learning';
-        const statusLabel = visitedLessons.length === 0
-          ? 'Ready to start'
-          : isComplete
-            ? 'Course complete'
-            : `Next: ${targetLesson?.title || 'Continue'}`;
-
-        document.querySelectorAll('[data-course-primary-cta]').forEach(cta => {
-          const label = cta.querySelector('[data-course-primary-cta-label]');
-          if (targetLesson?.url) cta.setAttribute('href', targetLesson.url);
-          if (label) label.textContent = ctaLabel;
-        });
-
-        document.querySelectorAll('[data-course-sidebar-status]').forEach(item => {
-          item.textContent = statusLabel;
-        });
-
-        document.querySelectorAll('[data-course-progress-wrap]').forEach(wrap => {
-          const bar = wrap.querySelector('[data-course-progress-bar]');
-          const label = wrap.querySelector('[data-course-progress-label]');
-          wrap.classList.toggle('hidden', percent === 0);
-          if (bar instanceof HTMLElement) bar.style.width = `${percent}%`;
-          if (label) label.textContent = `${percent}%`;
-        });
 
         const next = [
           { id: courseId, title: courseTitle, url: courseUrl, timestamp: new Date().toISOString() },
@@ -529,8 +224,6 @@ const visibleLearningOutcomes = course.data.learningOutcomes.slice(0, 4);
       } catch {
         localStorage.removeItem('edumynt_recent_courses');
       }
-
-      applyCurriculumFilters();
     });
   </script>
 </BaseLayout>

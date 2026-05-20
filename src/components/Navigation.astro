@@ -12,7 +12,7 @@ export interface Props {
 const { pageType, title, titleHref, showFilter = false, showBottomNav: requestedShowBottomNav } = Astro.props;
 const headerTitle = title || (pageType === 'home' ? 'Edumynt' : pageType === 'courses' ? 'Courses' : 'Course');
 const headerHref = titleHref || (pageType === 'home' ? '/' : '/courses');
-const showBottomNav = requestedShowBottomNav ?? pageType !== 'lesson';
+const showBottomNav = requestedShowBottomNav ?? (pageType === 'home' || pageType === 'courses');
 
 const outlines = await getCourseOutlines();
 const searchItems = outlines.flatMap(outline => [
